@@ -127,6 +127,16 @@ class Tmsm_Availpro {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-sanitize.php';
 
+		/**
+		 * The class responsible for Availpro webservice calls
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-webservice.php';
+
+		/**
+		 * Oauth Class
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/oauth-php/SoapOAuthWrapper.php';
+
 		$this->loader = new Tmsm_Availpro_Loader();
 
 	}
@@ -185,6 +195,8 @@ class Tmsm_Availpro {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		$this->loader->add_action( 'tmsmavailpro_cronaction', $plugin_public, 'checkprices' );
 
 	}
 

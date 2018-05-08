@@ -61,18 +61,6 @@ class Tmsm_Availpro_Public {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Tmsm_Availpro_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Tmsm_Availpro_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/tmsm-availpro-public.css', array(), $this->version, 'all' );
 
 	}
@@ -84,20 +72,60 @@ class Tmsm_Availpro_Public {
 	 */
 	public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Tmsm_Availpro_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Tmsm_Availpro_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+	/**
+	 * Check Availpro Prices
+	 */
+	public function checkprices(){
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('Function checkprices()');
+		}
+
+		$lastmonthchecked = get_option('tmsm-availpro-lastmonthchecked', false);
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('Last month checked: '.$lastmonthchecked);
+		}
+
+		// Check if the last checked value was created
+		if($lastmonthchecked === false){
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Check not initiated yet');
+			}
+			$monthtocheck = date('Y-m');
+		}
+		else{
+			$lastmonthchecked_object = DateTime::createFromFormat('Y-m', $lastmonthchecked);
+			$lastmonthchecked_object->modify('+1 month');
+			$lastmonthchecked_limit = new Datetime();
+			$lastmonthchecked_limit->modify('+1 year');
+
+			if($lastmonthchecked_object->getTimestamp() >= $lastmonthchecked_limit->getTimestamp()){
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log('Limit month passed');
+				}
+				$monthtocheck = date('Y-m');
+			}
+			else{
+				$monthtocheck = $lastmonthchecked_object->format('Y-m');
+			}
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('Month to check: '.$monthtocheck);
+		}
+		// Update last check value
+		$result = update_option( 'tmsm-availpro-lastmonthchecked', $monthtocheck, true);
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('Result saving new month: '.$result);
+		}
+
+		$webservice = new Tmsm_Availpro_Webservice();
+
+	}
+
 
 }

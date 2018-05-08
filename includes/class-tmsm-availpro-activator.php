@@ -30,7 +30,7 @@ class Tmsm_Availpro_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		wp_schedule_event( time(), 'hourly', 'tmsmavailpro_cronaction' );
 	}
 
 }
