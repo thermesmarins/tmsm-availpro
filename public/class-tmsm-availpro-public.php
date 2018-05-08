@@ -124,6 +124,12 @@ class Tmsm_Availpro_Public {
 		}
 
 		$webservice = new Tmsm_Availpro_Webservice();
+		$month_planning = $webservice->get_data($monthtocheck);
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log($month_planning);
+
+		}
 
 	}
 

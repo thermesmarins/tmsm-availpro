@@ -138,27 +138,63 @@ class Tmsm_Availpro_Webservice {
 			$filters_roomids .= '</rooms>';
 		}
 
+
+		// @TODO include $filters_roomids but it doesn't give any result with it
 		$this->filters ='
 					<ratePlans><ratePlan groupId="'.$option_groupid.'"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
-	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 	                $filters_rateids.
-					$filters_roomids.
+	                //$filters_roomids.
+	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		'';
 
 		error_log($this->filters);
+
 	}
 
 	/**
 	 * Get Data from Availpro API call
+	 *
+	 * @param string $month
+	 *
+	 * @return string
 	 */
-	public function get_data(){
+	public function get_data($month){
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('get_data');
+		}
+
+		if(!class_exists('SoapOAuthWrapper')){
+			return 'SoapOAuthWrapper doesn\'t exist';
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('SoapOAuthWrapper');
+		}
+
+		$options = get_option('tmsm-availpro-options', false);
+
+		$option_rateids = $options['rateids'];
+		$option_roomids = $options['roomids'];
+		$option_groupid = $options['groupid'];
+		$option_hotelid = $options['hotelid'];
+
+		$soap_parameters = array(
+			'groupId'   => $options['groupid'],
+			'hotelId'   => $options['hotelid'],
+			'beginDate' => '2018-06-01',
+			'endDate'   => '2018-06-08',
+			'layout'    => self::LAYOUT,
+			'filter'    => $this->filters,
+		);
 
 		try {
-			$result = SoapOAuthWrapper::Invoke( $url, $namespace, $method, $soapParameters, $oauthOptions );
-			echo 'body : ' . htmlentities( $result ) . '<br/>';
+			$result = SoapOAuthWrapper::Invoke( self::URL, self::NAMESPACE, self::METHOD, $soap_parameters, $this->oauth_identifiers );
+			return $result;
 		} catch ( OAuthException2 $e ) {
-			echo $e;
+			return $e;
 		}
+
 	}
 
 }
