@@ -18,7 +18,7 @@ class Tmsm_Availpro_Webservice {
 	 * @since 	1.0.0
 	 * @var 	string
 	 */
-	const NAMESPACE = 'http://ws.availpro.com/schemas/planning/2012A';
+	const WSNAMESPACE = 'http://ws.availpro.com/schemas/planning/2012A';
 
 	/**
 	 * Webservice URL
@@ -154,14 +154,21 @@ class Tmsm_Availpro_Webservice {
 	/**
 	 * Get Data from Availpro API call
 	 *
-	 * @param string $month
+	 * @param string $month (YYYY-MM)
 	 *
 	 * @return string
 	 */
 	public function get_data($month){
 
+		$month_firstday = DateTime::createFromFormat('Y-m', $month);
+		$month_firstday->modify('first day of this month');
+		$month_lastday = clone $month_firstday;
+		$month_lastday->modify('last day of this month');
+
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log('get_data');
+			error_log('firstday:'.$month_firstday->format('Y-m-d'));
+			error_log('lastday:'.$month_lastday->format('Y-m-d'));
 		}
 
 		if(!class_exists('SoapOAuthWrapper')){
@@ -182,19 +189,45 @@ class Tmsm_Availpro_Webservice {
 		$soap_parameters = array(
 			'groupId'   => $options['groupid'],
 			'hotelId'   => $options['hotelid'],
-			'beginDate' => '2018-06-01',
-			'endDate'   => '2018-06-08',
+			'beginDate' => $month_firstday->format('Y-m-d'),
+			'endDate'   => $month_lastday->format('Y-m-d'),
 			'layout'    => self::LAYOUT,
 			'filter'    => $this->filters,
 		);
 
 		try {
-			$result = SoapOAuthWrapper::Invoke( self::URL, self::NAMESPACE, self::METHOD, $soap_parameters, $this->oauth_identifiers );
+			$result = SoapOAuthWrapper::Invoke( self::URL, self::WSNAMESPACE, self::METHOD, $soap_parameters, $this->oauth_identifiers );
 			return $result;
 		} catch ( OAuthException2 $e ) {
 			return $e;
 		}
 
+	}
+
+	/**
+	 * Convert XML results in array
+	 *
+	 * @param string $xml
+	 *
+	 * @return array
+	 */
+	static public function convert_to_array($xml){
+		//error_log('xml to convert:');
+		//error_log($xml);
+
+		$domObject = new DOMDocument();
+		$domObject->loadXML($xml);
+
+		$domXPATH = new DOMXPath($domObject);
+		$results = $domXPATH->query("//soap:Body/*");
+
+		$array = [];
+		foreach($results as $result)
+		{
+			$array = json_decode(json_encode(simplexml_load_string($result->ownerDocument->saveXML($result))), true);
+
+		}
+		return $array;
 	}
 
 }
