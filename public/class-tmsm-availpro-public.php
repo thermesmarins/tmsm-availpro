@@ -73,8 +73,53 @@ class Tmsm_Availpro_Public {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery' ), $this->version, false );
+		// Scripts
+		wp_enqueue_script( 'moment', plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/min/moment.min.js', array( 'jquery' ), $this->version, true );
+		if ( function_exists( 'PLL' ) && $language = PLL()->model->get_language( get_locale() ) )
+		{
+			wp_enqueue_script( 'moment-'.pll_current_language(), plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/locale/'.pll_current_language().'.js', array( 'jquery' ), $this->version, true );
+		}
 
+		wp_enqueue_script( 'clndr', plugin_dir_url( dirname(__FILE__) ) . 'vendor/clndr/clndr.min.js', array( 'jquery', 'moment', 'underscore' ), $this->version, true );
+
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery' ), $this->version, true );
+
+
+		// Params
+		$params = [
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'security' => wp_create_nonce( 'security' ),
+			'i18n' => [
+				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
+			],
+			'data' => $this->get_options_bestprice(),
+		];
+
+		wp_localize_script( $this->plugin_name, 'tmsm_availpro_params', $params);
+	}
+
+	/**
+	 * Get options for all bestprices months
+	 *
+	 * @return array
+	 */
+	public function get_options_bestprice(){
+
+		$data = [];
+
+		// Brows 12 next months
+		$date = new Datetime();
+		$i=0;
+		while($i<=12){
+			$date->modify('+1 month');
+			$month_data = get_option('tmsm-availpro-bestprice-'.$date->format('Y-m'), false);
+			if(!empty($month_data)){
+				$data[$date->format('Y-m')] = $month_data;
+			}
+			$i++;
+		}
+
+		return $data;
 	}
 
 	/**
