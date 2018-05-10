@@ -239,6 +239,17 @@ class Tmsm_Availpro_Admin {
 			)
 		);
 
+		add_settings_field(
+			'currency',
+			esc_html__( 'Currency (ISO 4217 code)', 'tmsm-availpro' ) ,
+			array( $this, 'field_text' ),
+			$this->plugin_name,
+			$this->plugin_name . '-filters',
+			array(
+				'id' 			=> 'currency',
+			)
+		);
+
 		/*add_settings_field(
 			'how-to-apply',
 			apply_filters( $this->plugin_name . 'label-how-to-apply', esc_html__( 'How to Apply', 'tmsm-availpro' ) ),
@@ -566,6 +577,7 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'hotelid', 'text', '' );
 		$options[] = array( 'roomids', 'text', '' );
 		$options[] = array( 'rateids', 'text', '' );
+		$options[] = array( 'currency', 'text', '' );
 		//$options[] = array( 'message-no-openings', 'text', 'Thank you for your interest! There are no job openings at this time.' );
 		//$options[] = array( 'howtoapply', 'editor', '' );
 		//$options[] = array( 'repeat-test', 'repeater', array( array( 'test1', 'text' ), array( 'test2', 'text' ), array( 'test3', 'text' ) ) );

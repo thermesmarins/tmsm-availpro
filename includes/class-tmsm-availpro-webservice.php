@@ -144,6 +144,7 @@ class Tmsm_Availpro_Webservice {
 					<ratePlans><ratePlan groupId="'.$option_groupid.'"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 	                $filters_rateids.
 	                //$filters_roomids.
+	                '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
 	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		'';
 
@@ -212,8 +213,10 @@ class Tmsm_Availpro_Webservice {
 	 * @return array
 	 */
 	static public function convert_to_array($xml){
-		//error_log('xml to convert:');
-		//error_log($xml);
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('xml to convert:');
+			error_log($xml);
+		}
 
 		$domObject = new DOMDocument();
 		$domObject->loadXML($xml);

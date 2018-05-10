@@ -41,6 +41,15 @@ class Tmsm_Availpro_Public {
 	private $version;
 
 	/**
+	 * The plugin options.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		string 			$options    The plugin options.
+	 */
+	private $options;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -53,6 +62,14 @@ class Tmsm_Availpro_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
+		$this->set_options();
+	}
+
+	/**
+	 * Sets the class variable $options
+	 */
+	private function set_options() {
+		$this->options = get_option( $this->plugin_name . '-options' );
 	}
 
 	/**
@@ -88,9 +105,13 @@ class Tmsm_Availpro_Public {
 		// Params
 		$params = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'locale' => (function_exists('pll_current_language') ? pll_current_language() : 'en'),
 			'security' => wp_create_nonce( 'security' ),
 			'i18n' => [
 				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
+			],
+			'options' => [
+				'currency' => $this->options['currency'],
 			],
 			'data' => $this->get_options_bestprice(),
 		];
@@ -98,17 +119,105 @@ class Tmsm_Availpro_Public {
 		wp_localize_script( $this->plugin_name, 'tmsm_availpro_params', $params);
 	}
 
+
+	/**
+	 * Display calendar template
+	 *
+	 * @return string
+	 */
+	public function calendar_template(){
+		$output = <<<EOT
+<div id="tmsm-availpro-calendar">
+    <script id="tmsm-availpro-calendar-template" type="text/template">
+
+        <table class="table-calendarprices table-condensed" border="0" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr class="clndr-controls">
+                <th class="clndr-control-button clndr-control-button-previous">
+                    <span class="clndr-previous-button">&larr;</span>
+                </th>
+                <th class="month" colspan="5">
+                    <%= month %> <%= year %>
+
+                    &nbsp;
+                    <small class="calendar-error">(Aucune date disponible pour ce mois)</small>
+                    <small class="calendar-loading">Chargement <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></small>
+
+                </th>
+                <th class="clndr-control-button clndr-control-button-next">
+                    <span class="clndr-next-button">&rarr;</span>
+                </th>
+            </tr>
+            <tr class="header-days">
+
+                <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
+<th class="header-day">
+                    <%= moment().weekday(i).format('dd').charAt(0) %><span class="rest"><%= moment().weekday(i).format('dddd').slice(1) %></span>
+                </th>
+                <% } %>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i = 0; i < numberOfRows; i++){ %>
+            <tr>
+                <% for(var j = 0; j < 7; j++){ %>
+                <% var d = j + i * 7; %>
+                <td class="<%= days[d].classes %>" data-daynumber="<%= days[d].day %>">
+
+                    <% if (days[d].events.length != 0) { %>
+                    <% _.each(days[d].events, function(event) { %>
+                    <div class="cell" data-price="<%= event.Price %>" data-status="<%= event.Status %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.MinimumStayThrough %>">
+                        <small class="day-number"><%= days[d].day %></small>
+                        <p class="price"><%= event.PriceWithCurrency %></p>
+                    </div>
+                    <% }) %>
+
+                    <% } else { %>
+
+                    <div class="cell">
+                        <small class="day-number"><%= days[d].day %></small>
+                        <p class="price">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    </div>
+                    <% } %>
+                </td>
+                <% } %>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+
+    </script>
+</div>
+EOT;
+
+		echo $output;
+	}
+
+	/**
+	 * Get option
+	 * @param string $option_name
+	 *
+	 * @return null
+	 */
+	private function get_option($option_name){
+		if(empty($this->options[$option_name])){
+			return null;
+		}
+		return $this->options[$option_name];
+	}
+
 	/**
 	 * Get options for all bestprices months
 	 *
 	 * @return array
 	 */
-	public function get_options_bestprice(){
+	private function get_options_bestprice(){
 
 		$data = [];
 
 		// Brows 12 next months
 		$date = new Datetime();
+		$date->modify('-1 month');
 		$i=0;
 		while($i<=12){
 			$date->modify('+1 month');

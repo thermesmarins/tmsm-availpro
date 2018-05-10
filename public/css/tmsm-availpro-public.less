@@ -1,0 +1,266 @@
+@brand-primary-alt: purple;
+@brand-primary: grey;
+@brand-primary-highlight: gold;
+
+@calendar-background: #f2f2f2;
+
+
+@screen-sm-min:500px;
+@screen-md-min: 900px;
+@font-size-base: 13px;
+
+@controls-border: rgba(0,0,0,0.5);
+
+@day-special-color: red;
+@day-number-background: darken(@calendar-background, 20%);
+@day-inactive-number-background: darken(@calendar-background, 10%);
+@day-background: @calendar-background;
+@day-color: #999;
+@day-border: @calendar-background;
+
+@day-event-color: #666;
+
+@day-inactive-background: white;
+@day-inactive-color: #999;
+@day-inactive-hover-color: #333;
+@day-inactive-hover-price-color: #333;
+
+@day-selected-background: gold;
+@day-selected-range-background: lighten(@day-selected-background, 20%);
+@day-selected-price-color: white;
+
+@day-hover-background: green;
+@day-hover-price-color: white;
+
+@day-price-color: green;
+
+#tmsm-availpro-calendar{
+
+    background: @calendar-background;
+
+    min-height: 280px;
+    @media(min-width: @screen-sm-min) {
+        min-height: 375px;
+    }
+
+    .table-calendarprices{
+        width: 100%;
+        ::-moz-selection {
+            background: transparent;
+            color:inherit;
+        }
+        ::selection {
+            background: transparent;
+            color:inherit;
+        }
+        .clndr-controls{
+            background: white;
+            border-bottom: 2px solid @controls-border;
+        }
+
+        .header-days{
+            .header-day{
+                text-align: center;
+            }
+            .rest{
+                display: none;
+                @media(min-width: @screen-sm-min) {
+                    display: inline-block;
+                }
+            }
+        }
+
+        .month{
+            height: 40px;
+            font-size: ceil((@font-size-base * 1.4));
+            font-weight: normal;
+            text-align: center;
+            &:first-letter{
+                text-transform: uppercase;
+            }
+            small{
+                display: none;
+            }
+        }
+
+        .clndr-control-button{
+            color: @brand-primary;
+            > span {
+                font-size: ceil((@font-size-base * 1.4));
+                &:hover{
+                    cursor: pointer;
+                }
+                &.inactive{
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
+            &.clndr-control-button-previous{
+                text-align: left;
+            }
+            &.clndr-control-button-next{
+                text-align: right;
+            }
+
+        }
+
+        .cell{
+            position: relative;
+            padding: 20px 3px 4px 3px;
+            @media(min-width: @screen-sm-min) {
+                padding: 8px;
+                //min-width: 50px;
+
+            }
+            + .cell{
+                display: none;
+            }
+        }
+
+        .day-number{
+            background: @day-number-background;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 1px;
+            width: 16px;
+            //height: 17px;
+            display: inline-block;
+            text-align: center;
+            font-size: ceil((@font-size-base * 0.7));
+            @media(min-width: @screen-sm-min) {
+                font-size: ceil((@font-size-base * 0.8));
+            }
+        }
+        .day-special{
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            padding: 1px;
+            width: 16px;
+            //display: none;
+            color: @day-special-color;
+            &.glyphicon-alert{
+                display: block;
+            }
+        }
+
+
+
+        .price{
+
+            font-weight: 300;
+            margin: 0;
+            font-size: ceil((@font-size-base * 0.8));
+
+            @media(min-width: @screen-sm-min) {
+                font-size: ceil((@font-size-base * 1.3));
+            }
+            .currency{
+                font-size: ceil((@font-size-base * 0.7));
+
+                @media(min-width: @screen-sm-min) {
+                    font-size: ceil((@font-size-base * 1));
+                }
+                margin-left: 2px;
+            }
+        }
+
+
+        tbody{
+
+            .day{
+                border: 1px solid @day-border;
+                padding: 0;
+                text-align: right;
+                vertical-align: top;
+                background: @day-background;
+                color: @day-color;
+                width: 14%;
+                @media(min-width: @screen-sm-min) {
+                    //min-width: 102px;
+                    border-width: 3px;
+                }
+                @media(min-width: @screen-md-min) {
+                    //min-width: 99px;
+                }
+
+            }
+
+            .day.event{
+                color: @day-event-color;
+                background: white;
+
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+
+
+            .day.past, .day.next-month, .day.inactive, .day.last-month{
+                background: @day-inactive-background;
+                color: @day-inactive-color;
+
+                .day-number{
+                    background: @day-inactive-number-background;
+                    color: inherit;
+                }
+                .cell{
+                    .price{
+                        visibility: hidden;
+                    }
+                }
+                .price{
+                    color: @day-price-color;
+                }
+                &.inactive{
+                    &:hover{
+
+                        color: @day-inactive-hover-color;
+                        cursor: not-allowed;
+                        .instead, .price{
+                            color: @day-inactive-hover-price-color;
+                        }
+                    }
+                }
+            }
+
+            .day.selected{
+                .price{
+                    color: @day-selected-price-color;
+                }
+                &.active{
+                    .instead, .price{
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .day.selected-hover{
+                background: @day-selected-range-background;
+            }
+
+            .day.selected-begin, .day.selected-end {
+                background: @day-selected-background;
+            }
+
+            .day.mouseover{
+                background: @day-hover-background;
+                .instead, .price{
+                    color: @day-hover-price-color;
+                }
+            }
+
+
+
+
+        }
+
+        .cell[data-equal='1'], .cell[data-equal='true']{
+            .instead{
+                visibility: hidden;
+            }
+        }
+
+    }
+}
