@@ -169,8 +169,9 @@ class Tmsm_Availpro_Public {
 
                     <% if (days[d].events.length != 0) { %>
                     <% _.each(days[d].events, function(event) { %>
-                    <div class="cell" data-price="<%= event.Price %>" data-status="<%= event.Status %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.MinimumStayThrough %>">
-                        <small class="day-number"><%= days[d].day %></small>
+                    <div class="cell" data-price="<%= event.Price %>" data-status="<%= event.Status %>"  data-lowestprice="<%= event.LowestPrice %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.MinimumStayThrough %>">
+                        <span class="day-number"><%= days[d].day %></span>
+                        <span class="minstay">⇾</span>
                         <p class="price"><%= event.PriceWithCurrency %></p>
                     </div>
                     <% }) %>
@@ -178,7 +179,7 @@ class Tmsm_Availpro_Public {
                     <% } else { %>
 
                     <div class="cell">
-                        <small class="day-number"><%= days[d].day %></small>
+                        <span class="day-number"><%= days[d].day %></span>
                         <p class="price">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                     </div>
                     <% } %>

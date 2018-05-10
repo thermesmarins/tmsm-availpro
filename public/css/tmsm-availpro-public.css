@@ -6,8 +6,20 @@
 #tmsm-availpro-calendar.calendar-small .hide-small {
   display: none;
 }
+#tmsm-availpro-calendar.calendar-small .clndr-controls {
+  font-size: 19px;
+}
+#tmsm-availpro-calendar.calendar-small .day {
+  font-size: 13px;
+}
 #tmsm-availpro-calendar.calendar-large .hide-large {
   display: none;
+}
+#tmsm-availpro-calendar.calendar-large .clndr-controls {
+  font-size: 23px;
+}
+#tmsm-availpro-calendar.calendar-large .day {
+  font-size: 16px;
 }
 @media (min-width: 500px) {
   #tmsm-availpro-calendar {
@@ -42,7 +54,6 @@
 }
 #tmsm-availpro-calendar .table-calendarprices .month {
   height: 40px;
-  font-size: 19px;
   font-weight: normal;
   text-align: center;
 }
@@ -51,9 +62,6 @@
 }
 #tmsm-availpro-calendar .table-calendarprices .month small {
   display: none;
-}
-#tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span {
-  font-size: 19px;
 }
 #tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span:hover {
   cursor: pointer;
@@ -69,8 +77,9 @@
   text-align: right;
 }
 #tmsm-availpro-calendar .table-calendarprices .cell {
+  vertical-align: middle;
   position: relative;
-  padding: 20px 3px 4px 3px;
+  padding: 4px 3px 4px 3px;
 }
 @media (min-width: 500px) {
   #tmsm-availpro-calendar .table-calendarprices .cell {
@@ -81,21 +90,20 @@
   display: none;
 }
 #tmsm-availpro-calendar .table-calendarprices .day-number {
-  background: #a5a5a5;
+  background: transparent;
   color: #ffffff;
-  position: absolute;
-  top: 0;
-  left: 0;
   padding: 1px;
-  width: 16px;
   display: inline-block;
-  text-align: center;
-  font-size: 10px;
 }
-@media (min-width: 500px) {
-  #tmsm-availpro-calendar .table-calendarprices .day-number {
-    font-size: 11px;
-  }
+#tmsm-availpro-calendar .table-calendarprices .minstay {
+  position: absolute;
+  line-height: 14px;
+  top: 0;
+  right: 0;
+  display: none;
+  padding: 2px;
+  background: #ffffff;
+  color: #333333;
 }
 #tmsm-availpro-calendar .table-calendarprices .day-special {
   position: absolute;
@@ -109,30 +117,15 @@
   display: block;
 }
 #tmsm-availpro-calendar .table-calendarprices .price {
-  font-weight: 300;
+  font-weight: bold;
   margin: 0;
-  font-size: 11px;
-}
-@media (min-width: 500px) {
-  #tmsm-availpro-calendar .table-calendarprices .price {
-    font-size: 17px;
-  }
-}
-#tmsm-availpro-calendar .table-calendarprices .price .currency {
-  font-size: 10px;
-  margin-left: 2px;
-}
-@media (min-width: 500px) {
-  #tmsm-availpro-calendar .table-calendarprices .price .currency {
-    font-size: 13px;
-  }
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day {
   border: 1px solid #f2f2f2;
   padding: 0;
-  text-align: right;
+  text-align: center;
   vertical-align: top;
-  background: #f2f2f2;
+  background: WhiteSmoke;
   color: #999999;
   width: 14%;
 }
@@ -141,9 +134,14 @@
     border-width: 3px;
   }
 }
+#tmsm-availpro-calendar .table-calendarprices tbody .day .price {
+  color: #ffffff;
+}
 #tmsm-availpro-calendar .table-calendarprices tbody .day.event {
   color: #666666;
-  background: white;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.event .cell {
+  background: #a9a9a9;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.event:hover {
   cursor: pointer;
@@ -152,27 +150,26 @@
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.last-month {
-  background: #ffffff;
-  color: #999999;
+  color: #a9a9a9 !important;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell {
+  background: WhiteSmoke !important;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .day-number {
-  background: #d9d9d9;
-  color: #ffffff;
+  background: inherit;
+  color: inherit;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .price {
   visibility: hidden;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.past .price,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .price,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .price,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .price {
-  color: #008000;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past.inactive:hover,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month.inactive:hover,
@@ -198,19 +195,29 @@
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .price {
   opacity: 1;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover {
-  background: #00e600;
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell {
+  background: #666666;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end {
-  background: #008000;
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell {
+  background: #333333;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover {
-  background: #ffd700;
+#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell {
+  background: #333333;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .instead,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price {
   color: #ffffff;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice='1'] {
+  background: #ffd700;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='1'],
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
+  background: #ff8789;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay=""]) .minstay {
+  display: inline-block;
 }
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='1'] .instead,
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='true'] .instead {

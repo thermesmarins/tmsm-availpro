@@ -45,19 +45,36 @@
         var days = tmsm_availpro_params.data[month.format('YYYY-MM')];
         var events = [];
         var i = 0;
+        var lowest_price = null;
+
+        // Get lowest price
+        $.each(days, function (index, value) {
+          if (typeof value.Price !== 'undefined') {
+            lowest_price = (value.Price);
+            if(lowest_price > (value.Price)){
+              lowest_price = (value.Price);
+            }
+          }
+        });
+
+        // Create Events
         $.each(days, function (index, value) {
           //console.log(index);
-
           value.date = index;
           if (typeof value.Price !== 'undefined') {
-            value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+            value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale,
+              {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+            if(value.Price === lowest_price){
+              value.LowestPrice=1;
+            }
           }
 
-          //console.log(value);
           events[i] = value;
           events_toload.push(events[i]);
           i++;
         });
+        console.log('lowest_price: '+lowest_price);
         tmsm_availpro_calendar_clndr.addEvents(events_toload);
       }
 
