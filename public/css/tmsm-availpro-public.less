@@ -1,19 +1,18 @@
-@brand-primary-alt: purple;
-@brand-primary: grey;
-@brand-primary-highlight: gold;
-
-@calendar-background: #f2f2f2;
-
-
 @screen-sm-min:500px;
 @screen-md-min: 900px;
 @font-size-base: 13px;
 
-@controls-border: rgba(0,0,0,0.5);
+@calendar-background: #f2f2f2;
+@calendar-text-color: grey;
+@controls-border: darkgrey;
 
 @day-special-color: red;
-@day-number-background: darken(@calendar-background, 20%);
+
+@day-number-background: darken(@calendar-background, 30%);
+@day-number-color: white;
 @day-inactive-number-background: darken(@calendar-background, 10%);
+@day-inactive-number-color: white;
+
 @day-background: @calendar-background;
 @day-color: #999;
 @day-border: @calendar-background;
@@ -25,16 +24,34 @@
 @day-inactive-hover-color: #333;
 @day-inactive-hover-price-color: #333;
 
-@day-selected-background: gold;
+@day-selected-background: green;
 @day-selected-range-background: lighten(@day-selected-background, 20%);
 @day-selected-price-color: white;
 
-@day-hover-background: green;
+@day-hover-background: gold;
 @day-hover-price-color: white;
 
 @day-price-color: green;
 
 #tmsm-availpro-calendar{
+
+    &.calendar-small{
+        .hide-small {
+            display: none;
+        }
+    }
+
+    &.calendar-large{
+        .hide-large {
+            display: none;
+        }
+    }
+
+
+
+
+
+    color: @calendar-text-color;
 
     background: @calendar-background;
 
@@ -84,7 +101,6 @@
         }
 
         .clndr-control-button{
-            color: @brand-primary;
             > span {
                 font-size: ceil((@font-size-base * 1.4));
                 &:hover{
@@ -119,6 +135,7 @@
 
         .day-number{
             background: @day-number-background;
+            color: @day-number-color;
             position: absolute;
             top: 0;
             left: 0;
@@ -203,7 +220,7 @@
 
                 .day-number{
                     background: @day-inactive-number-background;
-                    color: inherit;
+                    color: @day-inactive-number-color;
                 }
                 .cell{
                     .price{

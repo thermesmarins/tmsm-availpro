@@ -152,7 +152,10 @@ class Tmsm_Availpro_Public {
 
                 <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
 <th class="header-day">
-                    <%= moment().weekday(i).format('dd').charAt(0) %><span class="rest"><%= moment().weekday(i).format('dddd').slice(1) %></span>
+                    <!--<%= moment().weekday(i).format('dd').charAt(0) %><span class="rest"><%= moment().weekday(i).format('dddd').slice(1) %></span>-->
+                    <span class="hide-large"><%= moment().weekday(i).format('dd').charAt(0) %></span>
+                    <span class="hide-small"><%= moment().weekday(i).format('dddd')%></span>
+                    
                 </th>
                 <% } %>
             </tr>

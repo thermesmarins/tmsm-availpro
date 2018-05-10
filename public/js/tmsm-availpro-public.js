@@ -58,7 +58,7 @@
           events_toload.push(events[i]);
           i++;
         });
-        tmsm_availpro_calendar.addEvents(events_toload);
+        tmsm_availpro_calendar_clndr.addEvents(events_toload);
       }
 
     }
@@ -89,8 +89,25 @@
 
   }
 
-  // Calendar
-  var tmsm_availpro_calendar = $('#tmsm-availpro-calendar').clndr({
+  var tmsm_availpro_calendar = $('#tmsm-availpro-calendar');
+  var setCalendarWidth = function(){
+
+    if(tmsm_availpro_calendar.width()> 600){
+      tmsm_availpro_calendar.addClass('calendar-large');
+      tmsm_availpro_calendar.removeClass('calendar-small');
+    }
+    else{
+      tmsm_availpro_calendar.addClass('calendar-small');
+      tmsm_availpro_calendar.removeClass('calendar-large');
+    }
+  };
+  $( window ).resize(function() {
+    setCalendarWidth();
+  });
+  setCalendarWidth();
+
+  // Clndr
+  var tmsm_availpro_calendar_clndr = tmsm_availpro_calendar.clndr({
     template: $('#tmsm-availpro-calendar-template').html(),
     startWithMonth: tmsm_availpro_calendar_startdate,
     constraints: {
