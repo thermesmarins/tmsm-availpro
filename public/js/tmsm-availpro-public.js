@@ -13,7 +13,8 @@
   var tmsm_availpro_calendar_lastdateclicked;
   var tmsm_availpro_calendar_current_year;
   var tmsm_availpro_calendar_current_month;
-  var tmsm_availpro_calendar_nights;
+  var tmsm_availpro_calendar_nights = 1;
+  var tmsm_availpro_calendar_minstay = 0;
 
   /**
    * Set Calendar Events for Month
@@ -49,10 +50,12 @@
 
         // Get lowest price
         $.each(days, function (index, value) {
-          if (typeof value.Price !== 'undefined') {
-            lowest_price = (value.Price);
-            if(lowest_price > (value.Price)){
-              lowest_price = (value.Price);
+          if (typeof value.Price !== 'undefined' && value.Status !=='NotAvailable' ) {
+            if(lowest_price === null){
+              lowest_price = Number(value.Price);
+            }
+            if(Number(value.Price) < lowest_price){
+              lowest_price = Number(value.Price);
             }
           }
         });
@@ -61,18 +64,19 @@
         $.each(days, function (index, value) {
           //console.log(index);
           value.date = index;
-          if (typeof value.Price !== 'undefined') {
+          if (typeof value.Price !== 'undefined' && value.Status !=='NotAvailable') {
             value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale,
               {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
 
-            if(value.Price === lowest_price){
+            if(Number(value.Price) === lowest_price){
               value.LowestPrice=1;
             }
+            events[i] = value;
+            events_toload.push(events[i]);
+            i++;
           }
 
-          events[i] = value;
-          events_toload.push(events[i]);
-          i++;
+
         });
         console.log('lowest_price: '+lowest_price);
         tmsm_availpro_calendar_clndr.addEvents(events_toload);
@@ -151,16 +155,44 @@
             $('.day').removeClass('selected').removeClass('selected-hover').removeClass('selected-begin').removeClass('selected-end').removeClass('active');
             tmsm_availpro_calendar_selected_begin = undefined;
             tmsm_availpro_calendar_selected_end = undefined;
+            $('#tmsm-availpro-form-checkoutdateinfo').val('');
+            $('#tmsm-availpro-form-checkoutdate').val('');
           }
 
           // Begin date not initialized
           if(typeof tmsm_availpro_calendar_selected_begin === 'undefined'){
             tmsm_availpro_calendar_selected_begin = tmsm_availpro_calendar_lastdateclicked;
             $('.calendar-day-' + tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD')).addClass('selected selected-begin');
+            $('#tmsm-availpro-form-checkindateinfo').val(tmsm_availpro_calendar_selected_begin.format('L'));
+            $('#tmsm-availpro-form-checkindate').val(tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD'));
+            $('#tmsm-availpro-form-arrivaldate').val(tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD'));
+
+            tmsm_availpro_calendar_minstay = $('.calendar-day-' + tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD') +' .cell').data('minstay');
+            if(!tmsm_availpro_calendar_minstay){
+              tmsm_availpro_calendar_minstay = 0;
+            }
+            $('#tmsm-availpro-form-minstay-message').attr('data-value', tmsm_availpro_calendar_minstay);
+            $('#tmsm-availpro-form-minstay-number').html(tmsm_availpro_calendar_minstay);
+
           }
           else{
-              tmsm_availpro_calendar_selected_end = tmsm_availpro_calendar_lastdateclicked;
+            tmsm_availpro_calendar_selected_end = tmsm_availpro_calendar_lastdateclicked;
+
+            // Check if dates respect minstay
+            if (tmsm_availpro_calendar_minstay > 0) {
+              var checkminstay = moment(tmsm_availpro_calendar_selected_begin);
+              if (checkminstay.add(tmsm_availpro_calendar_minstay, 'days') > tmsm_availpro_calendar_selected_end) {
+                console.warn('doest not respect minstay');
+                tmsm_availpro_calendar_selected_end = undefined;
+              }
+              else {
+
+              }
+            }
+            if( typeof tmsm_availpro_calendar_selected_end !== 'undefined'){
               $('.calendar-day-' + tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD')).addClass('selected selected-end');
+            }
+
             /*var tmsm_availpro_calendar_selected_hover = tmsm_availpro_calendar_selected_begin;
             while(tmsm_availpro_calendar_selected_hover.format('YYYY-MM-DD') != tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD')) {
               tmsm_availpro_calendar_selected_hover.add(1, 'days');
@@ -168,6 +200,9 @@
               //console.log(tmsm_availpro_calendar_selected_begin_hover);
               $('.calendar-day-' + tmsm_availpro_calendar_selected_hover.format('YYYY-MM-DD')).addClass('selected selected-range');
             }*/
+
+
+
           }
 
           // Reorder dates
@@ -177,8 +212,22 @@
               tmsm_availpro_calendar_selected_begin = tmsm_availpro_calendar_selected_end;
               tmsm_availpro_calendar_selected_end = temp_begin;
             }
-            tmsm_availpro_calendar_nights = tmsm_availpro_calendar_selected_end.diff(tmsm_availpro_calendar_selected_begin, "days");
 
+            tmsm_availpro_calendar_nights = tmsm_availpro_calendar_selected_end.diff(tmsm_availpro_calendar_selected_begin, "days");
+            $('#tmsm-availpro-form-checkoutdateinfo').val(tmsm_availpro_calendar_selected_end.format('L'));
+            $('#tmsm-availpro-form-checkoutdate').val(tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD'));
+
+          }
+          else{
+            tmsm_availpro_calendar_nights = 0;
+          }
+
+          $('#tmsm-availpro-form-nights-number').html(tmsm_availpro_calendar_nights);
+          $('#tmsm-availpro-form-nights-message').attr('data-value', tmsm_availpro_calendar_nights);
+          $('#tmsm-availpro-form-nights').val(tmsm_availpro_calendar_nights);
+          if(tmsm_availpro_calendar_nights > 0){
+            $('#tmsm-availpro-form-minstay-message').attr('data-value', 0);
+            $('#tmsm-availpro-form-minstay-number').html('');
           }
 
           console.log('tmsm_availpro_calendar_selected_begin:');

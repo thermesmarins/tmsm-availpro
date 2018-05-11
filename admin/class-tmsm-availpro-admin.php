@@ -250,6 +250,17 @@ class Tmsm_Availpro_Admin {
 			)
 		);
 
+		add_settings_field(
+			'engine',
+			esc_html__( 'Engine (format: name/id/)', 'tmsm-availpro' ) ,
+			array( $this, 'field_text' ),
+			$this->plugin_name,
+			$this->plugin_name . '-filters',
+			array(
+				'id' 			=> 'engine',
+			)
+		);
+
 		/*add_settings_field(
 			'how-to-apply',
 			apply_filters( $this->plugin_name . 'label-how-to-apply', esc_html__( 'How to Apply', 'tmsm-availpro' ) ),
@@ -578,6 +589,7 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'roomids', 'text', '' );
 		$options[] = array( 'rateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
+		$options[] = array( 'engine', 'text', '' );
 		//$options[] = array( 'message-no-openings', 'text', 'Thank you for your interest! There are no job openings at this time.' );
 		//$options[] = array( 'howtoapply', 'editor', '' );
 		//$options[] = array( 'repeat-test', 'repeater', array( array( 'test1', 'text' ), array( 'test2', 'text' ), array( 'test3', 'text' ) ) );

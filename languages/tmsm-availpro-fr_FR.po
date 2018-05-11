@@ -1,12 +1,11 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: TMSM Availpro\n"
 "POT-Creation-Date: 2018-05-11 15:16+0200\n"
-"PO-Revision-Date: 2014-10-24 21:08+0100\n"
+"PO-Revision-Date: 2018-05-11 15:16+0200\n"
 "Last-Translator: Nicolas Mollet <nico.mollet@gmail.com>\n"
 "Language-Team: Nicolas Mollet <nico.mollet@gmail.com>\n"
-"Language: en\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,139 +13,142 @@ msgstr ""
 "X-Poedit-KeywordsList: _e;__;_n:1,2;_x:1,2c;esc_attr__;esc_attr_e;"
 "esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: languages\n"
 "X-Poedit-SearchPath-1: .\n"
 "X-Poedit-SearchPathExcluded-0: vendor\n"
 
 #: admin/class-tmsm-availpro-admin.php:97
 msgid "Availpro"
-msgstr ""
+msgstr "Availpro"
 
 #: admin/class-tmsm-availpro-admin.php:110
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 #: admin/class-tmsm-availpro-admin.php:154
 msgid "Consumer key"
-msgstr ""
+msgstr "Clé client"
 
 #: admin/class-tmsm-availpro-admin.php:167
 msgid "Consumer secret"
-msgstr ""
+msgstr "Secret client"
 
 #: admin/class-tmsm-availpro-admin.php:178
 msgid "Access token"
-msgstr ""
+msgstr "Token d’accès"
 
 #: admin/class-tmsm-availpro-admin.php:189
 msgid "Token secret"
-msgstr ""
+msgstr "Secret de token"
 
 #: admin/class-tmsm-availpro-admin.php:200
 msgid "Group ID"
-msgstr ""
+msgstr "Identifiant du groupe"
 
 #: admin/class-tmsm-availpro-admin.php:211
 msgid "Hotel ID"
-msgstr ""
+msgstr "Identifiant de l'hôtel"
 
 #: admin/class-tmsm-availpro-admin.php:222
 msgid "Room IDs (separated by comma)"
-msgstr ""
+msgstr "Identifiants de chambres (séparé par des virgules)"
 
 #: admin/class-tmsm-availpro-admin.php:233
 msgid "Rate IDs (separated by comma)"
-msgstr ""
+msgstr "Identifiants de tarifs (séparé par des virgules)"
 
 #: admin/class-tmsm-availpro-admin.php:244
 msgid "Currency (ISO 4217 code)"
-msgstr ""
+msgstr "Monnaie (code ISO 4217)"
 
 #: admin/class-tmsm-availpro-admin.php:255
 msgid "Engine (format: name/id/)"
-msgstr ""
+msgstr "Moteur (format : nom/identifiant/)"
 
 #: admin/class-tmsm-availpro-admin.php:338
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: admin/class-tmsm-availpro-admin.php:345
 msgid "Filters"
-msgstr ""
+msgstr "Filtres"
 
 #: admin/partials/tmsm-availpro-admin-options-page.php:16
 msgid "Save options"
-msgstr ""
+msgstr "Enregistrer les options"
 
 #: includes/class-tmsm-availpro-sanitize.php:190
 msgid "Specify the data type to sanitize."
-msgstr ""
+msgstr "Spécifier de type de données à normaliser."
 
 #: includes/class-tmsm-availpro-sanitize.php:196
 msgid "Forgot data type"
-msgstr ""
+msgstr "Type de données oublié"
 
 #: public/class-tmsm-availpro-public.php:152
 #: public/class-tmsm-availpro-public.php:245
 msgid "Book now"
-msgstr ""
+msgstr "Réserver maintenant"
 
 #: public/class-tmsm-availpro-public.php:202
 msgid "Not available"
-msgstr ""
+msgstr "Indisponible"
 
 #: public/class-tmsm-availpro-public.php:203
 msgid "Available"
-msgstr ""
+msgstr "Disponible"
 
 #: public/class-tmsm-availpro-public.php:204
 msgid "Lowest price"
-msgstr ""
+msgstr "Prix le plus bas"
 
 #: public/class-tmsm-availpro-public.php:205
 msgid "Last rooms"
-msgstr ""
+msgstr "Dernières disponibilités"
 
 #: public/class-tmsm-availpro-public.php:206
 msgid "Minimum stay"
-msgstr ""
+msgstr "Durée minimum"
 
 #: public/class-tmsm-availpro-public.php:221
 msgid "Number of nights:"
-msgstr ""
+msgstr "Nombre de nuits :"
 
 #: public/class-tmsm-availpro-public.php:222
 msgid "Minimum stay:"
-msgstr ""
+msgstr "Durée minimum :"
 
 #: public/class-tmsm-availpro-public.php:225
 msgid "From"
-msgstr ""
+msgstr "Du"
 
 #: public/class-tmsm-availpro-public.php:225
 msgid "Checkin"
-msgstr ""
+msgstr "Arrivée"
 
 #: public/class-tmsm-availpro-public.php:225
 msgid "To"
-msgstr ""
+msgstr "Au"
 
 #: public/class-tmsm-availpro-public.php:225
 msgid "Checkout"
-msgstr ""
+msgstr "Départ"
 
 #: public/class-tmsm-availpro-public.php:229
 msgid "Number of adults:"
-msgstr ""
+msgstr "Nombre d’adultes :"
 
 #: public/class-tmsm-availpro-public.php:231
 msgid "Number of adults"
-msgstr ""
+msgstr "Nombre d’adultes"
 
 #: public/class-tmsm-availpro-public.php:236
 #, php-format
 msgid "%s adult"
 msgid_plural "%s adults"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s adulte"
+msgstr[1] "%s adultes"
+
+#~ msgid "Engine"
+#~ msgstr "Moteur"

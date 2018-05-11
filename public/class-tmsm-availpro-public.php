@@ -50,6 +50,19 @@ class Tmsm_Availpro_Public {
 	private $options;
 
 	/**
+	 * Engine URL
+	 *
+	 * @since 		1.0.0
+	 */
+	const ENGINE_URL = 'https://www.secure-hotel-booking.com/';
+
+	/**
+	 * Frontend Locale
+	 * @var
+	 */
+	private $locale;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -63,6 +76,21 @@ class Tmsm_Availpro_Public {
 		$this->version     = $version;
 
 		$this->set_options();
+		$this->set_locale();
+	}
+
+	/**
+	 * Sets locale
+	 */
+	private function set_locale() {
+		$this->locale = (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(),0, 2));
+	}
+
+	/**
+	 * Gets locale
+	 */
+	private function get_locale() {
+		return $this->locale;
 	}
 
 	/**
@@ -70,6 +98,19 @@ class Tmsm_Availpro_Public {
 	 */
 	private function set_options() {
 		$this->options = get_option( $this->plugin_name . '-options' );
+	}
+
+	/**
+	 * Get option
+	 * @param string $option_name
+	 *
+	 * @return null
+	 */
+	private function get_option($option_name){
+		if(empty($this->options[$option_name])){
+			return null;
+		}
+		return $this->options[$option_name];
 	}
 
 	/**
@@ -105,7 +146,7 @@ class Tmsm_Availpro_Public {
 		// Params
 		$params = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'locale' => (function_exists('pll_current_language') ? pll_current_language() : 'en'),
+			'locale' => $this->get_locale(),
 			'security' => wp_create_nonce( 'security' ),
 			'i18n' => [
 				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
@@ -119,13 +160,103 @@ class Tmsm_Availpro_Public {
 		wp_localize_script( $this->plugin_name, 'tmsm_availpro_params', $params);
 	}
 
+	/**
+	 * Register the shortcodes
+	 *
+	 * @since    1.0.0
+	 */
+	public function register_shortcodes() {
+		add_shortcode( 'tmsm-availpro-calendar', array( $this, 'calendar_shortcode') );
+	}
+
+	/**
+	 * Calendar shortcode
+	 *
+	 * @since    1.0.0
+	 */
+	public function calendar_shortcode($atts) {
+		$atts = shortcode_atts( array(
+			'option' => '',
+		), $atts, 'tmsm-availpro-calendar' );
+
+		$output = self::calendar_template();
+		$output .= $this->form_template();
+
+		return $output;
+	}
+
+	/**
+	 * Form template
+	 *
+	 * @return string
+	 */
+	private function form_template(){
+
+		$today = new Datetime();
+		$tomorrow = (new DateTime())->modify('+1 day');
+
+		$output = '
+		<form target="_blank" action="'.self::ENGINE_URL.$this->get_option('engine').'" method="get" id="tmsm-availpro-form">
+		
+	        <div class="tmsm-availpro-form-legend">
+                <p class="legend-item legend-item-notavailable">'.__('Not available','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-available">'.__('Available','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-lowestprice">'.__('Lowest price','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-lastrooms">'.__('Last rooms','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-minstay">'.__('Minimum stay','tmsm-availpro').'</p>
+	        </div>
+        
+		<input type="hidden" name="language" value="'.$this->get_locale().'">
+		<input type="hidden" name="arrivalDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-arrivaldate">
+		<input type="hidden" name="nights" value="1" id="tmsm-availpro-form-nights">
+		<input type="hidden" name="checkinDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-checkindate">
+		<input type="hidden" name="checkoutDate" value="'.$tomorrow->format('Y-m-d').'" id="tmsm-availpro-form-checkoutdate">
+		<input type="hidden" name="selectedChildCount" value="0">
+		<input type="hidden" name="guestCountSelector" value="ReadOnly">
+		<input type="hidden" name="rate" value="">
+		<input type="hidden" name="roomid" value="">
+		<input type="hidden" name="showSearch" value="true">
+		
+        <div class="tmsm-availpro-form-fields">
+            <p id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></p>
+            <p id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></p>
+
+			<p>
+				<label for="tmsm-availpro-form-checkindateinfo" id="tmsm-availpro-form-checkindateinfo-label">' . __( 'From', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkindateinfo" type="text" name="checkinDateInfo" value="' . __( 'Checkin', 'tmsm-availpro' ) . '" readonly><label for="tmsm-availpro-form-checkoutdateinfo" id="tmsm-availpro-form-checkoutdateinfo-label">' . __( 'To', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkoutdateinfo" type="text" name="checkoutDateInfo" value="' . __( 'Checkout', 'tmsm-availpro' ) . '" readonly>
+			</p>
+
+			<p>
+				<label for="tmsm-availpro-form-adults" id="tmsm-availpro-form-adults-label">'.__( 'Number of adults:', 'tmsm-availpro' ).'</label>
+				<select name="selectedAdultCount" id="tmsm-availpro-form-adults">
+				<option value="2">'.__( 'Number of adults', 'tmsm-availpro' ).'</option>';
+
+
+				for ( $adults = 1; $adults <= 6; $adults ++ ) {
+					$output .= '<option value="' . $adults . '">';
+					$output .= sprintf( _n( '%s adult', '%s adults', $adults, 'tmsm-availpro' ), number_format_i18n( $adults ) );
+					$output .= '</option>';
+				}
+		$output.='
+
+				</select>
+			</p>
+                
+            <p>
+            <button type="submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
+            </p>
+            </div>
+
+            </form>
+		';
+		return $output;
+	}
 
 	/**
 	 * Display calendar template
 	 *
 	 * @return string
 	 */
-	public function calendar_template(){
+	private static function calendar_template(){
 		$output = <<<EOT
 <div id="tmsm-availpro-calendar">
     <script id="tmsm-availpro-calendar-template" type="text/template">
@@ -140,8 +271,8 @@ class Tmsm_Availpro_Public {
                     <%= month %> <%= year %>
 
                     &nbsp;
-                    <small class="calendar-error">(Aucune date disponible pour ce mois)</small>
-                    <small class="calendar-loading">Chargement <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></small>
+                    <small class="tmsm-availpro-calendar-error">(Aucune date disponible pour ce mois)</small>
+                    <small class="tmsm-availpro-calendar-loading">Chargement <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></small>
 
                 </th>
                 <th class="clndr-control-button clndr-control-button-next">
@@ -194,21 +325,9 @@ class Tmsm_Availpro_Public {
 </div>
 EOT;
 
-		echo $output;
+		return $output;
 	}
 
-	/**
-	 * Get option
-	 * @param string $option_name
-	 *
-	 * @return null
-	 */
-	private function get_option($option_name){
-		if(empty($this->options[$option_name])){
-			return null;
-		}
-		return $this->options[$option_name];
-	}
 
 	/**
 	 * Get options for all bestprices months

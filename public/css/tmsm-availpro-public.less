@@ -3,27 +3,17 @@
 @font-size-small: 13px;
 @font-size-large: 16px;
 
-@calendar-background: #f2f2f2;
+@calendar-background: white;
 @calendar-text-color: grey;
 @controls-border: darkgrey;
 
-@day-special-color: red;
 
-@day-number-background: transparent;
-@day-number-color: white;
-@day-inactive-number-background: inherit;
-@day-inactive-number-color: inherit;
-
-@day-background: @calendar-background;
-@day-color: #999;
+@day-background: WhiteSmoke;
+@day-color: darkgrey;
+@day-color: darkgrey;
 @day-border: @calendar-background;
 
 @day-event-color: #666;
-
-@day-inactive-background: WhiteSmoke;
-@day-inactive-color: darkgrey;
-@day-inactive-hover-color: #333;
-@day-inactive-hover-price-color: #333;
 
 @day-selected-background: #333;
 @day-selected-range-background: lighten(@day-selected-background, 20%);
@@ -37,6 +27,10 @@
 @day-lowestprice-background: gold;
 @day-lowavailability-background: #ff8789;
 @day-event-background: darkgrey;
+@day-event-number-color: @day-price-color;
+@day-number-background: transparent;
+@day-number-color: inherit;
+
 
 @minstay-background: white;
 @minstay-color: #333;
@@ -52,6 +46,10 @@
         }
         .day{
             font-size: @font-size-small;
+            border: 1px solid @day-border;
+        }
+        .cell{
+            padding: 4px 3px 4px 3px;
         }
     }
 
@@ -65,6 +63,11 @@
         }
         .day{
             font-size: @font-size-large;
+            border: 3px solid @day-border;
+
+        }
+        .cell{
+            padding: 8px;
         }
     }
 
@@ -72,10 +75,10 @@
 
     background: @calendar-background;
 
-    min-height: 280px;
-    @media(min-width: @screen-sm-min) {
-        min-height: 375px;
-    }
+    //min-height: 280px;
+    //@media(min-width: @screen-sm-min) {
+    //    min-height: 375px;
+    //}
 
     .table-calendarprices{
         width: 100%;
@@ -95,12 +98,6 @@
         .header-days{
             .header-day{
                 text-align: center;
-            }
-            .rest{
-                display: none;
-                @media(min-width: @screen-sm-min) {
-                    display: inline-block;
-                }
             }
         }
 
@@ -140,12 +137,7 @@
         .cell{
             vertical-align: middle;
             position: relative;
-            padding: 4px 3px 4px 3px;
-            @media(min-width: @screen-sm-min) {
-                padding: 8px;
-                //min-width: 50px;
 
-            }
             + .cell{
                 display: none;
             }
@@ -181,7 +173,6 @@
             padding: 1px;
             width: 16px;
             //display: none;
-            color: @day-special-color;
             &.glyphicon-alert{
                 display: block;
             }
@@ -196,28 +187,28 @@
 
             .day{
 
-                border: 1px solid @day-border;
+
                 padding: 0;
                 text-align: center;
                 vertical-align: top;
-                background: @day-inactive-background;
+                background: @day-background;
                 color: @day-color;
                 width: 14%;
-                @media(min-width: @screen-sm-min) {
-                    //min-width: 102px;
-                    border-width: 3px;
-                }
-                @media(min-width: @screen-md-min) {
-                    //min-width: 99px;
-                }
+
                 .price{
                     color: @day-price-color;
                 }
             }
 
             .day.event{
+                .day-number{
+                    color:@day-event-number-color;
+                }
                 .cell{
                     background: @day-event-background;
+                    &[data-status='NotAvailable']{
+                        display: none;
+                    }
                 }
                 color: @day-event-color;
 
@@ -229,14 +220,10 @@
 
             .day.past, .day.next-month, .day.inactive, .day.last-month{
                 .cell{
-                    background: @day-inactive-background !important;
+                    background: @day-background !important;
                 }
-                color: @day-inactive-color  !important;;
+                color: @day-color  !important;;
 
-                .day-number{
-                    background: @day-inactive-number-background;
-                    color: @day-inactive-number-color;
-                }
                 .cell{
                     .price{
                         visibility: hidden;
@@ -245,12 +232,7 @@
 
                 &.inactive{
                     &:hover{
-
-                        color: @day-inactive-hover-color;
                         cursor: not-allowed;
-                        .instead, .price{
-                            color: @day-inactive-hover-price-color;
-                        }
                     }
                 }
             }
@@ -294,6 +276,8 @@
                 .cell[data-availability='1'], .cell[data-availability='2'] {
                     background: @day-lowavailability-background;
                 }
+
+
             }
             .day:not(.selected):not(.past):not(.mouseover){
                 .cell[data-minstay]:not([data-minstay=""]){
@@ -314,5 +298,98 @@
         }
 
 
+    }
+}
+
+#tmsm-availpro-form{
+    .tmsm-availpro-form-legend{
+        .legend-item{
+            margin-bottom: 5px;
+
+            &:before{
+                content: '';
+                border:1px solid black;
+                background: white;
+                width: 18px;
+                line-height: 7px;
+                height: 12px;
+                padding: 2px;
+                display: inline-block;
+                margin-right: 5px;
+            }
+            &.legend-item-notavailable{
+                &:before{
+                    background: @day-background;
+                }
+            }
+            &.legend-item-available{
+                &:before{
+                    background: @day-event-background;
+                }
+            }
+            &.legend-item-lowestprice{
+                &:before{
+                    background: @day-lowestprice-background;
+                }
+            }
+            &.legend-item-lastrooms{
+                &:before{
+                    background: @day-lowavailability-background;
+                }
+            }
+            &.legend-item-minstay{
+                &:before{
+                    content:'⇾';
+                    background: @minstay-background;
+                    color: @minstay-color;
+                }
+            }
+
+        }
+    }
+
+    #tmsm-availpro-form-checkindateinfo-label, #tmsm-availpro-form-adults-label{
+        display: none;
+    }
+    #tmsm-availpro-form-checkoutdateinfo-label{
+        text-align: center;
+        width: 20%;
+        display: inline-block;
+    }
+    #tmsm-availpro-form-checkindateinfo{
+        width:40%;
+    }
+    #tmsm-availpro-form-checkoutdateinfo{
+        width:40%;
+    }
+
+    #tmsm-availpro-form-minstay-message{
+        &[data-value='0']{
+            display: none;
+        }
+    }
+
+    #tmsm-availpro-form-adults{
+        width: auto;
+    }
+
+    #tmsm-availpro-form-nights-message{
+        &[data-value='0']{
+            display: none;
+        }
+    }
+
+}
+
+#tmsm-availpro-calendar{
+    @media(min-width: @screen-md-min) {
+        width: 60%;
+        display: inline-block;
+    }
+}
+#tmsm-availpro-form{
+    @media(min-width: @screen-md-min) {
+        width: 34%;
+        float: right;
     }
 }
