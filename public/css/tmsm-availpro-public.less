@@ -350,6 +350,7 @@
 
     #tmsm-availpro-form-checkindateinfo-label, #tmsm-availpro-form-adults-label{
         display: none;
+
     }
     #tmsm-availpro-form-checkoutdateinfo-label{
         text-align: center;
@@ -373,10 +374,23 @@
         width: auto;
     }
 
+    #tmsm-availpro-form-dates-container{
+        padding-top: 35px;
+        position: relative;
+    }
+
     #tmsm-availpro-form-nights-message{
         &[data-value='0']{
             display: none;
         }
+    }
+    #tmsm-availpro-form-nights-message, #tmsm-availpro-form-minstay-message {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
     }
 
 }

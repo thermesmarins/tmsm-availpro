@@ -205,7 +205,6 @@
   padding: 2px;
   display: inline-block;
   margin-right: 5px;
-  vertical-align: middle;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable:before {
   background: WhiteSmoke;
@@ -245,8 +244,21 @@
 #tmsm-availpro-form #tmsm-availpro-form-adults {
   width: auto;
 }
+#tmsm-availpro-form #tmsm-availpro-form-dates-container {
+  padding-top: 35px;
+  position: relative;
+}
 #tmsm-availpro-form #tmsm-availpro-form-nights-message[data-value='0'] {
   display: none;
+}
+#tmsm-availpro-form #tmsm-availpro-form-nights-message,
+#tmsm-availpro-form #tmsm-availpro-form-minstay-message {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
 }
 @media (min-width: 900px) {
   #tmsm-availpro-calendar {

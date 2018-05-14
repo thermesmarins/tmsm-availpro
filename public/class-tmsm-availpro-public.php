@@ -218,10 +218,11 @@ class Tmsm_Availpro_Public {
 		<input type="hidden" name="showSearch" value="true">
 		
         <div class="tmsm-availpro-form-fields">
-            <p id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></p>
-            <p id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></p>
 
-			<p>
+			<p id="tmsm-availpro-form-dates-container">
+            <span id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></span>
+            <span id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></span>
+
 				<label for="tmsm-availpro-form-checkindateinfo" id="tmsm-availpro-form-checkindateinfo-label">' . __( 'From', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkindateinfo" type="text" name="checkinDateInfo" value="' . __( 'Checkin', 'tmsm-availpro' ) . '" readonly><label for="tmsm-availpro-form-checkoutdateinfo" id="tmsm-availpro-form-checkoutdateinfo-label">' . __( 'To', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkoutdateinfo" type="text" name="checkoutDateInfo" value="' . __( 'Checkout', 'tmsm-availpro' ) . '" readonly>
 			</p>
 
