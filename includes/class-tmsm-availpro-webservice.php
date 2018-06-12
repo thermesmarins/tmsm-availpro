@@ -90,7 +90,9 @@ class Tmsm_Availpro_Webservice {
 			'accessToken'    => $options['accesstoken'],
 			'accessSecret'   => $options['tokensecret'],
 		];
-		error_log(var_export($this->oauth_identifiers, true));
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log(var_export($this->oauth_identifiers, true));
+		}
 	}
 
 	/**
@@ -141,14 +143,16 @@ class Tmsm_Availpro_Webservice {
 
 		// @TODO include $filters_roomids but it doesn't give any result with it
 		$this->filters ='
-					<ratePlans><ratePlan groupId="'.$option_groupid.'"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
+					<ratePlans><ratePlan groupId="'.$option_groupid.'" referenceRateCode="OTABAR"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 	                $filters_rateids.
 	                //$filters_roomids.
 	                '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
 	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		'';
 
-		error_log($this->filters);
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log($this->filters);
+		}
 
 	}
 
@@ -161,7 +165,9 @@ class Tmsm_Availpro_Webservice {
 	 */
 	public function get_data($month){
 
-		$month_firstday = DateTime::createFromFormat('Y-m', $month);
+		$timezone = new DateTimeZone( "Europe/Paris" );
+
+		$month_firstday = DateTime::createFromFormat('Y-m-d', $month.'-01', $timezone);
 		$month_firstday->modify('first day of this month');
 		$month_lastday = clone $month_firstday;
 		$month_lastday->modify('last day of this month');

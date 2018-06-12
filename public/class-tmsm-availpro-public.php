@@ -339,7 +339,7 @@ EOT;
 
 		$data = [];
 
-		// Brows 12 next months
+		// Browse 12 next months
 		$date = new Datetime();
 		$date->modify('-1 month');
 		$i=0;
@@ -365,6 +365,7 @@ EOT;
 		}
 
 		$lastmonthchecked = get_option( 'tmsm-availpro-lastmonthchecked', false );
+		$lastmonthchecked = '2018-05';
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log( 'Last month checked: ' . $lastmonthchecked );
 		}
@@ -376,12 +377,11 @@ EOT;
 			}
 			$monthtocheck = date( 'Y-m' );
 		} else {
-			$lastmonthchecked_object = DateTime::createFromFormat( 'Y-m', $lastmonthchecked );
+			$lastmonthchecked_object = DateTime::createFromFormat( 'Y-m-d', $lastmonthchecked.'-01' );
+
 			$lastmonthchecked_object->modify( '+1 month' );
 			$lastmonthchecked_limit = new Datetime();
 			$lastmonthchecked_limit->modify( '+1 year' );
-
-
 
 			if ( $lastmonthchecked_object->getTimestamp() >= $lastmonthchecked_limit->getTimestamp() ) {
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -392,6 +392,8 @@ EOT;
 				$monthtocheck = $lastmonthchecked_object->format( 'Y-m' );
 			}
 		}
+
+
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log( 'Month to check: ' . $monthtocheck );
