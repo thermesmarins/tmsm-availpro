@@ -30,24 +30,6 @@ class Tmsm_Availpro_Webservice {
 	const URL = 'https://ws.availpro.com/Planning/2012A/PlanningService.asmx?WSDL';
 
 	/**
-	 * Webservice URL
-	 *
-	 * @access 	private
-	 * @since 	1.0.0
-	 * @var 	string
-	 */
-	const METHOD = 'GetDailyPlanning';
-
-	/**
-	 * Webservice URL
-	 *
-	 * @access 	private
-	 * @since 	1.0.0
-	 * @var 	string
-	 */
-	const LAYOUT = '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>';
-
-	/**
 	 * Webservice Oauth identifiers
 	 *
 	 * @access 	private
@@ -142,13 +124,15 @@ class Tmsm_Availpro_Webservice {
 
 
 		// @TODO include $filters_roomids but it doesn't give any result with it
+		// @TODO not hardcode OTABAR
 		$this->filters ='
-					<ratePlans><ratePlan groupId="'.$option_groupid.'" referenceRateCode="OTABAR"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
+					<ratePlans><ratePlan groupId="'.$option_groupid.'" referenceRateCode="BARPROM"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 	                $filters_rateids.
 	                //$filters_roomids.
 	                '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
 	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		'';
+
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log($this->filters);
@@ -198,12 +182,12 @@ class Tmsm_Availpro_Webservice {
 			'hotelId'   => $options['hotelid'],
 			'beginDate' => $month_firstday->format('Y-m-d'),
 			'endDate'   => $month_lastday->format('Y-m-d'),
-			'layout'    => self::LAYOUT,
+			'layout'    => '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>',
 			'filter'    => $this->filters,
 		);
 
 		try {
-			$result = SoapOAuthWrapper::Invoke( self::URL, self::WSNAMESPACE, self::METHOD, $soap_parameters, $this->oauth_identifiers );
+			$result = SoapOAuthWrapper::Invoke( self::URL, self::WSNAMESPACE, 'GetDailyPlanning', $soap_parameters, $this->oauth_identifiers );
 			return $result;
 		} catch ( OAuthException2 $e ) {
 			return $e;
@@ -237,6 +221,91 @@ class Tmsm_Availpro_Webservice {
 
 		}
 		return $array;
+	}
+
+
+
+	/**
+	 * Get Stay Planning from Availpro API call
+	 *
+	 * @param string $arrivaldate (YYYY-MM-DD)
+	 * @param int $nights
+	 *
+	 * @return string
+	 */
+	public function get_stayplanning($arrivaldate, $nights){
+
+		$timezone = new DateTimeZone( "Europe/Paris" );
+
+		$arrivaldate = DateTime::createFromFormat('Y-m-d', $arrivaldate, $timezone);
+
+		if(!class_exists('SoapOAuthWrapper')){
+			return 'SoapOAuthWrapper doesn\'t exist';
+		}
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('SoapOAuthWrapper');
+		}
+
+
+		$options = get_option('tmsm-availpro-options', false);
+
+		$option_ratecode = '';
+		$option_rateids = $options['rateids'];
+		$option_rateids = '38558';
+		$option_groupid = $options['groupid'];
+		$option_hotelid = $options['hotelid'];
+
+		// rates
+		$option_rateids_array = [];
+		if(!empty($option_rateids) ){
+			$option_rateids_array = explode(',', $option_rateids);
+			foreach($option_rateids_array as &$item){
+				$item = trim($item);
+			}
+		}
+		$filters_rateids = '';
+		if(!empty($option_rateids_array) && is_array($option_rateids_array) && count($option_rateids_array) > 0){
+			$filters_rateids = '<rates default="Excluded">';
+			foreach($option_rateids_array as $item){
+				$filters_rateids .= '<exception id="'.$item.'"/>';
+			}
+			$filters_rateids .= '</rates>';
+		}
+
+		$filters_ratecode='';
+		if(!empty($option_ratecode)){
+			$filters_ratecode = 'referenceRateCode="'.$option_ratecode.'"';
+		}
+
+		$filters ='
+					<ratePlans><ratePlan groupId="'.$option_groupid.'" '.$filters_ratecode.'><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
+		          $filters_rateids.
+		          '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
+		          '<status><include status="Available" /></status>'.
+		          '';
+
+		$soap_parameters = array(
+			'groupId'   => $options['groupid'],
+			'hotelId'   => $options['hotelid'],
+			'arrivalDate' => $arrivaldate->format('Y-m-d'),
+			'nightCount'   => $nights,
+			'layout'    => '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>',
+			'filter'    => $filters,
+		);
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('soap_parameters:');
+			error_log(var_export($soap_parameters,true));
+		}
+
+		try {
+			$result = SoapOAuthWrapper::Invoke( self::URL, self::WSNAMESPACE, 'GetStayPlanning', $soap_parameters, $this->oauth_identifiers );
+			return $result;
+		} catch ( OAuthException2 $e ) {
+			return $e;
+		}
+
 	}
 
 }

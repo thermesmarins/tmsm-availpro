@@ -196,11 +196,6 @@ class Tmsm_Availpro_Public {
 		$tomorrow = (new DateTime())->modify('+1 day');
 
 		$output = '
-		<form action="" method="post" id="tmsm-availpro-calculatetotal">
-		'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce' ).'
-		<input type="text" name="tmsm-availpro-calculatetotal-totalprice" id="tmsm-availpro-calculatetotal-totalprice" value="" />
-        <button type="submit" id="tmsm-availpro-calculatetotal-submit" disabled="disabled">Submit</button>
-		</form>
 		<form target="_blank" action="'.self::ENGINE_URL.$this->get_option('engine').'" method="get" id="tmsm-availpro-form">
 		
 	        <div class="tmsm-availpro-form-legend">
@@ -247,12 +242,21 @@ class Tmsm_Availpro_Public {
 				</select>
 			</p>
                 
+            <p id="tmsm-availpro-calculateprice-results">
+                <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
+                ' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice"></span>
+			</p>
             <p>
-            <button type="submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
+            <button type="submit" id="tmsm-availpro-form-submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
             </p>
             </div>
 
             </form>
+            <form action="" method="post" id="tmsm-availpro-calculatetotal">
+			'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce' ).'
+	
+	        <button type="submit" id="tmsm-availpro-calculatetotal-submit">Submit</button>
+			</form>
 		';
 		return $output;
 	}
@@ -370,7 +374,7 @@ EOT;
 		}
 
 		$lastmonthchecked = get_option( 'tmsm-availpro-lastmonthchecked', false );
-		$lastmonthchecked = '2018-05';
+		$lastmonthchecked = '2018-06';
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log( 'Last month checked: ' . $lastmonthchecked );
 		}
@@ -546,6 +550,9 @@ EOT;
 	public static function ajax_calculate_totalprice() {
 
 		$security = sanitize_text_field( $_POST['security'] );
+		$date_begin = sanitize_text_field( $_POST['date_begin'] );
+		$date_end = sanitize_text_field( $_POST['date_end'] );
+		$nights = sanitize_text_field( $_POST['nights'] );
 
 		$errors = array(); // Array to hold validation errors
 		$data   = array(); // Array to pass back data
@@ -554,8 +561,9 @@ EOT;
 			error_log('ajax_calculate_totalprice');
 		}
 
+		// Check security
 		if ( empty( $security ) || ! wp_verify_nonce( $security, 'tmsm-availpro-calculatetotal-nonce-action' ) ) {
-			$errors[] = __('The request is not valid.', 'tmsm-availpro');
+			$errors[] = __('The request is not valid', 'tmsm-availpro');
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log('Ajax security not OK');
 			}
@@ -566,16 +574,110 @@ EOT;
 				error_log('Ajax security OK');
 			}
 		}
-
 		check_ajax_referer( 'tmsm-availpro-calculatetotal-nonce-action', 'security' );
 
-		$totalprice = 1523.14;
-		$data = [
-			1 => 2,
-			'totalprice' => money_format('%.2n', $totalprice),
-			];
+		// Check date begin
+		if(empty($date_begin)){
+			$errors[] = __('Date is empty', 'tmsm-availpro');
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Date is empty');
+			}
+		}
+		// Check nights number
+		if(empty($nights)){
+			$errors[] = __('Nights number are empty', 'tmsm-availpro');
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Nights number is empty');
+			}
+		}
 
-		// return a response
+
+
+		// Calculate price
+		$webservice = new Tmsm_Availpro_Webservice();
+		$response   = $webservice->get_stayplanning( $date_begin, $nights);
+		$data       = $webservice::convert_to_array( $response );
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('response:');
+			error_log($response);
+		}
+
+		// Init data var
+		$dailyplanning_bestprice = [];
+		if ( ! empty( $data ) ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'Data responsee' );
+			}
+
+			if ( isset( $data['response']['success'] ) ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log( 'data success' );
+				}
+				if ( isset( $data['response']['stayPlanning'] ) ) {
+
+					if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
+					     && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
+
+						foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) {
+							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+								error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+							}
+
+							$dailyplanning_bestprice_entity = [];
+
+							foreach ( $entity['property'] as $property ) {
+
+								$propertyname = $property['@attributes']['name'];
+
+								@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
+
+							}
+
+							ksort($dailyplanning_bestprice_entity);
+							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+								error_log('dailyplanning_bestprice_entity:');
+								error_log(var_export($dailyplanning_bestprice_entity, true));
+							}
+
+							// Merge data
+							if(empty($dailyplanning_bestprice)){
+								$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+							}
+							else{
+								if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price'])){
+									// New Price is less than merged data
+									if(
+										$dailyplanning_bestprice_entity['Price'] < $dailyplanning_bestprice['Price']
+									){
+										$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+									}
+								}
+
+							}
+						}
+					}
+				}
+			}
+		}
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('dailyplanning_bestprice:');
+			error_log(var_export($dailyplanning_bestprice, true));
+		}
+
+		$totalprice = null;
+		if(!empty($dailyplanning_bestprice)){
+			$totalprice = $dailyplanning_bestprice['Price'];
+		}
+		else{
+			$errors[] = __('No availability', 'tmsm-availpro');
+		}
+
+
+		$data = [
+			'totalprice' => money_format( '%.2n', $totalprice ),
+		];
+
+		// Return a response
 		if( ! empty($errors) ) {
 			$data['success'] = false;
 			$data['errors']  = $errors;
@@ -584,7 +686,6 @@ EOT;
 			$data['success'] = true;
 			$data['data'] = $data;
 		}
-
 		wp_send_json($data);
 		wp_die();
 

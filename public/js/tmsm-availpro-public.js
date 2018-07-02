@@ -370,11 +370,12 @@
     console.log(tmsm_availpro_calendar_selected_end);
 
     // Reset value
-    $('#tmsm-availpro-calculatetotal-totalprice').val('');
-    $('#tmsm-availpro-calculatetotal-submit').prop('disabled', true);
+    $('#tmsm-availpro-calculatetotal-totalprice').html('');
+    $('#tmsm-availpro-form-submit').prop('disabled', true);
+    $('#tmsm-availpro-calculatetotal-loading').show();
 
     // Calculate date if begin and end are defined
-    if(tmsm_availpro_calendar_selected_begin && tmsm_availpro_calendar_selected_end){
+    if(tmsm_availpro_calendar_selected_begin && tmsm_availpro_calendar_nights > 0){
 
       // Ajax call
       $.ajax({
@@ -384,8 +385,9 @@
         enctype: 'multipart/form-data',
         data: {
           action: 'tmsm-availpro-calculatetotal',
-          date_start: '3',
-          date_end: '3',
+          date_begin: tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD'),
+          date_end: tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD'),
+          nights: tmsm_availpro_calendar_nights,
           security: $('#tmsm-availpro-calculatetotal-nonce').val(),
         },
         success: function (data) {
@@ -393,14 +395,15 @@
           console.log('success 1');
 
           if (data.success === true) {
-            $('#tmsm-availpro-calculatetotal-submit').prop('disabled', false);
+            $('#tmsm-availpro-form-submit').prop('disabled', false);
+            $('#tmsm-availpro-calculatetotal-loading').hide();
             var Price = data.totalprice;
             if(Price){
               var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
 
               if(PriceWithCurrency){
                 console.log(PriceWithCurrency);
-                $('#tmsm-availpro-calculatetotal-totalprice').val(PriceWithCurrency);
+                $('#tmsm-availpro-calculatetotal-totalprice').html(PriceWithCurrency);
               }
 
             }
