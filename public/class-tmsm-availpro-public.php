@@ -196,6 +196,11 @@ class Tmsm_Availpro_Public {
 		$tomorrow = (new DateTime())->modify('+1 day');
 
 		$output = '
+		<form action="" method="post" id="tmsm-availpro-calculatetotal">
+		'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce' ).'
+		<input type="text" name="tmsm-availpro-calculatetotal-totalprice" id="tmsm-availpro-calculatetotal-totalprice" value="" />
+        <button type="submit" id="tmsm-availpro-calculatetotal-submit" disabled="disabled">Submit</button>
+		</form>
 		<form target="_blank" action="'.self::ENGINE_URL.$this->get_option('engine').'" method="get" id="tmsm-availpro-form">
 		
 	        <div class="tmsm-availpro-form-legend">
@@ -531,4 +536,57 @@ EOT;
 		$today = new Datetime();
 		delete_option( 'tmsm-availpro-bestprice-'.$today->modify('-1 month')->format('Y-m') );
 	}
+
+
+	/**
+	 * Ajax calculate total price
+	 *
+	 * @since    1.0.0
+	 */
+	public static function ajax_calculate_totalprice() {
+
+		$security = sanitize_text_field( $_POST['security'] );
+
+		$errors = array(); // Array to hold validation errors
+		$data   = array(); // Array to pass back data
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('ajax_calculate_totalprice');
+		}
+
+		if ( empty( $security ) || ! wp_verify_nonce( $security, 'tmsm-availpro-calculatetotal-nonce-action' ) ) {
+			$errors[] = __('The request is not valid.', 'tmsm-availpro');
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Ajax security not OK');
+			}
+			wp_die( -1 );
+		}
+		else{
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Ajax security OK');
+			}
+		}
+
+		check_ajax_referer( 'tmsm-availpro-calculatetotal-nonce-action', 'security' );
+
+		$totalprice = 1523.14;
+		$data = [
+			1 => 2,
+			'totalprice' => money_format('%.2n', $totalprice),
+			];
+
+		// return a response
+		if( ! empty($errors) ) {
+			$data['success'] = false;
+			$data['errors']  = $errors;
+		}
+		else {
+			$data['success'] = true;
+			$data['data'] = $data;
+		}
+
+		wp_send_json($data);
+		wp_die();
+
+    }
 }

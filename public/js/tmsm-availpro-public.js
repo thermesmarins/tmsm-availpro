@@ -217,6 +217,9 @@
             $('#tmsm-availpro-form-checkoutdateinfo').val(tmsm_availpro_calendar_selected_end.format('L'));
             $('#tmsm-availpro-form-checkoutdate').val(tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD'));
 
+            // Submit calculate total price
+            $('#tmsm-availpro-calculatetotal').submit();
+            
           }
           else{
             tmsm_availpro_calendar_nights = 0;
@@ -229,6 +232,8 @@
             $('#tmsm-availpro-form-minstay-message').attr('data-value', 0);
             $('#tmsm-availpro-form-minstay-number').html('');
           }
+
+
 
           console.log('tmsm_availpro_calendar_selected_begin:');
           console.log(tmsm_availpro_calendar_selected_begin);
@@ -351,5 +356,66 @@
   });
 
   tmsm_availpro_calendar_set_events(tmsm_availpro_calendar_startdate);
+
+  // Calculate total price form
+  $('#tmsm-availpro-calculatetotal').on('submit', function(e){
+    e.preventDefault();
+    console.log('tmsm-availpro-calculatetotal submit');
+
+    console.log(_wpUtilSettings.ajax.url);
+
+    console.log('tmsm_availpro_calendar_selected_begin:');
+    console.log(tmsm_availpro_calendar_selected_begin);
+    console.log('tmsm_availpro_calendar_selected_end:');
+    console.log(tmsm_availpro_calendar_selected_end);
+
+    // Reset value
+    $('#tmsm-availpro-calculatetotal-totalprice').val('');
+    $('#tmsm-availpro-calculatetotal-submit').prop('disabled', true);
+
+    // Calculate date if begin and end are defined
+    if(tmsm_availpro_calendar_selected_begin && tmsm_availpro_calendar_selected_end){
+
+      // Ajax call
+      $.ajax({
+        url: _wpUtilSettings.ajax.url,
+        type: 'post',
+        dataType: 'json',
+        enctype: 'multipart/form-data',
+        data: {
+          action: 'tmsm-availpro-calculatetotal',
+          date_start: '3',
+          date_end: '3',
+          security: $('#tmsm-availpro-calculatetotal-nonce').val(),
+        },
+        success: function (data) {
+          console.log(data);
+          console.log('success 1');
+
+          if (data.success === true) {
+            $('#tmsm-availpro-calculatetotal-submit').prop('disabled', false);
+            var Price = data.totalprice;
+            if(Price){
+              var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+              if(PriceWithCurrency){
+                console.log(PriceWithCurrency);
+                $('#tmsm-availpro-calculatetotal-totalprice').val(PriceWithCurrency);
+              }
+
+            }
+          }
+          else {
+          }
+        },
+        error: function (jqXHR, textStatus) {
+          console.log('error');
+          console.log(jqXHR);
+          console.log(textStatus);
+        }
+      });
+    }
+
+  });
 
 })( jQuery );
