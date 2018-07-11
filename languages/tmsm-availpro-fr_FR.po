@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TMSM Availpro\n"
-"POT-Creation-Date: 2018-05-11 15:16+0200\n"
-"PO-Revision-Date: 2018-05-11 15:16+0200\n"
+"POT-Creation-Date: 2018-07-11 15:30+0200\n"
+"PO-Revision-Date: 2018-07-11 15:31+0200\n"
 "Last-Translator: Nicolas Mollet <nico.mollet@gmail.com>\n"
 "Language-Team: Nicolas Mollet <nico.mollet@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.8\n"
 "X-Poedit-KeywordsList: _e;__;_n:1,2;_x:1,2c;esc_attr__;esc_attr_e;"
 "esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-Basepath: ..\n"
@@ -87,7 +87,7 @@ msgid "Forgot data type"
 msgstr "Type de données oublié"
 
 #: public/class-tmsm-availpro-public.php:152
-#: public/class-tmsm-availpro-public.php:245
+#: public/class-tmsm-availpro-public.php:251
 msgid "Book now"
 msgstr "Réserver maintenant"
 
@@ -111,44 +111,64 @@ msgstr "Dernières disponibilités"
 msgid "Minimum stay"
 msgstr "Durée minimum"
 
-#: public/class-tmsm-availpro-public.php:221
+#: public/class-tmsm-availpro-public.php:223
 msgid "Number of nights:"
 msgstr "Nombre de nuits :"
 
-#: public/class-tmsm-availpro-public.php:222
+#: public/class-tmsm-availpro-public.php:224
 msgid "Minimum stay:"
 msgstr "Durée minimum :"
 
-#: public/class-tmsm-availpro-public.php:225
+#: public/class-tmsm-availpro-public.php:226
 msgid "From"
 msgstr "Du"
 
-#: public/class-tmsm-availpro-public.php:225
+#: public/class-tmsm-availpro-public.php:226
 msgid "Checkin"
 msgstr "Arrivée"
 
-#: public/class-tmsm-availpro-public.php:225
+#: public/class-tmsm-availpro-public.php:226
 msgid "To"
 msgstr "Au"
 
-#: public/class-tmsm-availpro-public.php:225
+#: public/class-tmsm-availpro-public.php:226
 msgid "Checkout"
 msgstr "Départ"
 
-#: public/class-tmsm-availpro-public.php:229
+#: public/class-tmsm-availpro-public.php:230
 msgid "Number of adults:"
 msgstr "Nombre d’adultes :"
 
-#: public/class-tmsm-availpro-public.php:231
+#: public/class-tmsm-availpro-public.php:232
 msgid "Number of adults"
 msgstr "Nombre d’adultes"
 
-#: public/class-tmsm-availpro-public.php:236
+#: public/class-tmsm-availpro-public.php:237
 #, php-format
 msgid "%s adult"
 msgid_plural "%s adults"
 msgstr[0] "%s adulte"
 msgstr[1] "%s adultes"
+
+#: public/class-tmsm-availpro-public.php:247
+msgid "Total price:"
+msgstr "Prix total :"
+
+#: public/class-tmsm-availpro-public.php:612
+msgid "The request is not valid"
+msgstr "La demande n’est pas valide"
+
+#: public/class-tmsm-availpro-public.php:627
+msgid "Date is empty"
+msgstr "La date est vide"
+
+#: public/class-tmsm-availpro-public.php:634
+msgid "Nights number are empty"
+msgstr "Le nombre de nuit est vide"
+
+#: public/class-tmsm-availpro-public.php:720
+msgid "No availability"
+msgstr "Aucune disponibilité"
 
 #~ msgid "Engine"
 #~ msgstr "Moteur"

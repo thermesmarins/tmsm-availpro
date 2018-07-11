@@ -47,6 +47,9 @@
         }
         .clndr-controls{
             font-size: ceil(@font-size-small*1.4);
+            td{
+                padding: 5px;
+            }
         }
         .day{
             font-size: @font-size-small;
@@ -159,6 +162,7 @@
             display: inline-block;
             //text-align: center;
             font-size: 15px;
+            line-height: normal;
         }
 
         .minstay{
@@ -188,6 +192,7 @@
             font-weight: bold;
             margin: 0;
             font-size: 11px;
+            line-height: normal;
         }
 
         tbody{
@@ -410,13 +415,13 @@
 
 #tmsm-availpro-calendar{
     @media(min-width: @screen-md-min) {
-        width: 60%;
+        width: 50%;
         display: inline-block;
     }
 }
 #tmsm-availpro-form{
     @media(min-width: @screen-md-min) {
-        width: 34%;
+        width: 44%;
         float: right;
     }
 }

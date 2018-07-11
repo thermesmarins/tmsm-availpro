@@ -243,9 +243,10 @@ class Tmsm_Availpro_Public {
 			</p>
                 
             <p id="tmsm-availpro-calculateprice-results">
-                <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
+                
                 <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none">' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice-value"></span></span>
                 <span id="tmsm-availpro-calculatetotal-errors" style="display: none"></span>
+                <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
             <p>
             <button type="submit" id="tmsm-availpro-form-submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>

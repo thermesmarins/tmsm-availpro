@@ -83,6 +83,7 @@
   padding: 1px;
   display: inline-block;
   font-size: 15px;
+  line-height: normal;
 }
 #tmsm-availpro-calendar .table-calendarprices .minstay {
   position: absolute;
@@ -108,6 +109,7 @@
   font-weight: bold;
   margin: 0;
   font-size: 11px;
+  line-height: normal;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day {
   padding: 0;
@@ -215,6 +217,9 @@
   display: inline-block;
   margin-right: 5px;
 }
+#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-available {
+  display: none;
+}
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable {
   display: none;
 }
@@ -277,13 +282,13 @@
 }
 @media (min-width: 900px) {
   #tmsm-availpro-calendar {
-    width: 60%;
+    width: 50%;
     display: inline-block;
   }
 }
 @media (min-width: 900px) {
   #tmsm-availpro-form {
-    width: 34%;
+    width: 44%;
     float: right;
   }
 }
