@@ -244,7 +244,8 @@ class Tmsm_Availpro_Public {
                 
             <p id="tmsm-availpro-calculateprice-results">
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
-                ' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice"></span>
+                <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none">' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice-value"></span></span>
+                <span id="tmsm-availpro-calculatetotal-errors" style="display: none"></span>
 			</p>
             <p>
             <button type="submit" id="tmsm-availpro-form-submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
@@ -255,9 +256,9 @@ class Tmsm_Availpro_Public {
             <form action="" method="post" id="tmsm-availpro-calculatetotal">
 			'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce' ).'
 	
-	        <button type="submit" id="tmsm-availpro-calculatetotal-submit">Submit</button>
+	        
 			</form>
-		';
+		';//<button type="submit" id="tmsm-availpro-calculatetotal-submit">Submit</button>
 		return $output;
 	}
 
@@ -294,8 +295,7 @@ class Tmsm_Availpro_Public {
                 <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
 <th class="header-day">
                     <!--<%= moment().weekday(i).format('dd').charAt(0) %><span class="rest"><%= moment().weekday(i).format('dddd').slice(1) %></span>-->
-                    <span class="hide-large"><%= moment().weekday(i).format('dd').charAt(0) %></span>
-                    <span class="hide-small"><%= moment().weekday(i).format('dddd')%></span>
+                    <span class=""><%= moment().weekday(i).format('dd').charAt(0) %></span>
                     
                 </th>
                 <% } %>
@@ -374,7 +374,7 @@ EOT;
 		}
 
 		$lastmonthchecked = get_option( 'tmsm-availpro-lastmonthchecked', false );
-		$lastmonthchecked = '2018-06';
+		//$lastmonthchecked = '2018-06';
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log( 'Last month checked: ' . $lastmonthchecked );
 		}
@@ -505,24 +505,70 @@ EOT;
 								error_log('dailyplanning_bestprice_entity:');
 								error_log(var_export($dailyplanning_bestprice_entity, true));
 							}
+
+
+							foreach($dailyplanning_bestprice_entity as $date => $attributes){
+								//if($date == '2018-07-05'){
+									error_log('*roomid: '.$entity['@attributes']['roomId']);
+									error_log('*Date: '.$date);
+									error_log('*Price: '.@$attributes['Price']);
+									error_log('*Status: '.@$attributes['Status']);
+									if(@$attributes['Status'] !=='NotAvailable' && !empty($attributes['Price'])){
+										error_log('*Consider Price');
+										if(!empty($dailyplanning_bestprice[$date]['Price'])){
+											error_log('*Current Best Price: '.$dailyplanning_bestprice[$date]['Price']);
+											if(
+												$attributes['Price'] < $dailyplanning_bestprice[$date]['Price']
+											){
+												error_log('*Price Inferior to Current Best Price: '.$attributes['Price']);
+												$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
+												error_log('*New Best Price: '.$dailyplanning_bestprice[$date]['Price']);
+											}
+										}
+										else{
+											@$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
+											@$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
+											error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['Price']);
+										}
+									}
+								//}
+
+							}
+
+
 							// Merge data
-							if(empty($dailyplanning_bestprice)){
+							/*if(empty($dailyplanning_bestprice)){
 								$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 							}
 							else{
 								//@TODO
 								foreach($dailyplanning_bestprice_entity as $date => $attributes){
-									if(!empty($attributes['Price']) && !empty($dailyplanning_bestprice[$date]['Price'])){
-										// New Price is less than merged data
-										if(
-											@$attributes['Status'] != 'NotAvailable' &&
-											$attributes['Price'] < $dailyplanning_bestprice[$date]['Price']
-										){
-											$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
+									if($date == '2018-07-05'){
+										error_log('***roomid: '.$entity['@attributes']['roomId']);
+										error_log('***Date: '.$date);
+										if(!empty($attributes['Price']) && !empty($dailyplanning_bestprice[$date]['Price'])){
+											// New Price is less than merged data
+											if(
+												$attributes['Price'] < $dailyplanning_bestprice[$date]['Price']
+											){
+												error_log('***Inferior Price: current='.$attributes['Price'].' - best='.$dailyplanning_bestprice[$date]['Price']);
+												if(!empty($attributes['Status']) && $attributes['Status']==='NotAvailable'){
+													error_log('***Status NotAvailable');
+												}
+												else{
+													$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
+												}
+											}
+										}
+										if(!empty($dailyplanning_bestprice[$date])){
+											error_log('Still best price:');
+											error_log(var_export($dailyplanning_bestprice[$date], true));
 										}
 									}
+
+
 								}
-							}
+							}*/
 						}
 					}
 				}
@@ -640,14 +686,15 @@ EOT;
 							}
 
 							// Merge data
-							if(empty($dailyplanning_bestprice)){
+							if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'){
 								$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 							}
 							else{
-								if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price'])){
+								if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price']) ){
 									// New Price is less than merged data
 									if(
 										$dailyplanning_bestprice_entity['Price'] < $dailyplanning_bestprice['Price']
+										&& @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'
 									){
 										$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 									}
@@ -667,6 +714,7 @@ EOT;
 		$totalprice = null;
 		if(!empty($dailyplanning_bestprice)){
 			$totalprice = $dailyplanning_bestprice['Price'];
+			// @TODO check if 'Status' => 'NotAvailable',
 		}
 		else{
 			$errors[] = __('No availability', 'tmsm-availpro');

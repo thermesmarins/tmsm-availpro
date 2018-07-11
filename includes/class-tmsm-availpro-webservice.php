@@ -125,8 +125,9 @@ class Tmsm_Availpro_Webservice {
 
 		// @TODO include $filters_roomids but it doesn't give any result with it
 		// @TODO not hardcode OTABAR
+		//referenceRateCode="BARPROM"
 		$this->filters ='
-					<ratePlans><ratePlan groupId="'.$option_groupid.'" referenceRateCode="BARPROM"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
+					<ratePlans><ratePlan groupId="'.$option_groupid.'"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 	                $filters_rateids.
 	                //$filters_roomids.
 	                '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
@@ -155,6 +156,7 @@ class Tmsm_Availpro_Webservice {
 		$month_firstday->modify('first day of this month');
 		$month_lastday = clone $month_firstday;
 		$month_lastday->modify('last day of this month');
+		//$month_lastday->modify('first day of this month')->modify('+6 days');
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log('get_data');
@@ -252,7 +254,7 @@ class Tmsm_Availpro_Webservice {
 
 		$option_ratecode = '';
 		$option_rateids = $options['rateids'];
-		$option_rateids = '38558';
+		//$option_rateids = 114240;
 		$option_groupid = $options['groupid'];
 		$option_hotelid = $options['hotelid'];
 
@@ -265,14 +267,33 @@ class Tmsm_Availpro_Webservice {
 			}
 		}
 		$filters_rateids = '';
+		error_log(var_export($option_rateids_array,true));
+
 		if(!empty($option_rateids_array) && is_array($option_rateids_array) && count($option_rateids_array) > 0){
 			$filters_rateids = '<rates default="Excluded">';
-			foreach($option_rateids_array as $item){
-				$filters_rateids .= '<exception id="'.$item.'"/>';
+			foreach($option_rateids_array as $item_key => $item_value){
+				$filters_rateids .= '<exception id="'.$item_value.'"/>';
 			}
 			$filters_rateids .= '</rates>';
 		}
-
+		error_log(var_export($filters_rateids,true));
+		//rooms
+		$option_roomids_array = [];
+		if(!empty($option_roomids) ){
+			$option_roomids_array = explode(',', $option_roomids);
+			foreach($option_roomids_array as &$item){
+				$item = trim($item);
+			}
+		}
+		$filters_roomids = '';
+		if(!empty($option_roomids_array) && is_array($option_roomids_array) && count($option_roomids_array) > 0){
+			$filters_roomids = '<rooms default="Excluded">';
+			foreach($option_roomids_array as $item){
+				$filters_roomids .= '<exception id="'.$item.'"/>';
+			}
+			$filters_roomids .= '</rooms>';
+		}
+		// ratecode
 		$filters_ratecode='';
 		if(!empty($option_ratecode)){
 			$filters_ratecode = 'referenceRateCode="'.$option_ratecode.'"';
@@ -281,8 +302,9 @@ class Tmsm_Availpro_Webservice {
 		$filters ='
 					<ratePlans><ratePlan groupId="'.$option_groupid.'" '.$filters_ratecode.'><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 		          $filters_rateids.
+		          $filters_roomids.
 		          '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
-		          '<status><include status="Available" /></status>'.
+		          '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		          '';
 
 		$soap_parameters = array(

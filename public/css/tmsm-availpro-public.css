@@ -1,5 +1,5 @@
 #tmsm-availpro-calendar {
-  color: #808080;
+  color: #333333;
   background: #ffffff;
 }
 #tmsm-availpro-calendar.calendar-small .hide-small {
@@ -82,6 +82,7 @@
   color: inherit;
   padding: 1px;
   display: inline-block;
+  font-size: 15px;
 }
 #tmsm-availpro-calendar .table-calendarprices .minstay {
   position: absolute;
@@ -106,44 +107,36 @@
 #tmsm-availpro-calendar .table-calendarprices .price {
   font-weight: bold;
   margin: 0;
+  font-size: 11px;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day {
   padding: 0;
   text-align: center;
   vertical-align: top;
-  background: WhiteSmoke;
-  color: #a9a9a9;
+  background: #ffffff;
+  color: #333333;
   width: 14%;
 }
+#tmsm-availpro-calendar .table-calendarprices tbody .day .day-number {
+  color: inherit;
+}
 #tmsm-availpro-calendar .table-calendarprices tbody .day .price {
-  color: #ffffff;
+  color: rgba(0, 0, 0, 0.4);
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.event {
-  color: #666666;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.event .day-number {
-  color: #ffffff;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.event .cell {
-  background: #a9a9a9;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.event .cell[data-status='NotAvailable'] {
-  display: none;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.event:hover {
+#tmsm-availpro-calendar .table-calendarprices tbody .day:hover {
   cursor: pointer;
-}
-#tmsm-availpro-calendar .table-calendarprices tbody .day.past,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.next-month,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.inactive,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month {
-  color: #a9a9a9 !important;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell {
-  background: WhiteSmoke !important;
+  background: #ffffff !important;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .day-number {
+  color: rgba(0, 0, 0, 0.25) !important;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell .price,
@@ -157,33 +150,49 @@
 #tmsm-availpro-calendar .table-calendarprices tbody .day.last-month.inactive:hover {
   cursor: not-allowed;
 }
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell {
+  background: #e9dcc1;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .day-number {
+  color: #333333;
+}
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected .price {
-  color: #ffffff;
+  color: rgba(0, 0, 0, 0.4);
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .instead,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .price {
   opacity: 1;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell {
-  background: #666666;
+  background: #e9dcc1;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell {
-  background: #333333;
+  background: #c29d4f;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .price,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .price {
+  color: #dcc79b;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .day-number {
+  color: #ffffff;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell {
-  background: #333333;
+  background: #c29d4f;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .instead,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price {
+  color: #dcc79b;
+}
+#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .day-number {
   color: #ffffff;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice='1'] {
-  background: #ffd700;
+  background: #ffffff;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='1'],
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
-  background: #ff8789;
+  background: #ffffff;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay=""]) .minstay {
   display: inline-block;
@@ -206,17 +215,23 @@
   display: inline-block;
   margin-right: 5px;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable:before {
-  background: WhiteSmoke;
+#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable {
+  display: none;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-available:before {
-  background: #a9a9a9;
+#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable:before {
+  background: #ffffff;
+}
+#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice {
+  display: none;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice:before {
-  background: #ffd700;
+  background: #ffffff;
+}
+#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms {
+  display: none;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms:before {
-  background: #ff8789;
+  background: #ffffff;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-minstay:before {
   content: '⇾';

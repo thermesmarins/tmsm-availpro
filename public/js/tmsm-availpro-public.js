@@ -1,7 +1,7 @@
 (function( $ ) {
 	'use strict';
 
-  var tmsm_availpro_calendar_today = moment();
+  var tmsm_availpro_calendar_today = moment().subtract(1, 'days');
   var tmsm_availpro_calendar_startdate = moment();
   var tmsm_availpro_calendar_enddate = moment().add(1, 'year');
 
@@ -145,7 +145,8 @@
 
         $('.day.mouseover').removeClass('mouseover');
 
-        if(target.events.length && !$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
+        //if(target.events.length && !$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
+        if(!$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
           //$('.day').removeClass('selected').removeClass('selected-range').removeClass('active');
 
           tmsm_availpro_calendar_lastdateclicked = target.date;
@@ -267,7 +268,7 @@
     },
     doneRendering: function() {
       var self = this;
-      $(this.element).on('mouseover', '.day.event:not(.inactive)', function(e) {
+      $(this.element).on('mouseover', '.day:not(.inactive)', function(e) {
 
         var target = self.buildTargetObject(e.currentTarget, true);
         var hover_begin = tmsm_availpro_calendar_selected_begin;
@@ -370,9 +371,10 @@
     console.log(tmsm_availpro_calendar_selected_end);
 
     // Reset value
-    $('#tmsm-availpro-calculatetotal-totalprice').html('');
+    $('#tmsm-availpro-calculatetotal-totalprice-value').html('');
     $('#tmsm-availpro-form-submit').prop('disabled', true);
     $('#tmsm-availpro-calculatetotal-loading').show();
+    $('#tmsm-availpro-calculatetotal-errors').hide();
 
     // Calculate date if begin and end are defined
     if(tmsm_availpro_calendar_selected_begin && tmsm_availpro_calendar_nights > 0){
@@ -392,23 +394,30 @@
         },
         success: function (data) {
           console.log(data);
-          console.log('success 1');
+          $('#tmsm-availpro-calculatetotal-loading').hide();
 
           if (data.success === true) {
             $('#tmsm-availpro-form-submit').prop('disabled', false);
-            $('#tmsm-availpro-calculatetotal-loading').hide();
+            $('#tmsm-availpro-calculatetotal-errors').hide();
+            $('#tmsm-availpro-calculatetotal-totalprice').show();
+
+
             var Price = data.totalprice;
             if(Price){
               var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
 
               if(PriceWithCurrency){
                 console.log(PriceWithCurrency);
-                $('#tmsm-availpro-calculatetotal-totalprice').html(PriceWithCurrency);
+                $('#tmsm-availpro-calculatetotal-totalprice-value').html(PriceWithCurrency);
               }
 
             }
           }
           else {
+            $('#tmsm-availpro-form-submit').prop('disabled', true);
+            $('#tmsm-availpro-calculatetotal-totalprice').hide();
+            $('#tmsm-availpro-calculatetotal-errors').show();
+            $('#tmsm-availpro-calculatetotal-errors').html(data.errors);
           }
         },
         error: function (jqXHR, textStatus) {

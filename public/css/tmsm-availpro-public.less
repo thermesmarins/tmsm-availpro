@@ -4,30 +4,34 @@
 @font-size-large: 16px;
 
 @calendar-background: white;
-@calendar-text-color: grey;
+@calendar-text-color: #333;
 @controls-border: darkgrey;
 
-
-@day-background: WhiteSmoke;
-@day-color: darkgrey;
-@day-color: darkgrey;
+@selected-color: #c29d4f;
+@day-past-color: rgba(0, 0, 0, 0.25);
 @day-border: @calendar-background;
 
-@day-event-color: #666;
+@day-background: white;
+@day-price-color:  rgba(0, 0, 0, 0.4);
+@day-number-color: @calendar-text-color;
 
-@day-selected-background: #333;
-@day-selected-range-background: lighten(@day-selected-background, 20%);
-@day-selected-price-color: white;
+
+
+@day-selected-background: @selected-color;
+@day-selected-price-color: lighten(@selected-color, 20%);
+@day-selected-day-number-color: white;
+
+@day-selected-range-background: lighten(@selected-color, 30%);
+@day-selected-range-day-number-color: @calendar-text-color;
+@day-selected-range-price-color: rgba(0, 0, 0, 0.4);
 
 @day-hover-background: @day-selected-background;
-@day-hover-price-color: white;
+@day-hover-price-color: @day-selected-price-color;
+@day-hover-day-number-color: @day-selected-day-number-color;
 
-@day-price-color: white;
 
-@day-lowestprice-background: gold;
-@day-lowavailability-background: #ff8789;
-@day-event-background: darkgrey;
-@day-event-number-color: @day-price-color;
+@day-lowestprice-background: white;
+@day-lowavailability-background: white;
 @day-number-background: transparent;
 @day-number-color: inherit;
 
@@ -154,7 +158,9 @@
             //height: 17px;
             display: inline-block;
             //text-align: center;
+            font-size: 15px;
         }
+
         .minstay{
             position: absolute;
             line-height: 14px;
@@ -181,37 +187,26 @@
         .price{
             font-weight: bold;
             margin: 0;
+            font-size: 11px;
         }
 
         tbody{
 
             .day{
 
-
                 padding: 0;
                 text-align: center;
                 vertical-align: top;
                 background: @day-background;
-                color: @day-color;
+                color: @calendar-text-color;
                 width: 14%;
 
+                .day-number{
+                    color: @day-number-color
+                }
                 .price{
                     color: @day-price-color;
                 }
-            }
-
-            .day.event{
-                .day-number{
-                    color:@day-event-number-color;
-                }
-                .cell{
-                    background: @day-event-background;
-                    &[data-status='NotAvailable']{
-                        display: none;
-                    }
-                }
-                color: @day-event-color;
-
                 &:hover{
                     cursor: pointer;
                 }
@@ -222,9 +217,11 @@
                 .cell{
                     background: @day-background !important;
                 }
-                color: @day-color  !important;;
 
                 .cell{
+                    .day-number{
+                        color: @day-past-color  !important;;
+                    }
                     .price{
                         visibility: hidden;
                     }
@@ -238,8 +235,14 @@
             }
 
             .day.selected{
+                .cell{
+                    background: @day-selected-range-background;
+                }
+                .day-number{
+                    color:@day-selected-range-day-number-color;
+                }
                 .price{
-                    color: @day-selected-price-color;
+                    color: @day-selected-range-price-color;
                 }
                 &.active{
                     .instead, .price{
@@ -258,14 +261,23 @@
                 .cell{
                     background: @day-selected-background;
                 }
+                .price{
+                    color: @day-selected-price-color;
+                }
+                .day-number{
+                    color: @day-selected-day-number-color;
+                }
             }
 
             .day.mouseover{
                 .cell{
                     background: @day-hover-background;
                 }
-                .instead, .price{
+                .price{
                     color: @day-hover-price-color;
+                }
+                .day-number{
+                    color: @day-hover-day-number-color;
                 }
             }
 
@@ -317,22 +329,23 @@
                 display: inline-block;
                 margin-right: 5px;
             }
+            &.legend-item-available{
+                display: none;
+            }
             &.legend-item-notavailable{
+                display: none;
                 &:before{
                     background: @day-background;
                 }
             }
-            &.legend-item-available{
-                &:before{
-                    background: @day-event-background;
-                }
-            }
             &.legend-item-lowestprice{
+                display: none;
                 &:before{
                     background: @day-lowestprice-background;
                 }
             }
             &.legend-item-lastrooms{
+                display: none;
                 &:before{
                     background: @day-lowavailability-background;
                 }
