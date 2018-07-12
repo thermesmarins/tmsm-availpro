@@ -192,8 +192,8 @@
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .day-number {
   color: #ffffff;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice='1'] {
-  background: #ffffff;
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice='1'] .price {
+  color: #0f9d58;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='1'],
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
@@ -233,7 +233,7 @@
   display: none;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice:before {
-  background: #ffffff;
+  background: #0f9d58;
 }
 #tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms {
   display: none;

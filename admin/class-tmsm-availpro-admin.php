@@ -545,7 +545,7 @@ class Tmsm_Availpro_Admin {
 		$wp_customize->add_setting( 'tmsm_availpro_calendar_selectedcolor', array(
 			'transport' 			=> 'postMessage',
 			'default'           	=> '#333333',
-			'sanitize_callback' 	=> 'oceanwp_sanitize_color',
+			'sanitize_callback' 	=> 'sanitize_hex_color',
 		) );
 
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'tmsm_availpro_calendar_selectedcolor', array(
@@ -558,13 +558,27 @@ class Tmsm_Availpro_Admin {
 		$wp_customize->add_setting( 'tmsm_availpro_calendar_rangecolor', array(
 			'transport' 			=> 'postMessage',
 			'default'           	=> '#808080',
-			'sanitize_callback' 	=> 'oceanwp_sanitize_color',
+			'sanitize_callback' 	=> 'sanitize_hex_color',
 		) );
 
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'tmsm_availpro_calendar_rangecolor', array(
 			'label'	   				=> esc_html__( 'Calendar color for range date', 'tmsm-availpro' ),
 			'section'  				=> 'tmsm_availpro',
 			'settings' 				=> 'tmsm_availpro_calendar_rangecolor',
+			'priority' 				=> 10,
+		) ) );
+
+
+		$wp_customize->add_setting( 'tmsm_availpro_calendar_bestpricecolor', array(
+			'transport' 			=> 'postMessage',
+			'default'           	=> '#0f9d58',
+			'sanitize_callback' 	=> 'sanitize_hex_color',
+		) );
+
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'tmsm_availpro_calendar_bestpricecolor', array(
+			'label'	   				=> esc_html__( 'Calendar best price color', 'tmsm-availpro' ),
+			'section'  				=> 'tmsm_availpro',
+			'settings' 				=> 'tmsm_availpro_calendar_bestpricecolor',
 			'priority' 				=> 10,
 		) ) );
 

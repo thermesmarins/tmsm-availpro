@@ -111,6 +111,7 @@ class Tmsm_Availpro_Public {
 		// Styling vars
 		$tmsm_availpro_calendar_selectedcolor 	= get_theme_mod( 'tmsm_availpro_calendar_selectedcolor', '#333333' );
 		$tmsm_availpro_calendar_rangecolor 	= get_theme_mod( 'tmsm_availpro_calendar_rangecolor', '#808080' );
+		$tmsm_availpro_calendar_bestpricecolor 	= get_theme_mod( 'tmsm_availpro_calendar_bestpricecolor', '#0f9d58' );
 
 		// Define css var
 		$css 			= '';
@@ -153,6 +154,18 @@ class Tmsm_Availpro_Public {
 			}';
 		}
 
+		if ( ! empty( $tmsm_availpro_calendar_bestpricecolor ) && $tmsm_availpro_calendar_bestpricecolor !== '#0f9d58') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice=\'1\'] .price {
+			color: '.$tmsm_availpro_calendar_bestpricecolor.';
+			}
+			#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice:before {
+			background: '.$tmsm_availpro_calendar_bestpricecolor.';
+			}
+			';
+
+		}
+
 		// Return CSS
 		if ( ! empty( $css ) ) {
 			$css = '/* Availpro CSS */'. $css;
@@ -188,6 +201,7 @@ class Tmsm_Availpro_Public {
 			'security' => wp_create_nonce( 'security' ),
 			'i18n' => [
 				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
+				'fromprice' => _x( 'from', 'price', 'tmsm-availpro' ),
 			],
 			'options' => [
 				'currency' => $this->options['currency'],
@@ -263,6 +277,9 @@ class Tmsm_Availpro_Public {
 
 				<label for="tmsm-availpro-form-checkindateinfo" id="tmsm-availpro-form-checkindateinfo-label">' . __( 'From', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkindateinfo" type="text" name="checkinDateInfo" value="' . __( 'Checkin', 'tmsm-availpro' ) . '" readonly><label for="tmsm-availpro-form-checkoutdateinfo" id="tmsm-availpro-form-checkoutdateinfo-label">' . __( 'To', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkoutdateinfo" type="text" name="checkoutDateInfo" value="' . __( 'Checkout', 'tmsm-availpro' ) . '" readonly>
 			</p>
+			';
+
+		/*$output.='
 
 			<p>
 				<label for="tmsm-availpro-form-adults" id="tmsm-availpro-form-adults-label">'.__( 'Number of adults:', 'tmsm-availpro' ).'</label>
@@ -275,11 +292,14 @@ class Tmsm_Availpro_Public {
 					$output .= sprintf( _n( '%s adult', '%s adults', $adults, 'tmsm-availpro' ), number_format_i18n( $adults ) );
 					$output .= '</option>';
 				}
+
 		$output.='
 
 				</select>
-			</p>
-                
+			</p>';
+		*/
+
+        $output.='  
             <p id="tmsm-availpro-calculateprice-results">
                 
                 <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none">' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice-value"></span></span>

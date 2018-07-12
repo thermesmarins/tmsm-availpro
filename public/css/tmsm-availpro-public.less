@@ -28,7 +28,7 @@
 @day-hover-day-number-color: @day-selected-day-number-color;
 
 
-@day-lowestprice-background: white;
+@day-lowestprice-price-color: #0f9d58;
 @day-lowavailability-background: white;
 @day-number-background: transparent;
 @day-number-color: inherit;
@@ -286,7 +286,10 @@
 
             .day:not(.selected):not(.past):not(.mouseover){
                 .cell[data-lowestprice='1']{
-                    background: @day-lowestprice-background;
+                    .price{
+
+                        color: @day-lowestprice-price-color;
+                    }
                 }
                 .cell[data-availability='1'], .cell[data-availability='2'] {
                     background: @day-lowavailability-background;
@@ -344,7 +347,7 @@
             &.legend-item-lowestprice{
                 display: none;
                 &:before{
-                    background: @day-lowestprice-background;
+                    background: @day-lowestprice-price-color;
                 }
             }
             &.legend-item-lastrooms{
