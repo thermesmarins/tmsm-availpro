@@ -8,6 +8,9 @@
 #tmsm-availpro-calendar.calendar-small .clndr-controls {
   font-size: 19px;
 }
+#tmsm-availpro-calendar.calendar-small .clndr-controls td {
+  padding: 5px;
+}
 #tmsm-availpro-calendar.calendar-small .day {
   font-size: 13px;
   border: 1px solid #ffffff;
@@ -153,7 +156,7 @@
   cursor: not-allowed;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell {
-  background: #e9dcc1;
+  background: #808080;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected .day-number {
   color: #333333;
@@ -166,25 +169,25 @@
   opacity: 1;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell {
-  background: #e9dcc1;
+  background: #808080;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell {
-  background: #c29d4f;
+  background: #333333;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .price {
-  color: #dcc79b;
+  color: #808080;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .day-number {
   color: #ffffff;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell {
-  background: #c29d4f;
+  background: #333333;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price {
-  color: #dcc79b;
+  color: #808080;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .day-number {
   color: #ffffff;

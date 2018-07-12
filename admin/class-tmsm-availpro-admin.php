@@ -260,72 +260,6 @@ class Tmsm_Availpro_Admin {
 				'id' 			=> 'engine',
 			)
 		);
-
-		/*add_settings_field(
-			'how-to-apply',
-			apply_filters( $this->plugin_name . 'label-how-to-apply', esc_html__( 'How to Apply', 'tmsm-availpro' ) ),
-			array( $this, 'field_editor' ),
-			$this->plugin_name,
-			$this->plugin_name . '-messages',
-			array(
-				'description' 	=> 'Instructions for applying (contact email, phone, fax, address, etc).',
-				'id' 			=> 'howtoapply'
-			)
-		);
-		add_settings_field(
-			'repeater-test',
-			apply_filters( $this->plugin_name . 'label-repeater-test', esc_html__( 'Repeater Test', 'tmsm-availpro' ) ),
-			array( $this, 'field_repeater' ),
-			$this->plugin_name,
-			$this->plugin_name . '-messages',
-			array(
-				'description' 	=> 'Instructions for applying (contact email, phone, fax, address, etc).',
-				'fields' 		=> array(
-					array(
-						'text' => array(
-							'class' 		=> '',
-							'description' 	=> '',
-							'id' 			=> 'test1',
-							'label' 		=> '',
-							'name' 			=> $this->plugin_name . '-options[test1]',
-							'placeholder' 	=> 'Test 1',
-							'type' 			=> 'text',
-							'value' 		=> ''
-						),
-					),
-					array(
-						'text' => array(
-							'class' 		=> '',
-							'description' 	=> '',
-							'id' 			=> 'test2',
-							'label' 		=> '',
-							'name' 			=> $this->plugin_name . '-options[test2]',
-							'placeholder' 	=> 'Test 2',
-							'type' 			=> 'text',
-							'value' 		=> ''
-						),
-					),
-					array(
-						'text' => array(
-							'class' 		=> '',
-							'description' 	=> '',
-							'id' 			=> 'test3',
-							'label' 		=> '',
-							'name' 			=> $this->plugin_name . '-options[test3]',
-							'placeholder' 	=> 'Test 3',
-							'type' 			=> 'text',
-							'value' 		=> ''
-						),
-					),
-				),
-				'id' 			=> 'repeater-test',
-				'label-add' 	=> 'Add Test',
-				'label-edit' 	=> 'Edit Test',
-				'label-header' 	=> 'TEST',
-				'label-remove' 	=> 'Remove Test',
-				'title-field' 	=> 'test1'
-			)
-		);*/
 	}
 
 	/**
@@ -590,9 +524,50 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'rateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
 		$options[] = array( 'engine', 'text', '' );
-		//$options[] = array( 'message-no-openings', 'text', 'Thank you for your interest! There are no job openings at this time.' );
-		//$options[] = array( 'howtoapply', 'editor', '' );
-		//$options[] = array( 'repeat-test', 'repeater', array( array( 'test1', 'text' ), array( 'test2', 'text' ), array( 'test3', 'text' ) ) );
 		return $options;
+	}
+
+	/**
+	 * Customizer Controls and settings
+	 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
+	 *
+	 * @since  1.0.0
+	 */
+	public function customize_register( $wp_customize ) {
+
+
+		$wp_customize->add_section('tmsm_availpro', array(
+			'title'    => esc_html__('Availpro', 'tmsm-availpro'),
+			'description' => '',
+			'priority' => 180,
+		));
+
+		$wp_customize->add_setting( 'tmsm_availpro_calendar_selectedcolor', array(
+			'transport' 			=> 'postMessage',
+			'default'           	=> '#333333',
+			'sanitize_callback' 	=> 'oceanwp_sanitize_color',
+		) );
+
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'tmsm_availpro_calendar_selectedcolor', array(
+			'label'	   				=> esc_html__( 'Calendar color for selected date', 'tmsm-availpro' ),
+			'section'  				=> 'tmsm_availpro',
+			'settings' 				=> 'tmsm_availpro_calendar_selectedcolor',
+			'priority' 				=> 10,
+		) ) );
+
+		$wp_customize->add_setting( 'tmsm_availpro_calendar_rangecolor', array(
+			'transport' 			=> 'postMessage',
+			'default'           	=> '#808080',
+			'sanitize_callback' 	=> 'oceanwp_sanitize_color',
+		) );
+
+		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'tmsm_availpro_calendar_rangecolor', array(
+			'label'	   				=> esc_html__( 'Calendar color for range date', 'tmsm-availpro' ),
+			'section'  				=> 'tmsm_availpro',
+			'settings' 				=> 'tmsm_availpro_calendar_rangecolor',
+			'priority' 				=> 10,
+		) ) );
+
+
 	}
 }

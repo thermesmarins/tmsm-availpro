@@ -172,6 +172,9 @@ class Tmsm_Availpro {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		// Customizer
+		$this->loader->add_action( 'customize_register', $plugin_admin, 'customize_register' );
+
 		// Settings
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_sections' );

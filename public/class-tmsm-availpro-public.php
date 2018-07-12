@@ -57,12 +57,6 @@ class Tmsm_Availpro_Public {
 	const ENGINE_URL = 'https://www.secure-hotel-booking.com/';
 
 	/**
-	 * Frontend Locale
-	 * @var
-	 */
-	private $locale;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -76,21 +70,13 @@ class Tmsm_Availpro_Public {
 		$this->version     = $version;
 
 		$this->set_options();
-		$this->set_locale();
-	}
-
-	/**
-	 * Sets locale
-	 */
-	private function set_locale() {
-		$this->locale = (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(),0, 2));
 	}
 
 	/**
 	 * Gets locale
 	 */
 	private function get_locale() {
-		return $this->locale;
+		return (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(),0, 2));
 	}
 
 	/**
@@ -122,6 +108,58 @@ class Tmsm_Availpro_Public {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/tmsm-availpro-public.css', array(), $this->version, 'all' );
 
+		// Styling vars
+		$tmsm_availpro_calendar_selectedcolor 	= get_theme_mod( 'tmsm_availpro_calendar_selectedcolor', '#333333' );
+		$tmsm_availpro_calendar_rangecolor 	= get_theme_mod( 'tmsm_availpro_calendar_rangecolor', '#808080' );
+
+		// Define css var
+		$css 			= '';
+
+
+		if ( ! empty( $tmsm_availpro_calendar_rangecolor ) && $tmsm_availpro_calendar_rangecolor!=='#808080') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell {background: '.$tmsm_availpro_calendar_rangecolor.';}
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell { background: '.$tmsm_availpro_calendar_rangecolor.'; }
+			';
+		}
+
+		if ( ! empty( $tmsm_availpro_calendar_selectedcolor ) && $tmsm_availpro_calendar_selectedcolor!=='#333333') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell,
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell {
+			background: '.$tmsm_availpro_calendar_selectedcolor.';
+			}';
+		}
+
+		if ( ! empty( $tmsm_availpro_calendar_rangecolor ) && $tmsm_availpro_calendar_rangecolor!=='#808080') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .price,
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .price {
+			color:'.$tmsm_availpro_calendar_rangecolor.';
+			}';
+		}
+
+		if ( ! empty( $tmsm_availpro_calendar_selectedcolor ) && $tmsm_availpro_calendar_selectedcolor!=='#333333') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell {
+			background: '.$tmsm_availpro_calendar_selectedcolor.';
+			}';
+		}
+
+		if ( ! empty( $tmsm_availpro_calendar_rangecolor ) && $tmsm_availpro_calendar_rangecolor!=='#808080') {
+			$css .= '
+			#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price {
+			color: '.$tmsm_availpro_calendar_rangecolor.';
+			}';
+		}
+
+		// Return CSS
+		if ( ! empty( $css ) ) {
+			$css = '/* Availpro CSS */'. $css;
+		}
+
+		wp_add_inline_style( $this->plugin_name, $css );
+
 	}
 
 	/**
@@ -133,7 +171,7 @@ class Tmsm_Availpro_Public {
 
 		// Scripts
 		wp_enqueue_script( 'moment', plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/min/moment.min.js', array( 'jquery' ), $this->version, true );
-		if ( function_exists( 'PLL' ) && $language = PLL()->model->get_language( get_locale() ) )
+		if ( function_exists( 'PLL' ) && $language = PLL()->model->get_language( get_locale() ) && pll_current_language() !== 'en')
 		{
 			wp_enqueue_script( 'moment-'.pll_current_language(), plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/locale/'.pll_current_language().'.js', array( 'jquery' ), $this->version, true );
 		}
@@ -314,7 +352,7 @@ class Tmsm_Availpro_Public {
                     <div class="cell" data-price="<%= event.Price %>" data-status="<%= event.Status %>"  data-lowestprice="<%= event.LowestPrice %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.MinimumStayThrough %>">
                         <span class="day-number"><%= days[d].day %></span>
                         <span class="minstay">⇾</span>
-                        <p class="price"><%= event.PriceWithCurrency %></p>
+                        <p class="price" data-test="<%= event.Test %>"><%= event.PriceWithCurrency %></p>
                     </div>
                     <% }) %>
 
@@ -713,15 +751,11 @@ EOT;
 		}
 
 		$totalprice = null;
-		if(!empty($dailyplanning_bestprice)){
+		if ( ! empty( $dailyplanning_bestprice ) && @$dailyplanning_bestprice['Status'] !== 'NotAvailable' ) {
 			$totalprice = $dailyplanning_bestprice['Price'];
-			// @TODO check if 'Status' => 'NotAvailable',
+		} else {
+			$errors[] = __( 'No availability', 'tmsm-availpro' );
 		}
-		else{
-			$errors[] = __('No availability', 'tmsm-availpro');
-		}
-
-
 		$data = [
 			'totalprice' => money_format( '%.2n', $totalprice ),
 		];
@@ -739,4 +773,17 @@ EOT;
 		wp_die();
 
     }
+
+	/**
+	 * Add css in head tag.
+	 *
+	 * @since  1.0.0
+	 */
+	public function head_css() {
+
+
+	}
+
+
+
 }

@@ -68,6 +68,7 @@
             value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale,
               {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
 
+            value.Test = tmsm_availpro_params.locale;
             if(Number(value.Price) === lowest_price){
               value.LowestPrice=1;
             }
