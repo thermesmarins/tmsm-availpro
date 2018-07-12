@@ -513,7 +513,7 @@ class Tmsm_Availpro_Admin {
 	 * @return 		array 			An array of options
 	 */
 	public static function get_options_list() {
-		$options = array();
+		$options   = array();
 		$options[] = array( 'consumerkey', 'text', '' );
 		$options[] = array( 'consumersecret', 'text', '' );
 		$options[] = array( 'accesstoken', 'text', '' );
@@ -524,6 +524,7 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'rateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
 		$options[] = array( 'engine', 'text', '' );
+
 		return $options;
 	}
 
@@ -534,7 +535,6 @@ class Tmsm_Availpro_Admin {
 	 * @since  1.0.0
 	 */
 	public function customize_register( $wp_customize ) {
-
 
 		$wp_customize->add_section('tmsm_availpro', array(
 			'title'    => esc_html__('Availpro', 'tmsm-availpro'),
@@ -581,7 +581,6 @@ class Tmsm_Availpro_Admin {
 			'settings' 				=> 'tmsm_availpro_calendar_bestpricecolor',
 			'priority' 				=> 10,
 		) ) );
-
-
+		
 	}
 }

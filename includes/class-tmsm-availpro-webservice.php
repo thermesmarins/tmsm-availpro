@@ -58,7 +58,6 @@ class Tmsm_Availpro_Webservice {
 		$this->set_oauth_identifiers();
 		$this->set_filters();
 
-
 	}
 
 	/**
@@ -67,14 +66,11 @@ class Tmsm_Availpro_Webservice {
 	private function set_oauth_identifiers(){
 		$options = get_option('tmsm-availpro-options', false);
 		$this->oauth_identifiers = [
-			'consumerKey' => $options['consumerkey'],
+			'consumerKey'    => $options['consumerkey'],
 			'consumerSecret' => $options['consumersecret'],
 			'accessToken'    => $options['accesstoken'],
 			'accessSecret'   => $options['tokensecret'],
 		];
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log(var_export($this->oauth_identifiers, true));
-		}
 	}
 
 	/**
@@ -134,7 +130,6 @@ class Tmsm_Availpro_Webservice {
 	                '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		'';
 
-
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log($this->filters);
 		}
@@ -166,10 +161,6 @@ class Tmsm_Availpro_Webservice {
 
 		if(!class_exists('SoapOAuthWrapper')){
 			return 'SoapOAuthWrapper doesn\'t exist';
-		}
-
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log('SoapOAuthWrapper');
 		}
 
 		$options = get_option('tmsm-availpro-options', false);
@@ -205,10 +196,6 @@ class Tmsm_Availpro_Webservice {
 	 * @return array
 	 */
 	static public function convert_to_array($xml){
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log('xml to convert:');
-			error_log($xml);
-		}
 
 		$domObject = new DOMDocument();
 		$domObject->loadXML($xml);
@@ -220,7 +207,6 @@ class Tmsm_Availpro_Webservice {
 		foreach($results as $result)
 		{
 			$array = json_decode(json_encode(simplexml_load_string($result->ownerDocument->saveXML($result))), true);
-
 		}
 		return $array;
 	}
@@ -249,12 +235,11 @@ class Tmsm_Availpro_Webservice {
 			error_log('SoapOAuthWrapper');
 		}
 
-
 		$options = get_option('tmsm-availpro-options', false);
 
 		$option_ratecode = '';
 		$option_rateids = $options['rateids'];
-		//$option_rateids = 114240;
+		//$option_rateids = 114240; //@TODO remove id
 		$option_groupid = $options['groupid'];
 		$option_hotelid = $options['hotelid'];
 

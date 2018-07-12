@@ -6,4 +6,4 @@ Availpro for Thermes Marins de Saint-Malo
 Features
 -----------
 
-@TODO
+* Customizer: customize calendar colors

@@ -180,7 +180,7 @@
             $('.day').removeClass('selected').removeClass('selected-hover').removeClass('selected-begin').removeClass('selected-end').removeClass('active');
             tmsm_availpro_calendar_selected_begin = undefined;
             tmsm_availpro_calendar_selected_end = undefined;
-            $('#tmsm-availpro-form-checkoutdateinfo').val('');
+            $('#tmsm-availpro-form-checkoutdateinfo').html('');
             $('#tmsm-availpro-form-checkoutdate').val('');
           }
 
@@ -189,7 +189,7 @@
             console.log('Begin date not initialized');
             tmsm_availpro_calendar_selected_begin = tmsm_availpro_calendar_lastdateclicked;
             $('.calendar-day-' + tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD')).addClass('selected selected-begin');
-            $('#tmsm-availpro-form-checkindateinfo').val(tmsm_availpro_calendar_selected_begin.format('L'));
+            $('#tmsm-availpro-form-checkindateinfo').html(tmsm_availpro_calendar_selected_begin.format('L'));
             $('#tmsm-availpro-form-checkindate').val(tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD'));
             $('#tmsm-availpro-form-arrivaldate').val(tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD'));
 
@@ -240,7 +240,7 @@
           if(typeof tmsm_availpro_calendar_selected_begin !== 'undefined' && typeof tmsm_availpro_calendar_selected_end !== 'undefined'){
             console.log('Calculate nights');
             tmsm_availpro_calendar_nights = tmsm_availpro_calendar_selected_end.diff(tmsm_availpro_calendar_selected_begin, "days");
-            $('#tmsm-availpro-form-checkoutdateinfo').val(tmsm_availpro_calendar_selected_end.format('L'));
+            $('#tmsm-availpro-form-checkoutdateinfo').html(tmsm_availpro_calendar_selected_end.format('L'));
             $('#tmsm-availpro-form-checkoutdate').val(tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD'));
 
             // Submit calculate total price

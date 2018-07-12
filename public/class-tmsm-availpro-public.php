@@ -73,14 +73,14 @@ class Tmsm_Availpro_Public {
 	}
 
 	/**
-	 * Gets locale
+	 * Get locale
 	 */
 	private function get_locale() {
 		return (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(),0, 2));
 	}
 
 	/**
-	 * Sets the class variable $options
+	 * Set the class variable $options
 	 */
 	private function set_options() {
 		$this->options = get_option( $this->plugin_name . '-options' );
@@ -263,6 +263,7 @@ class Tmsm_Availpro_Public {
 		<input type="hidden" name="nights" value="1" id="tmsm-availpro-form-nights">
 		<input type="hidden" name="checkinDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-checkindate">
 		<input type="hidden" name="checkoutDate" value="'.$tomorrow->format('Y-m-d').'" id="tmsm-availpro-form-checkoutdate">
+		<input type="hidden" name="selectedAdultCount" value="2">
 		<input type="hidden" name="selectedChildCount" value="0">
 		<input type="hidden" name="guestCountSelector" value="ReadOnly">
 		<input type="hidden" name="rate" value="">
@@ -272,11 +273,10 @@ class Tmsm_Availpro_Public {
         <div class="tmsm-availpro-form-fields">
 
 			<p id="tmsm-availpro-form-dates-container">
-            <span id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></span>
-            <span id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></span>
-
-				<label for="tmsm-availpro-form-checkindateinfo" id="tmsm-availpro-form-checkindateinfo-label">' . __( 'From', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkindateinfo" type="text" name="checkinDateInfo" value="' . __( 'Checkin', 'tmsm-availpro' ) . '" readonly><label for="tmsm-availpro-form-checkoutdateinfo" id="tmsm-availpro-form-checkoutdateinfo-label">' . __( 'To', 'tmsm-availpro' ) . '</label><input id="tmsm-availpro-form-checkoutdateinfo" type="text" name="checkoutDateInfo" value="' . __( 'Checkout', 'tmsm-availpro' ) . '" readonly>
+				' . __( 'From', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkindateinfo"  ></span> ' . __( 'To', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkoutdateinfo" ></span>
 			</p>
+            <p id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></p>
+            <p id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></p>
 			';
 
 		/*$output.='
@@ -339,11 +339,6 @@ class Tmsm_Availpro_Public {
                 </th>
                 <th class="month" colspan="5">
                     <%= month %> <%= year %>
-
-                    &nbsp;
-                    <small class="tmsm-availpro-calendar-error">(Aucune date disponible pour ce mois)</small>
-                    <small class="tmsm-availpro-calendar-loading">Chargement <span class="glyphicon glyphicon-refresh glyphicon-spin"></span></small>
-
                 </th>
                 <th class="clndr-control-button clndr-control-button-next">
                     <span class="clndr-next-button">&rarr;</span>
@@ -594,40 +589,6 @@ EOT;
 
 							}
 
-
-							// Merge data
-							/*if(empty($dailyplanning_bestprice)){
-								$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
-							}
-							else{
-								//@TODO
-								foreach($dailyplanning_bestprice_entity as $date => $attributes){
-									if($date == '2018-07-05'){
-										error_log('***roomid: '.$entity['@attributes']['roomId']);
-										error_log('***Date: '.$date);
-										if(!empty($attributes['Price']) && !empty($dailyplanning_bestprice[$date]['Price'])){
-											// New Price is less than merged data
-											if(
-												$attributes['Price'] < $dailyplanning_bestprice[$date]['Price']
-											){
-												error_log('***Inferior Price: current='.$attributes['Price'].' - best='.$dailyplanning_bestprice[$date]['Price']);
-												if(!empty($attributes['Status']) && $attributes['Status']==='NotAvailable'){
-													error_log('***Status NotAvailable');
-												}
-												else{
-													$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
-												}
-											}
-										}
-										if(!empty($dailyplanning_bestprice[$date])){
-											error_log('Still best price:');
-											error_log(var_export($dailyplanning_bestprice[$date], true));
-										}
-									}
-
-
-								}
-							}*/
 						}
 					}
 				}

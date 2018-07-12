@@ -34,7 +34,7 @@
 @day-number-color: inherit;
 
 
-@minstay-background: white;
+@minstay-background: transparent;
 @minstay-color: #333;
 
 #tmsm-availpro-calendar{
@@ -169,7 +169,7 @@
             top: 0;
             right: 0;
             display: none;
-            padding: 2px;
+            //padding: 2px;
             background: @minstay-background;
             color: @minstay-color;
         }
@@ -373,14 +373,14 @@
     }
     #tmsm-availpro-form-checkoutdateinfo-label{
         text-align: center;
-        width: 20%;
         display: inline-block;
     }
-    #tmsm-availpro-form-checkindateinfo{
-        width:40%;
-    }
-    #tmsm-availpro-form-checkoutdateinfo{
-        width:40%;
+    #tmsm-availpro-form-checkindateinfo, #tmsm-availpro-form-checkoutdateinfo{
+        &:empty{
+            border-bottom: 1px dotted @controls-border;
+            min-width: 60px;
+            display: inline-block;
+        }
     }
 
     #tmsm-availpro-form-minstay-message{
@@ -394,22 +394,23 @@
     }
 
     #tmsm-availpro-form-dates-container{
-        padding-top: 35px;
+        //padding-top: 35px;
         position: relative;
     }
 
     #tmsm-availpro-form-nights-message{
+        display: block;
         &[data-value='0']{
             display: none;
         }
     }
     #tmsm-availpro-form-nights-message, #tmsm-availpro-form-minstay-message {
-        margin-top: 10px;
-        margin-bottom: 5px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
+        //margin-top: 10px;
+        //margin-bottom: 5px;
+        //position: absolute;
+        //top: 0;
+        //right: 0;
+        //left: 0;
     }
 
 }
@@ -418,6 +419,7 @@
     @media(min-width: @screen-md-min) {
         width: 50%;
         display: inline-block;
+        min-height: 405px;
     }
 }
 #tmsm-availpro-form{
