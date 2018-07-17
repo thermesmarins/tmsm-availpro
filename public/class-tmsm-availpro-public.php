@@ -315,7 +315,9 @@ class Tmsm_Availpro_Public {
         $output.='  
             <p id="tmsm-availpro-calculateprice-results">
                 
-                <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none">' . __( 'Total price:', 'tmsm-availpro' ) . '&nbsp;<span id="tmsm-availpro-calculatetotal-totalprice-value"></span></span>
+                <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none">
+                <span id="tmsm-availpro-calculatetotal-totalprice-label">' . __( 'Total price:', 'tmsm-availpro' ) . ' </span><span id="tmsm-availpro-calculatetotal-totalprice-value"></span>
+                </span>
                 <span id="tmsm-availpro-calculatetotal-errors" style="display: none"></span>
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
