@@ -116,7 +116,6 @@ class Tmsm_Availpro_Public {
 		// Define css var
 		$css 			= '';
 
-
 		if ( ! empty( $tmsm_availpro_calendar_rangecolor ) && $tmsm_availpro_calendar_rangecolor!=='#808080') {
 			$css .= '
 			#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell {background: '.$tmsm_availpro_calendar_rangecolor.';}
@@ -191,7 +190,7 @@ class Tmsm_Availpro_Public {
 
 		wp_enqueue_script( 'clndr', plugin_dir_url( dirname(__FILE__) ) . 'vendor/clndr/clndr.min.js', array( 'jquery', 'moment', 'underscore' ), $this->version, true );
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery', 'wp-util' ), $this->version, true );
 
 
 		// Params
@@ -231,12 +230,29 @@ class Tmsm_Availpro_Public {
 			'option' => '',
 		), $atts, 'tmsm-availpro-calendar' );
 
-		$output = self::calendar_template();
+		$output = $this->calendar_template();
 		$output .= $this->form_template();
 
 		return $output;
 	}
 
+	/**
+	 * Legend template
+	 *
+	 * @return string
+	 */
+	private function legend_template(){
+		$output = '
+		        <div class="tmsm-availpro-form-legend">
+                <p class="legend-item legend-item-notavailable">'.__('Not available','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-available">'.__('Available','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-lowestprice">'.__('Lowest price','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-lastrooms">'.__('Last rooms','tmsm-availpro').'</p>
+                <p class="legend-item legend-item-minstay">'.__('Minimum stay','tmsm-availpro').'</p>
+	        </div>';
+		return $output;
+	}	
+		
 	/**
 	 * Form template
 	 *
@@ -250,14 +266,6 @@ class Tmsm_Availpro_Public {
 		$output = '
 		<form target="_blank" action="'.self::ENGINE_URL.$this->get_option('engine').'" method="get" id="tmsm-availpro-form">
 		
-	        <div class="tmsm-availpro-form-legend">
-                <p class="legend-item legend-item-notavailable">'.__('Not available','tmsm-availpro').'</p>
-                <p class="legend-item legend-item-available">'.__('Available','tmsm-availpro').'</p>
-                <p class="legend-item legend-item-lowestprice">'.__('Lowest price','tmsm-availpro').'</p>
-                <p class="legend-item legend-item-lastrooms">'.__('Last rooms','tmsm-availpro').'</p>
-                <p class="legend-item legend-item-minstay">'.__('Minimum stay','tmsm-availpro').'</p>
-	        </div>
-        
 		<input type="hidden" name="language" value="'.$this->get_locale().'">
 		<input type="hidden" name="arrivalDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-arrivaldate">
 		<input type="hidden" name="nights" value="1" id="tmsm-availpro-form-nights">
@@ -272,6 +280,8 @@ class Tmsm_Availpro_Public {
 		
         <div class="tmsm-availpro-form-fields">
 
+			'.(!empty($this->get_option('intro')) ? '<p id="tmsm-availpro-form-intro">'.html_entity_decode( $this->get_option('intro')).'</p>' : '' ).'
+			
 			<p id="tmsm-availpro-form-dates-container">
 				' . __( 'From', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkindateinfo"  ></span> ' . __( 'To', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkoutdateinfo" ></span>
 			</p>
@@ -299,6 +309,9 @@ class Tmsm_Availpro_Public {
 			</p>';
 		*/
 
+		$theme = wp_get_theme();
+		$buttonclass = ( 'StormBringer' == $theme->name || 'stormbringer' == $theme->template  ? 'btn btn-primary': '');
+
         $output.='  
             <p id="tmsm-availpro-calculateprice-results">
                 
@@ -307,13 +320,14 @@ class Tmsm_Availpro_Public {
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
             <p>
-            <button type="submit" id="tmsm-availpro-form-submit">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
+            <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
             </p>
+            '.(!empty($this->get_option('outro')) ? '<p id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</p>' : '' ).'
             </div>
 
             </form>
             <form action="" method="post" id="tmsm-availpro-calculatetotal">
-			'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce' ).'
+			'.wp_nonce_field( 'tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce', true, false ).'
 	
 	        
 			</form>
@@ -326,10 +340,10 @@ class Tmsm_Availpro_Public {
 	 *
 	 * @return string
 	 */
-	private static function calendar_template(){
-		$output = <<<EOT
+	private function calendar_template(){
+		$output = '
 <div id="tmsm-availpro-calendar">
-    <script id="tmsm-availpro-calendar-template" type="text/template">
+<script id="tmsm-availpro-calendar-template" type="text/template">
 
         <table class="table-calendarprices table-condensed" border="0" cellspacing="0" cellpadding="0">
             <thead>
@@ -348,8 +362,7 @@ class Tmsm_Availpro_Public {
 
                 <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
 <th class="header-day">
-                    <!--<%= moment().weekday(i).format('dd').charAt(0) %><span class="rest"><%= moment().weekday(i).format('dddd').slice(1) %></span>-->
-                    <span class=""><%= moment().weekday(i).format('dd').charAt(0) %></span>
+                    <span class=""><%= moment().weekday(i).format(\'dd\').charAt(0) %></span>
                     
                 </th>
                 <% } %>
@@ -385,10 +398,11 @@ class Tmsm_Availpro_Public {
             </tbody>
         </table>
 
-    </script>
+</script>
 </div>
-EOT;
+';
 
+		$output = '<div id="tmsm-availpro-calendar-container">'.$output.$this->legend_template().'</div>';
 		return $output;
 	}
 
@@ -754,17 +768,5 @@ EOT;
 		wp_die();
 
     }
-
-	/**
-	 * Add css in head tag.
-	 *
-	 * @since  1.0.0
-	 */
-	public function head_css() {
-
-
-	}
-
-
 
 }

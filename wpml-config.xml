@@ -1,0 +1,8 @@
+<wpml-config>
+    <admin-texts>
+        <key name="tmsm-availpro-options">
+            <key name="intro" />
+            <key name="outro" />
+        </key>
+    </admin-texts>
+</wpml-config>

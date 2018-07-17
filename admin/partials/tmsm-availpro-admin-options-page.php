@@ -9,7 +9,11 @@
  * @package    Tmsm_Availpro
  * @subpackage Tmsm_Availpro/admin/partials
  */
-?><h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+?>
+<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+
+<p><?php echo '<a href="' . admin_url( 'customize.php') . '">'.__('Customize colors', 'tmsm-availpro').'</a>' ?></p>
+
 <form method="post" action="options.php"><?php
 	settings_fields( $this->plugin_name . '-options' );
 	do_settings_sections( $this->plugin_name );

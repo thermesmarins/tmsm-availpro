@@ -38,6 +38,7 @@
 @minstay-color: #333;
 
 #tmsm-availpro-calendar{
+    padding: 2px;
 
     &.calendar-small{
         .hide-small {
@@ -319,53 +320,57 @@
     }
 }
 
-#tmsm-availpro-form{
-    .tmsm-availpro-form-legend{
-        .legend-item{
-            margin-bottom: 5px;
+.tmsm-availpro-form-legend{
+    margin-top: 5px;
+    .legend-item{
+        margin-bottom: 5px;
 
-            &:before{
-                content: '';
-                border:1px solid black;
-                background: white;
-                width: 18px;
-                line-height: 7px;
-                height: 12px;
-                padding: 2px;
-                display: inline-block;
-                margin-right: 5px;
-            }
-            &.legend-item-available{
-                display: none;
-            }
-            &.legend-item-notavailable{
-                display: none;
-                &:before{
-                    background: @day-background;
-                }
-            }
-            &.legend-item-lowestprice{
-                display: none;
-                &:before{
-                    background: @day-lowestprice-price-color;
-                }
-            }
-            &.legend-item-lastrooms{
-                display: none;
-                &:before{
-                    background: @day-lowavailability-background;
-                }
-            }
-            &.legend-item-minstay{
-                &:before{
-                    content:'⇾';
-                    background: @minstay-background;
-                    color: @minstay-color;
-                }
-            }
-
+        &:before{
+            content: '';
+            border:1px solid black;
+            background: white;
+            width: 18px;
+            line-height: 7px;
+            height: 12px;
+            padding: 2px;
+            display: inline-block;
+            margin-right: 5px;
         }
+        &.legend-item-available{
+            display: none;
+        }
+        &.legend-item-notavailable{
+            display: none;
+            &:before{
+                background: @day-background;
+            }
+        }
+        &.legend-item-lowestprice{
+            display: none;
+            &:before{
+                background: @day-lowestprice-price-color;
+            }
+        }
+        &.legend-item-lastrooms{
+            display: none;
+            &:before{
+                background: @day-lowavailability-background;
+            }
+        }
+        &.legend-item-minstay{
+            &:before{
+                content:'⇾';
+                background: @minstay-background;
+                color: @minstay-color;
+            }
+        }
+
     }
+}
+
+
+#tmsm-availpro-form{
+
 
     #tmsm-availpro-form-checkindateinfo-label, #tmsm-availpro-form-adults-label{
         display: none;
@@ -415,11 +420,15 @@
 
 }
 
-#tmsm-availpro-calendar{
+#tmsm-availpro-calendar-container{
     @media(min-width: @screen-md-min) {
         width: 50%;
         display: inline-block;
-        min-height: 405px;
+    }
+}
+#tmsm-availpro-calendar{
+    @media(min-width: @screen-md-min) {
+        min-height: 325px;
     }
 }
 #tmsm-availpro-form{

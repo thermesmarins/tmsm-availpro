@@ -1,4 +1,5 @@
 #tmsm-availpro-calendar {
+  padding: 2px;
   color: #333333;
   background: #ffffff;
 }
@@ -205,10 +206,10 @@
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='true'] .instead {
   visibility: hidden;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item {
+.tmsm-availpro-form-legend .legend-item {
   margin-bottom: 5px;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item:before {
+.tmsm-availpro-form-legend .legend-item:before {
   content: '';
   border: 1px solid black;
   background: white;
@@ -219,28 +220,28 @@
   display: inline-block;
   margin-right: 5px;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-available {
+.tmsm-availpro-form-legend .legend-item.legend-item-available {
   display: none;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable {
+.tmsm-availpro-form-legend .legend-item.legend-item-notavailable {
   display: none;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-notavailable:before {
+.tmsm-availpro-form-legend .legend-item.legend-item-notavailable:before {
   background: #ffffff;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice {
+.tmsm-availpro-form-legend .legend-item.legend-item-lowestprice {
   display: none;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lowestprice:before {
+.tmsm-availpro-form-legend .legend-item.legend-item-lowestprice:before {
   background: #0f9d58;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms {
+.tmsm-availpro-form-legend .legend-item.legend-item-lastrooms {
   display: none;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms:before {
+.tmsm-availpro-form-legend .legend-item.legend-item-lastrooms:before {
   background: #ffffff;
 }
-#tmsm-availpro-form .tmsm-availpro-form-legend .legend-item.legend-item-minstay:before {
+.tmsm-availpro-form-legend .legend-item.legend-item-minstay:before {
   content: '⇾';
   background: transparent;
   color: #333333;
@@ -275,10 +276,14 @@
   display: none;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-calendar {
+  #tmsm-availpro-calendar-container {
     width: 50%;
     display: inline-block;
-    min-height: 405px;
+  }
+}
+@media (min-width: 900px) {
+  #tmsm-availpro-calendar {
+    min-height: 325px;
   }
 }
 @media (min-width: 900px) {

@@ -430,7 +430,7 @@
 
               if(PriceWithCurrency){
                 console.log(PriceWithCurrency);
-                $('#tmsm-availpro-calculatetotal-totalprice-value').html(tmsm_availpro_params.i18n.fromprice+' '+PriceWithCurrency);
+                $('#tmsm-availpro-calculatetotal-totalprice-value').html(tmsm_availpro_params.i18n.fromprice+' <b>'+PriceWithCurrency+'</b>');
               }
 
             }

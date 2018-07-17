@@ -23,7 +23,7 @@ if ( ! empty( $atts['label'] ) ) {
 	name="<?php echo esc_attr( $atts['name'] ); ?>"
 	rows="<?php echo esc_attr( $atts['rows'] ); ?>"><?php
 
-	echo esc_textarea( $atts['value'] );
+	echo wp_kses( $atts['value'], wp_kses_allowed_html() );
 
 ?></textarea>
 <span class="description"><?php esc_html_e( $atts['description'], 'tmsm-availpro' ); ?></span>

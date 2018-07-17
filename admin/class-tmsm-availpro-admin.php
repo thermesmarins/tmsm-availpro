@@ -144,6 +144,17 @@ class Tmsm_Availpro_Admin {
 	}
 
 	/**
+	 * Creates a settings section
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$params 		Array of parameters for the section
+	 * @return 		mixed 						The settings section
+	 */
+	public function section_desc( $params ) {
+		include_once( plugin_dir_path( __FILE__ ) . 'partials/'. $this->plugin_name.'-admin-section-desc.php' );
+	}
+
+	/**
 	 * Registers settings fields with WordPress
 	 */
 	public function register_fields() {
@@ -260,6 +271,31 @@ class Tmsm_Availpro_Admin {
 				'id' 			=> 'engine',
 			)
 		);
+
+		add_settings_field(
+			'intro',
+			esc_html__( 'Intro', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'intro',
+			)
+		);
+
+		add_settings_field(
+			'outro',
+			esc_html__( 'Outro', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'outro',
+			)
+		);
+
+
+
 	}
 
 	/**
@@ -278,6 +314,13 @@ class Tmsm_Availpro_Admin {
 			$this->plugin_name . '-filters',
 			esc_html__( 'Filters', 'tmsm-availpro' ),
 			array( $this, 'section_filters' ),
+			$this->plugin_name
+		);
+
+		add_settings_section(
+			$this->plugin_name . '-desc',
+			esc_html__( 'Descriptions', 'tmsm-availpro' ),
+			array( $this, 'section_desc' ),
 			$this->plugin_name
 		);
 
@@ -524,6 +567,8 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'rateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
 		$options[] = array( 'engine', 'text', '' );
+		$options[] = array( 'intro', 'textarea', '' );
+		$options[] = array( 'outro', 'textarea', '' );
 
 		return $options;
 	}
