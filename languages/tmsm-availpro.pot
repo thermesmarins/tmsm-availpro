@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TMSM Availpro\n"
-"POT-Creation-Date: 2018-07-17 15:33+0200\n"
+"POT-Creation-Date: 2018-07-17 17:03+0200\n"
 "PO-Revision-Date: 2014-10-24 21:08+0100\n"
 "Last-Translator: Nicolas Mollet <nico.mollet@gmail.com>\n"
 "Language-Team: Nicolas Mollet <nico.mollet@gmail.com>\n"
@@ -117,69 +117,69 @@ msgid "Forgot data type"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:202
-#: public/class-tmsm-availpro-public.php:323
+#: public/class-tmsm-availpro-public.php:326
 msgid "Book now"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:203
 msgctxt "price"
-msgid "from"
-msgstr ""
-
-#: public/class-tmsm-availpro-public.php:247
-msgid "Not available"
+msgid "From"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:248
-msgid "Available"
+msgid "Not available"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:249
-msgid "Lowest price"
+msgid "Available"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:250
-msgid "Last rooms"
+msgid "Lowest price"
 msgstr ""
 
 #: public/class-tmsm-availpro-public.php:251
+msgid "Last rooms"
+msgstr ""
+
+#: public/class-tmsm-availpro-public.php:252
 msgid "Minimum stay"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:286
+#: public/class-tmsm-availpro-public.php:287
 msgctxt "date selection"
 msgid "From"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:286
+#: public/class-tmsm-availpro-public.php:287
 msgctxt "date selection"
 msgid "to"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:288
+#: public/class-tmsm-availpro-public.php:289
 msgid "Number of nights:"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:289
+#: public/class-tmsm-availpro-public.php:290
 msgid "Minimum stay:"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:318
+#: public/class-tmsm-availpro-public.php:320
 msgid "Total price:"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:646
+#: public/class-tmsm-availpro-public.php:649
 msgid "The request is not valid"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:661
+#: public/class-tmsm-availpro-public.php:664
 msgid "Date is empty"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:668
+#: public/class-tmsm-availpro-public.php:671
 msgid "Nights number are empty"
 msgstr ""
 
-#: public/class-tmsm-availpro-public.php:752
+#: public/class-tmsm-availpro-public.php:755
 msgid "No availability"
 msgstr ""

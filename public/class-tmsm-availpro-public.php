@@ -200,7 +200,7 @@ class Tmsm_Availpro_Public {
 			'security' => wp_create_nonce( 'security' ),
 			'i18n' => [
 				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
-				'fromprice' => _x( 'from', 'price', 'tmsm-availpro' ),
+				'fromprice' => _x( 'From', 'price', 'tmsm-availpro' ),
 			],
 			'options' => [
 				'currency' => $this->options['currency'],
@@ -233,6 +233,7 @@ class Tmsm_Availpro_Public {
 		$output = $this->calendar_template();
 		$output .= $this->form_template();
 
+		$output = '<div id="tmsm-availpro-container">'.$output.'</div>';
 		return $output;
 	}
 

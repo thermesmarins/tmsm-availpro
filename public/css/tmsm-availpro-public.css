@@ -45,7 +45,7 @@
 }
 #tmsm-availpro-calendar .table-calendarprices .clndr-controls {
   background: white;
-  border-bottom: 2px solid #a9a9a9;
+  border-bottom: 2px solid #dddddd;
 }
 #tmsm-availpro-calendar .table-calendarprices .header-days .header-day {
   text-align: center;
@@ -206,6 +206,9 @@
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='true'] .instead {
   visibility: hidden;
 }
+.tmsm-availpro-form-legend {
+  margin-top: 5px;
+}
 .tmsm-availpro-form-legend .legend-item {
   margin-bottom: 5px;
 }
@@ -246,6 +249,9 @@
   background: transparent;
   color: #333333;
 }
+#tmsm-availpro-form #tmsm-availpro-calculatetotal-totalprice-label {
+  display: none;
+}
 #tmsm-availpro-form #tmsm-availpro-form-checkindateinfo-label,
 #tmsm-availpro-form #tmsm-availpro-form-adults-label {
   display: none;
@@ -256,7 +262,7 @@
 }
 #tmsm-availpro-form #tmsm-availpro-form-checkindateinfo:empty,
 #tmsm-availpro-form #tmsm-availpro-form-checkoutdateinfo:empty {
-  border-bottom: 1px dotted #a9a9a9;
+  border-bottom: 1px dotted #dddddd;
   min-width: 60px;
   display: inline-block;
 }
@@ -275,10 +281,15 @@
 #tmsm-availpro-form #tmsm-availpro-form-nights-message[data-value='0'] {
   display: none;
 }
+#tmsm-availpro-calendar-container {
+  padding: 10px;
+  background: #dddddd;
+}
 @media (min-width: 900px) {
   #tmsm-availpro-calendar-container {
     width: 50%;
     display: inline-block;
+    padding: 15px;
   }
 }
 @media (min-width: 900px) {
@@ -286,9 +297,17 @@
     min-height: 325px;
   }
 }
+#tmsm-availpro-form {
+  padding: 10px;
+  background: white;
+}
 @media (min-width: 900px) {
   #tmsm-availpro-form {
-    width: 44%;
+    width: 50%;
     float: right;
+    padding: 15px;
   }
+}
+#tmsm-availpro-container {
+  background: white;
 }

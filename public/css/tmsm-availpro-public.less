@@ -5,7 +5,7 @@
 
 @calendar-background: white;
 @calendar-text-color: #333;
-@controls-border: darkgrey;
+@controls-border: #ddd;
 
 @selected-color: #333333;
 @day-past-color: rgba(0, 0, 0, 0.25);
@@ -371,6 +371,9 @@
 
 #tmsm-availpro-form{
 
+    #tmsm-availpro-calculatetotal-totalprice-label{
+        display: none;
+    }
 
     #tmsm-availpro-form-checkindateinfo-label, #tmsm-availpro-form-adults-label{
         display: none;
@@ -421,19 +424,31 @@
 }
 
 #tmsm-availpro-calendar-container{
+    padding: 10px;
+    background: @controls-border;
     @media(min-width: @screen-md-min) {
         width: 50%;
         display: inline-block;
+        padding: 15px;
     }
 }
+
 #tmsm-availpro-calendar{
     @media(min-width: @screen-md-min) {
         min-height: 325px;
     }
 }
+
 #tmsm-availpro-form{
+    padding: 10px;
+    background: white;
+
     @media(min-width: @screen-md-min) {
-        width: 44%;
+        width: 50%;
         float: right;
+        padding: 15px;
     }
+}
+#tmsm-availpro-container{
+    background: white;
 }
