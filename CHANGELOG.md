@@ -1,5 +1,8 @@
 ### Unreleased ###
 
+### 1.0.2: July 17th, 2018
+* Remove JS debug
+
 ### 1.0.1: July 17th, 2018
 * Change style
 
