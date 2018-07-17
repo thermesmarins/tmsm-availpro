@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       TMSM Availpro
  * Plugin URI:        https://github.com/thermesmarins/tmsm-availpro
- * Description:       Availpro API calls to get prices and availability
+ * Description:       Display Availpro daily prices (best price) in a calendar view
  * Version:           1.0.0
  * Author:            Nicolas Mollet
  * Author URI:        https://github.com/nicomollet
