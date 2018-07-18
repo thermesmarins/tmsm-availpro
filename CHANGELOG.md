@@ -1,5 +1,8 @@
 ### Unreleased ###
 
+### 1.0.4: July 18th, 2018
+* Fix error with options
+
 ### 1.0.3: July 18th, 2018
 * New option "Book button label"
 * Fix Polylang/WPML compatibility
