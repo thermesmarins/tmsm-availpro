@@ -41,15 +41,6 @@ class Tmsm_Availpro_Public {
 	private $version;
 
 	/**
-	 * The plugin options.
-	 *
-	 * @since 		1.0.0
-	 * @access 		private
-	 * @var 		string 			$options    The plugin options.
-	 */
-	private $options;
-
-	/**
 	 * Engine URL
 	 *
 	 * @since 		1.0.0
@@ -199,7 +190,7 @@ class Tmsm_Availpro_Public {
 				'fromprice' => _x( 'From', 'price', 'tmsm-availpro' ),
 			],
 			'options' => [
-				'currency' => $this->options['currency'],
+				'currency' => $this->get_option('currency'),
 			],
 			'data' => $this->get_options_bestprice(),
 		];
