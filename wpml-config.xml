@@ -3,6 +3,7 @@
         <key name="tmsm-availpro-options">
             <key name="intro" />
             <key name="outro" />
+            <key name="bookbuttonlabel" />
         </key>
     </admin-texts>
 </wpml-config>

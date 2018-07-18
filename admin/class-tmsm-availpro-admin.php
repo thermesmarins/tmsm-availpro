@@ -294,6 +294,17 @@ class Tmsm_Availpro_Admin {
 			)
 		);
 
+		add_settings_field(
+			'bookbuttonlabel',
+			esc_html__( 'Book Button Label', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'bookbuttonlabel',
+			)
+		);
+
 
 
 	}
@@ -569,6 +580,7 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'engine', 'text', '' );
 		$options[] = array( 'intro', 'textarea', '' );
 		$options[] = array( 'outro', 'textarea', '' );
+		$options[] = array( 'bookbuttonlabel', 'textarea', '' );
 
 		return $options;
 	}

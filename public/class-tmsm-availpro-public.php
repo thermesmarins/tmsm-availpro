@@ -319,7 +319,7 @@ class Tmsm_Availpro_Public {
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
             <p>
-            <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' . __( 'Book now', 'tmsm-availpro' ) . '</button>
+            <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</button>
             </p>
             '.(!empty($this->get_option('outro')) ? '<p id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</p>' : '' ).'
             </div>
