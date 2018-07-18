@@ -45,7 +45,10 @@
             display: none;
         }
         .clndr-controls{
-            font-size: ceil(@font-size-small*1.4);
+            font-size: ceil(@font-size-small*1.1);
+            @media(min-width: @screen-md-min) {
+                font-size: ceil(@font-size-small*1.4);
+            }
             td{
                 padding: 5px;
             }
@@ -323,6 +326,7 @@
 .tmsm-availpro-form-legend{
     margin-top: 5px;
     .legend-item{
+
         margin-bottom: 5px;
 
         &:before{
@@ -358,6 +362,11 @@
             }
         }
         &.legend-item-minstay{
+            display: none;
+            @media(min-width: @screen-md-min) {
+                display: block;
+            }
+
             &:before{
                 content:'⇾';
                 background: @minstay-background;
@@ -370,6 +379,13 @@
 
 
 #tmsm-availpro-form{
+
+    #tmsm-availpro-form-intro{
+        display: none;
+        @media(min-width: @screen-md-min) {
+            display: block;
+        }
+    }
 
     #tmsm-availpro-calculatetotal-totalprice-label{
         display: none;
@@ -407,18 +423,13 @@
     }
 
     #tmsm-availpro-form-nights-message{
-        display: block;
-        &[data-value='0']{
-            display: none;
+        display: none;
+        @media(min-width: @screen-md-min) {
+            display: block;
+            &[data-value='0']{
+                display: none;
+            }
         }
-    }
-    #tmsm-availpro-form-nights-message, #tmsm-availpro-form-minstay-message {
-        //margin-top: 10px;
-        //margin-bottom: 5px;
-        //position: absolute;
-        //top: 0;
-        //right: 0;
-        //left: 0;
     }
 
 }

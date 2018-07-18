@@ -7,7 +7,12 @@
   display: none;
 }
 #tmsm-availpro-calendar.calendar-small .clndr-controls {
-  font-size: 19px;
+  font-size: 15px;
+}
+@media (min-width: 900px) {
+  #tmsm-availpro-calendar.calendar-small .clndr-controls {
+    font-size: 19px;
+  }
 }
 #tmsm-availpro-calendar.calendar-small .clndr-controls td {
   padding: 5px;
@@ -244,10 +249,26 @@
 .tmsm-availpro-form-legend .legend-item.legend-item-lastrooms:before {
   background: #ffffff;
 }
+.tmsm-availpro-form-legend .legend-item.legend-item-minstay {
+  display: none;
+}
+@media (min-width: 900px) {
+  .tmsm-availpro-form-legend .legend-item.legend-item-minstay {
+    display: block;
+  }
+}
 .tmsm-availpro-form-legend .legend-item.legend-item-minstay:before {
   content: '⇾';
   background: transparent;
   color: #333333;
+}
+#tmsm-availpro-form #tmsm-availpro-form-intro {
+  display: none;
+}
+@media (min-width: 900px) {
+  #tmsm-availpro-form #tmsm-availpro-form-intro {
+    display: block;
+  }
 }
 #tmsm-availpro-form #tmsm-availpro-calculatetotal-totalprice-label {
   display: none;
@@ -276,10 +297,15 @@
   position: relative;
 }
 #tmsm-availpro-form #tmsm-availpro-form-nights-message {
-  display: block;
-}
-#tmsm-availpro-form #tmsm-availpro-form-nights-message[data-value='0'] {
   display: none;
+}
+@media (min-width: 900px) {
+  #tmsm-availpro-form #tmsm-availpro-form-nights-message {
+    display: block;
+  }
+  #tmsm-availpro-form #tmsm-availpro-form-nights-message[data-value='0'] {
+    display: none;
+  }
 }
 #tmsm-availpro-calendar-container {
   padding: 10px;

@@ -1,5 +1,8 @@
 ### Unreleased ###
 
+### 1.0.5: July 18th, 2018
+* Optimizations on mobile
+
 ### 1.0.4: July 18th, 2018
 * Fix error with options
 
