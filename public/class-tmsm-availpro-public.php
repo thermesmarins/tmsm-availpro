@@ -69,7 +69,6 @@ class Tmsm_Availpro_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
-		$this->set_options();
 	}
 
 	/**
@@ -79,12 +78,6 @@ class Tmsm_Availpro_Public {
 		return (function_exists('pll_current_language') ? pll_current_language() : substr(get_locale(),0, 2));
 	}
 
-	/**
-	 * Set the class variable $options
-	 */
-	private function set_options() {
-		$this->options = get_option( $this->plugin_name . '-options' );
-	}
 
 	/**
 	 * Get option
@@ -93,10 +86,13 @@ class Tmsm_Availpro_Public {
 	 * @return null
 	 */
 	private function get_option($option_name){
-		if(empty($this->options[$option_name])){
+
+		$options = get_option($this->plugin_name . '-options');
+
+		if(empty($options[$option_name])){
 			return null;
 		}
-		return $this->options[$option_name];
+		return $options[$option_name];
 	}
 
 	/**
