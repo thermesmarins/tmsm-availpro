@@ -262,6 +262,9 @@
   background: transparent;
   color: #333333;
 }
+#tmsm-availpro-form .tmsm-availpro-form-fields {
+  padding-bottom: 50px;
+}
 #tmsm-availpro-form #tmsm-availpro-form-intro {
   display: none;
 }
