@@ -154,9 +154,9 @@ class Tmsm_Availpro_Webservice {
 		//$month_lastday->modify('first day of this month')->modify('+6 days');
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log('get_data');
-			error_log('firstday:'.$month_firstday->format('Y-m-d'));
-			error_log('lastday:'.$month_lastday->format('Y-m-d'));
+			//error_log('get_data');
+			//error_log('firstday:'.$month_firstday->format('Y-m-d'));
+			//error_log('lastday:'.$month_lastday->format('Y-m-d'));
 		}
 
 		if(!class_exists('SoapOAuthWrapper')){
@@ -231,10 +231,6 @@ class Tmsm_Availpro_Webservice {
 			return 'SoapOAuthWrapper doesn\'t exist';
 		}
 
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log('SoapOAuthWrapper');
-		}
-
 		$options = get_option('tmsm-availpro-options', false);
 
 		$option_ratecode = '';
@@ -252,7 +248,7 @@ class Tmsm_Availpro_Webservice {
 			}
 		}
 		$filters_rateids = '';
-		error_log(var_export($option_rateids_array,true));
+		//error_log(var_export($option_rateids_array,true));
 
 		if(!empty($option_rateids_array) && is_array($option_rateids_array) && count($option_rateids_array) > 0){
 			$filters_rateids = '<rates default="Excluded">';
@@ -261,7 +257,7 @@ class Tmsm_Availpro_Webservice {
 			}
 			$filters_rateids .= '</rates>';
 		}
-		error_log(var_export($filters_rateids,true));
+		//error_log(var_export($filters_rateids,true));
 		//rooms
 		$option_roomids_array = [];
 		if(!empty($option_roomids) ){
