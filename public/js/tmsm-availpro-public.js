@@ -313,7 +313,14 @@
       }
 
     });
-  }
 
+    // Display year best price in shortcode
+    var tmsm_availpro_bestprice_year = $('#tmsm-availpro-bestprice-year');
+    if(tmsm_availpro_bestprice_year.length > 0){
+      if(tmsm_availpro_bestprice_year.data('price')){
+        tmsm_availpro_bestprice_year.html(tmsm_availpro_params.i18n.yearbestpricelabel.replace('%',Number(tmsm_availpro_bestprice_year.data('price')).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0})));
+      }
+    }
+  }
 
 })( jQuery );

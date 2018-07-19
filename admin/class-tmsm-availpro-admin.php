@@ -305,6 +305,17 @@ class Tmsm_Availpro_Admin {
 			)
 		);
 
+		add_settings_field(
+			'yearbestpricelabel',
+			esc_html__( 'Year Best Price Label', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'yearbestpricelabel',
+			)
+		);
+
 
 
 	}
@@ -581,6 +592,7 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'intro', 'textarea', '' );
 		$options[] = array( 'outro', 'textarea', '' );
 		$options[] = array( 'bookbuttonlabel', 'textarea', '' );
+		$options[] = array( 'yearbestpricelabel', 'textarea', _x('From %', 'money format', 'tmsm-availpro') );
 
 		return $options;
 	}

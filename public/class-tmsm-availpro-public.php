@@ -183,16 +183,16 @@ class Tmsm_Availpro_Public {
 		// Params
 		$params = [
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'locale' => $this->get_locale(),
+			'locale'   => $this->get_locale(),
 			'security' => wp_create_nonce( 'security' ),
-			'i18n' => [
-				'button_continue' => __( 'Book now', 'tmsm-availpro' ),
-				'fromprice' => _x( 'From', 'price', 'tmsm-availpro' ),
+			'i18n'     => [
+				'fromprice'          => _x( 'From', 'price', 'tmsm-availpro' ),
+				'yearbestpricelabel' => $this->get_option( 'yearbestpricelabel' ),
 			],
-			'options' => [
-				'currency' => $this->get_option('currency'),
+			'options'  => [
+				'currency' => $this->get_option( 'currency' ),
 			],
-			'data' => $this->get_options_bestprice(),
+			'data'     => $this->get_options_bestprice(),
 		];
 
 		wp_localize_script( $this->plugin_name, 'tmsm_availpro_params', $params);
@@ -205,6 +205,7 @@ class Tmsm_Availpro_Public {
 	 */
 	public function register_shortcodes() {
 		add_shortcode( 'tmsm-availpro-calendar', array( $this, 'calendar_shortcode') );
+		add_shortcode( 'tmsm-availpro-bestprice-year', array( $this, 'bestpriceyear_shortcode') );
 	}
 
 	/**
@@ -221,6 +222,36 @@ class Tmsm_Availpro_Public {
 		$output .= $this->form_template();
 
 		$output = '<div id="tmsm-availpro-container">'.$output.'</div>';
+		return $output;
+	}
+
+	/**
+	 * Best Price Year shortcode
+	 *
+	 * @since    1.0.0
+	 */
+	public function bestpriceyear_shortcode($atts) {
+		$atts = shortcode_atts( array(
+			'option' => '',
+		), $atts, 'tmsm-availpro-bestprice-year' );
+
+		$price = null;
+		$output = null;
+		$date = null;
+
+		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
+		if ( $bestprice_year !== false ) {
+			if ( @$bestprice_year['Price'] !== null ) {
+				$price = $bestprice_year['Price'];
+			}
+			if ( @$bestprice_year['Date'] !== null ) {
+				$date = $bestprice_year['Date'];
+			}
+		}
+
+		if($price !== null){
+			$output = '<span id="tmsm-availpro-bestprice-year" data-date="'.$date.'" data-price="'.$price.'"></span>';
+		}
 		return $output;
 	}
 
@@ -574,6 +605,19 @@ class Tmsm_Availpro_Public {
 									error_log('*Price: '.@$attributes['Price']);
 									error_log('*Status: '.@$attributes['Status']);
 									if(@$attributes['Status'] !=='NotAvailable' && !empty($attributes['Price'])){
+
+
+										// Check year price
+										$attributes['Date'] = $date;
+										if(empty($dailyplanning_bestprice_year) && empty(@$dailyplanning_bestprice_year['Price'])){
+											$dailyplanning_bestprice_year = $attributes;
+										}
+										if(!empty($dailyplanning_bestprice_year) && !empty(@$dailyplanning_bestprice_year['Price']) && @$dailyplanning_bestprice_year['Price'] > $attributes['Price']){
+											$dailyplanning_bestprice_year = $attributes;
+										}
+
+
+										// Check month price
 										error_log('*Consider Price');
 										if(!empty($dailyplanning_bestprice[$date]['Price'])){
 											error_log('*Current Best Price: '.$dailyplanning_bestprice[$date]['Price']);
@@ -583,16 +627,12 @@ class Tmsm_Availpro_Public {
 												error_log('*Price Inferior to Current Best Price: '.$attributes['Price']);
 												$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
 												error_log('*New Best Price: '.$dailyplanning_bestprice[$date]['Price']);
-												$attributes['Date'] = $date;
-												$dailyplanning_bestprice_year = $attributes;
 											}
 										}
 										else{
 											@$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
 											@$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
 											error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['Price']);
-											$attributes['Date'] = $date;
-											$dailyplanning_bestprice_year = $attributes;
 										}
 									}
 								//}
@@ -612,19 +652,26 @@ class Tmsm_Availpro_Public {
 		// Save Month to check data
 		update_option('tmsm-availpro-bestprice-'.$monthtocheck, $dailyplanning_bestprice);
 
-
 		// Check year best price
 		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
-		if($bestprice_year === false && $dailyplanning_bestprice_year !== null){
+
+		error_log('$dailyplanning_bestprice_year:');
+		error_log(var_export($dailyplanning_bestprice_year, true));
+
+
+		if(($bestprice_year === false || $bestprice_year === '') && $dailyplanning_bestprice_year !== null){
 			update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
 			error_log('Init bestprice_year');
 			error_log(var_export($dailyplanning_bestprice_year, true));
 		}
 		else{
-			if(@$bestprice_year['Price'] > @$dailyplanning_bestprice_year['Price']){
+			if(isset($dailyplanning_bestprice_year) && @$bestprice_year['Price'] > @$dailyplanning_bestprice_year['Price']){
 				update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
 				error_log('New bestprice_year');
 				error_log(var_export($dailyplanning_bestprice_year, true));
+			}
+			else{
+				error_log('Not best bestprice_year');
 			}
 		}
 

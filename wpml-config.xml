@@ -4,6 +4,7 @@
             <key name="intro" />
             <key name="outro" />
             <key name="bookbuttonlabel" />
+            <key name="yearbestpricelabel" />
         </key>
     </admin-texts>
 </wpml-config>

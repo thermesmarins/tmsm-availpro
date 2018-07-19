@@ -1,5 +1,5 @@
 ### Unreleased ###
-
+* New calculated data: tmsm-availpro-bestprice-year which is the best price of the next 12 months
 
 ### 1.0.6: July 19th, 2018
 * Change cron from hourly to 5 minutes
