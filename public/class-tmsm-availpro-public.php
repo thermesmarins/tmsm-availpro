@@ -483,6 +483,8 @@ class Tmsm_Availpro_Public {
 
 		// Init data var
 		$dailyplanning_bestprice = [];
+		$dailyplanning_bestprice_year = null;
+
 		$interval           = new \DateInterval( 'P1D' );
 
 		if ( ! empty( $data ) ) {
@@ -581,12 +583,16 @@ class Tmsm_Availpro_Public {
 												error_log('*Price Inferior to Current Best Price: '.$attributes['Price']);
 												$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
 												error_log('*New Best Price: '.$dailyplanning_bestprice[$date]['Price']);
+												$attributes['Date'] = $date;
+												$dailyplanning_bestprice_year = $attributes;
 											}
 										}
 										else{
 											@$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
 											@$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
 											error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['Price']);
+											$attributes['Date'] = $date;
+											$dailyplanning_bestprice_year = $attributes;
 										}
 									}
 								//}
@@ -605,6 +611,22 @@ class Tmsm_Availpro_Public {
 		}
 		// Save Month to check data
 		update_option('tmsm-availpro-bestprice-'.$monthtocheck, $dailyplanning_bestprice);
+
+
+		// Check year best price
+		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
+		if($bestprice_year === false && $dailyplanning_bestprice_year !== null){
+			update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
+			error_log('Init bestprice_year');
+			error_log(var_export($dailyplanning_bestprice_year, true));
+		}
+		else{
+			if(@$bestprice_year['Price'] > @$dailyplanning_bestprice_year['Price']){
+				update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
+				error_log('New bestprice_year');
+				error_log(var_export($dailyplanning_bestprice_year, true));
+			}
+		}
 
 		// Delete previous month data
 		$today = new Datetime();
