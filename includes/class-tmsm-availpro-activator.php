@@ -23,14 +23,17 @@
 class Tmsm_Availpro_Activator {
 
 	/**
-	 * Short Description. (use period)
+	 * Activate
 	 *
 	 * Long Description.
 	 *
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		wp_schedule_event( time(), 'hourly', 'tmsmavailpro_cronaction' );
+
+		if ( ! wp_next_scheduled( 'tmsmavailpro_cronaction' ) ) {
+			wp_schedule_event( time(), 'tmsm_availpro_refresh_schedule', 'tmsmavailpro_cronaction' );
+		}
 	}
 
 }

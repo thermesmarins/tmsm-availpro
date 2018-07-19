@@ -1,5 +1,11 @@
 ### Unreleased ###
 
+
+### 1.0.6: July 19th, 2018
+* Change cron from hourly to 5 minutes
+* Check calendar existence
+* Fix legend CSS
+
 ### 1.0.5: July 18th, 2018
 * Optimizations on mobile
 

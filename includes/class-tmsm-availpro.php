@@ -76,6 +76,7 @@ class Tmsm_Availpro {
 
 		$this->load_dependencies();
 		$this->set_locale();
+		$this->define_cron_schedule();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -183,6 +184,22 @@ class Tmsm_Availpro {
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
 		$this->loader->add_filter( 'plugin_action_links_'.$plugin_basename, $plugin_admin, 'settings_link' );
 
+	}
+
+	/**
+	 * Define cron
+	 *
+	 * @since    1.0.6
+	 * @access   private
+	 */
+	private function define_cron_schedule() {
+		add_filter('cron_schedules', function($schedules) {
+			$schedules['tmsm_availpro_refresh_schedule'] = array(
+				'interval' => MINUTE_IN_SECONDS * 5,
+				'display'  => __( 'Every 5 minutes', 'tmsm-availpro' ),
+			);
+			return $schedules;
+		}, 99);
 	}
 
 	/**
