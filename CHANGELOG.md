@@ -1,7 +1,7 @@
 ### Unreleased ###
 * New calculated data: tmsm-availpro-bestprice-year which is the best price of the next 12 months
 * Empty year best price when rechecking month with year best price
-* Shortcode displaying the best year price
+* Shortcode displaying the best year price [tmsm-availpro-bestprice-year]
 
 ### 1.0.6: July 19th, 2018
 * Change cron from hourly to 5 minutes

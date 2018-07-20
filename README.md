@@ -8,6 +8,7 @@ Features
 
 
 * Shortcode `[tmsm-availpro-calendar]` to display calendar
+* Shortcode `[tmsm-availpro-bestprice-year]` to display best year price
 * Prices are cached in wp_options
 * Hourly cron refreshes prices
 * User can select begin date and end date in the calendar, this calculates the total price of the stay
