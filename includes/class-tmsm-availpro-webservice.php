@@ -39,16 +39,6 @@ class Tmsm_Availpro_Webservice {
 	private $oauth_identifiers = [];
 
 	/**
-	 * Webservice Oauth identifiers
-	 *
-	 * @access 	private
-	 * @since 	1.0.0
-	 * @var 	string
-	 */
-	private $filters = '';
-
-
-	/**
 	 * Constructor
 	 */
 	public function __construct() {
@@ -56,7 +46,6 @@ class Tmsm_Availpro_Webservice {
 		$options = get_option('tmsm-availpro-options', false);
 
 		$this->set_oauth_identifiers();
-		$this->set_filters();
 
 	}
 
@@ -74,12 +63,26 @@ class Tmsm_Availpro_Webservice {
 	}
 
 	/**
-	 * Set filters
+	 * Get Layout
+	 *
+	 * @return string
 	 */
-	private function set_filters(){
+	private function get_layout(){
+		return '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>';
+
+	}
+	/**
+	 * Get Filters
+	 *
+	 * @param null $rateids
+	 *
+	 * @return string
+	 */
+	private function get_filters($rateids = null){
 		$options = get_option('tmsm-availpro-options', false);
 
-		$option_rateids = $options['rateids'];
+		$option_rateids = $rateids;
+		$option_ratecode = null;
 		$option_roomids = $options['roomids'];
 		$option_groupid = $options['groupid'];
 		$option_hotelid = $options['hotelid'];
@@ -118,12 +121,17 @@ class Tmsm_Availpro_Webservice {
 			$filters_roomids .= '</rooms>';
 		}
 
+		// ratecode
+		$filters_ratecode='';
+		if(!empty($option_ratecode)){
+			$filters_ratecode = 'referenceRateCode="'.$option_ratecode.'"';
+		}
 
 		// @TODO include $filters_roomids but it doesn't give any result with it
 		// @TODO not hardcode OTABAR
 		//referenceRateCode="BARPROM"
-		$this->filters ='
-					<ratePlans><ratePlan groupId="'.$option_groupid.'"><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
+		$filters = '
+					<ratePlans><ratePlan groupId="'.$option_groupid.'" '.$filters_ratecode.'><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
 	                $filters_rateids.
 	                //$filters_roomids.
 	                '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
@@ -131,8 +139,10 @@ class Tmsm_Availpro_Webservice {
 		'';
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log($this->filters);
+			error_log($filters);
 		}
+
+		return $filters;
 
 	}
 
@@ -164,19 +174,15 @@ class Tmsm_Availpro_Webservice {
 		}
 
 		$options = get_option('tmsm-availpro-options', false);
-
-		$option_rateids = $options['rateids'];
-		$option_roomids = $options['roomids'];
-		$option_groupid = $options['groupid'];
-		$option_hotelid = $options['hotelid'];
+		$rateids = $options['accommodationrateids'];
 
 		$soap_parameters = array(
 			'groupId'   => $options['groupid'],
 			'hotelId'   => $options['hotelid'],
 			'beginDate' => $month_firstday->format('Y-m-d'),
 			'endDate'   => $month_lastday->format('Y-m-d'),
-			'layout'    => '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>',
-			'filter'    => $this->filters,
+			'layout'    => $this->get_layout(),
+			'filter'    => $this->get_filters($rateids),
 		);
 
 		try {
@@ -185,7 +191,6 @@ class Tmsm_Availpro_Webservice {
 		} catch ( OAuthException2 $e ) {
 			return $e;
 		}
-
 	}
 
 	/**
@@ -218,10 +223,11 @@ class Tmsm_Availpro_Webservice {
 	 *
 	 * @param string $arrivaldate (YYYY-MM-DD)
 	 * @param int $nights
+	 * @param string $rateids
 	 *
 	 * @return string
 	 */
-	public function get_stayplanning($arrivaldate, $nights){
+	public function get_stayplanning($arrivaldate, $nights, $rateids){
 
 		$timezone = new DateTimeZone( "Europe/Paris" );
 
@@ -231,70 +237,15 @@ class Tmsm_Availpro_Webservice {
 			return 'SoapOAuthWrapper doesn\'t exist';
 		}
 
+
 		$options = get_option('tmsm-availpro-options', false);
-
-		$option_ratecode = '';
-		$option_rateids = $options['rateids'];
-		//$option_rateids = 114240; //@TODO remove id
-		$option_groupid = $options['groupid'];
-		$option_hotelid = $options['hotelid'];
-
-		// rates
-		$option_rateids_array = [];
-		if(!empty($option_rateids) ){
-			$option_rateids_array = explode(',', $option_rateids);
-			foreach($option_rateids_array as &$item){
-				$item = trim($item);
-			}
-		}
-		$filters_rateids = '';
-		//error_log(var_export($option_rateids_array,true));
-
-		if(!empty($option_rateids_array) && is_array($option_rateids_array) && count($option_rateids_array) > 0){
-			$filters_rateids = '<rates default="Excluded">';
-			foreach($option_rateids_array as $item_key => $item_value){
-				$filters_rateids .= '<exception id="'.$item_value.'"/>';
-			}
-			$filters_rateids .= '</rates>';
-		}
-		//error_log(var_export($filters_rateids,true));
-		//rooms
-		$option_roomids_array = [];
-		if(!empty($option_roomids) ){
-			$option_roomids_array = explode(',', $option_roomids);
-			foreach($option_roomids_array as &$item){
-				$item = trim($item);
-			}
-		}
-		$filters_roomids = '';
-		if(!empty($option_roomids_array) && is_array($option_roomids_array) && count($option_roomids_array) > 0){
-			$filters_roomids = '<rooms default="Excluded">';
-			foreach($option_roomids_array as $item){
-				$filters_roomids .= '<exception id="'.$item.'"/>';
-			}
-			$filters_roomids .= '</rooms>';
-		}
-		// ratecode
-		$filters_ratecode='';
-		if(!empty($option_ratecode)){
-			$filters_ratecode = 'referenceRateCode="'.$option_ratecode.'"';
-		}
-
-		$filters ='
-					<ratePlans><ratePlan groupId="'.$option_groupid.'" '.$filters_ratecode.'><hotels default="Excluded"><exception id="'.$option_hotelid.'" /></hotels></ratePlan></ratePlans>'.
-		          $filters_rateids.
-		          $filters_roomids.
-		          '<currencies default="Excluded"><exception currency="EUR"/></currencies>'.
-		          '<status><include status="Available" /><include status="NotAvailable" /></status>'.
-		          '';
-
 		$soap_parameters = array(
 			'groupId'   => $options['groupid'],
 			'hotelId'   => $options['hotelid'],
 			'arrivalDate' => $arrivaldate->format('Y-m-d'),
 			'nightCount'   => $nights,
 			'layout'    => '<level name="ArticleRate"><property name="Status" /><property name="Price" /><property name="Availability" /><property name="MinimumStayThrough" /></level>',
-			'filter'    => $filters,
+			'filter'    => $this->get_filters($rateids),
 		);
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {

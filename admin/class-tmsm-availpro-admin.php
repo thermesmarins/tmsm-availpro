@@ -251,6 +251,28 @@ class Tmsm_Availpro_Admin {
 		);
 
 		add_settings_field(
+			'accommodationrateids',
+			esc_html__( 'Accommodation Rate IDs (separated by comma)', 'tmsm-availpro' ) ,
+			array( $this, 'field_text' ),
+			$this->plugin_name,
+			$this->plugin_name . '-filters',
+			array(
+				'id' 			=> 'accommodationrateids',
+			)
+		);
+
+		add_settings_field(
+			'otarateids',
+			esc_html__( 'OTA Rate IDs (separated by comma)', 'tmsm-availpro' ) ,
+			array( $this, 'field_text' ),
+			$this->plugin_name,
+			$this->plugin_name . '-filters',
+			array(
+				'id' 			=> 'otarateids',
+			)
+		);
+
+		add_settings_field(
 			'currency',
 			esc_html__( 'Currency (ISO 4217 code)', 'tmsm-availpro' ) ,
 			array( $this, 'field_text' ),
@@ -280,6 +302,7 @@ class Tmsm_Availpro_Admin {
 			$this->plugin_name . '-desc',
 			array(
 				'id' => 'intro',
+				'description' => esc_html__( 'Html accepted. ', 'tmsm-availpro' ),
 			)
 		);
 
@@ -291,6 +314,7 @@ class Tmsm_Availpro_Admin {
 			$this->plugin_name . '-desc',
 			array(
 				'id' => 'outro',
+				'description' => esc_html__( 'Html accepted. ', 'tmsm-availpro' ),
 			)
 		);
 
@@ -302,6 +326,7 @@ class Tmsm_Availpro_Admin {
 			$this->plugin_name . '-desc',
 			array(
 				'id' => 'bookbuttonlabel',
+				'description' => esc_html__( 'Html accepted. ', 'tmsm-availpro' ),
 			)
 		);
 
@@ -313,10 +338,33 @@ class Tmsm_Availpro_Admin {
 			$this->plugin_name . '-desc',
 			array(
 				'id' => 'yearbestpricelabel',
+				'description' => esc_html__( 'Html accepted. Use % as placeholder for price.', 'tmsm-availpro' ),
 			)
 		);
 
+		add_settings_field(
+			'selecteddatepricelabel',
+			esc_html__( 'Accommodation Price Label', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'selecteddatepricelabel',
+				'description' => esc_html__( 'Html accepted. Use % as placeholder for price.', 'tmsm-availpro' ),
+			)
+		);
 
+		add_settings_field(
+			'otacomparelabel',
+			esc_html__( 'OTA Compare Label', 'tmsm-availpro' ),
+			array( $this, 'field_textarea' ),
+			$this->plugin_name,
+			$this->plugin_name . '-desc',
+			array(
+				'id' => 'otacomparelabel',
+				'description' => esc_html__( 'Html accepted. Use % as placeholder for price.', 'tmsm-availpro' ),
+			)
+		);
 
 	}
 
@@ -587,12 +635,16 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'hotelid', 'text', '' );
 		$options[] = array( 'roomids', 'text', '' );
 		$options[] = array( 'rateids', 'text', '' );
+		$options[] = array( 'accommodationrateids', 'text', '' );
+		$options[] = array( 'otarateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
 		$options[] = array( 'engine', 'text', '' );
 		$options[] = array( 'intro', 'textarea', '' );
 		$options[] = array( 'outro', 'textarea', '' );
 		$options[] = array( 'bookbuttonlabel', 'textarea', '' );
+		$options[] = array( 'selecteddatepricelabel', 'textarea', _x( 'From %', 'money format', 'tmsm-availpro' ) );
 		$options[] = array( 'yearbestpricelabel', 'textarea', _x('From %', 'money format', 'tmsm-availpro') );
+		$options[] = array( 'otacomparelabel', 'textarea', __( 'Compare with the OTA: %', 'tmsm-availpro' ) );
 
 		return $options;
 	}
