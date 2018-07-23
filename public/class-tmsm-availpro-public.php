@@ -513,28 +513,27 @@ class Tmsm_Availpro_Public {
 						error_log('key $bestprice_year: '.$bestprice_year_item_key);
 						error_log('current $bestprice_year[Date]: '.$bestprice_year_item_value['Date']);
 					}
+
+					// unset value if we are checking again the prices of the month
 					if(strpos($bestprice_year_item_value['Date'], $monthtocheck) !== false){
+						unset($bestprice_year[$bestprice_year_item_key]);
 						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 							error_log('current $bestprice_year[Date] is in month to check');
-							unset($bestprice_year[$bestprice_year_item_key]);
 						}
 					}
+
+					// unset value if the value date is passed
+					$bestprice_year_item_object = DateTime::createFromFormat( 'Y-m-d', $bestprice_year_item_value['Date'] );
+					if($bestprice_year_item_object->getTimestamp() < time()){
+						unset($bestprice_year[$bestprice_year_item_key]);
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+							error_log('current $bestprice_year[Date] is passed');
+						}
+					}
+
 				}
 			}
 
-			/*
-			if(!empty($bestprice_year) && isset($bestprice_year['Date']) ){
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log('current $bestprice_year[Date]: '.$bestprice_year['Date']);
-				}
-				if(strpos($bestprice_year['Date'], $monthtocheck) !== false){
-					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						error_log('current $bestprice_year[Date] is in month to check');
-						delete_option('tmsm-availpro-bestprice-year');
-					}
-				}
-			}
-			*/
 		}
 
 		// Update last check value
@@ -549,8 +548,8 @@ class Tmsm_Availpro_Public {
 		$data       = $webservice::convert_to_array( $response );
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			//error_log( 'webservice response as array:' );
-			//error_log( print_r( $data, true ) );
+			error_log( 'webservice response as array:' );
+			error_log( print_r( $data, true ) );
 		}
 
 		// Init data var
@@ -575,50 +574,80 @@ class Tmsm_Availpro_Public {
 
 						foreach ( $data['response']['dailyPlanning']['ratePlan']['hotel']['entity'] as $entity ) {
 							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-								//error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+								error_log( '******************Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+								error_log( print_r($entity,true));
+
+							}
+
+							$properties = $entity['property'];
+
+							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+								//error_log( '******properties before:');
+								//error_log( print_r($properties,true));
+							}
+
+							if(!isset($properties[0])){
+								if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+									error_log( 'properties not multiple');
+								}
+								$tmp = $properties;
+								unset($properties);
+								$properties[0] = $tmp;
+							}
+
+							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+								//error_log( '******properties after:');
+								//error_log( print_r($properties,true));
 							}
 
 							$dailyplanning_bestprice_entity = [];
 
-							foreach ( $entity['property'] as $property ) {
-								if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-									//error_log( 'property:');
-									//error_log( print_r($property,true));
-								}
-								$propertyname = $property['@attributes']['name'];
+							//foreach ( $entity['property'] as $properties ) {
 
-								if ( ! empty( $property['period'] ) ) {
-									foreach ( $property['period'] as $period ) {
+								foreach ( $properties as $property ) {
+									if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+										//error_log( '***property:');
+										//error_log( print_r($property,true));
+									}
 
-										$attributes = ( isset( $period['@attributes'] ) ? $period['@attributes'] : $period );
-
-										if ( ! empty( $attributes['beginDate'] ) && ! empty( $attributes['endDate'] ) && ! empty( $attributes['value'] ) ) {
-
-											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-												//error_log( $propertyname . ': beginDate=' . $attributes['beginDate'] . ' endDate='. $attributes['endDate'] . ' value=' . $attributes['value'] );
-											}
+									$propertyname = (!empty($property['@attributes']['name']) ? $property['@attributes']['name'] : $property['name']);
 
 
-											$begindate = Datetime::createFromFormat( 'Y-m-d', $attributes['beginDate'] );
-											$enddate   = Datetime::createFromFormat( 'Y-m-d', $attributes['endDate'] );
-											$value   = $attributes['value'];
+									if ( ! empty( $property['period'] ) ) {
+										foreach ( $property['period'] as $period ) {
 
-											$daterange = new \DatePeriod( $begindate, $interval, $enddate->modify( '+1 day' ) );
+											$attributes = ( isset( $period['@attributes'] ) ? $period['@attributes'] : $period );
 
-											/* @var $date Datetime */
-											foreach ( $daterange as $date ) {
-												//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
-												if(empty($dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )])){
-													$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )] = array();
+											if ( ! empty( $attributes['beginDate'] ) && ! empty( $attributes['endDate'] ) && ! empty( $attributes['value'] ) ) {
+
+												if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+													//error_log( $propertyname . ': beginDate=' . $attributes['beginDate'] . ' endDate='. $attributes['endDate'] . ' value=' . $attributes['value'] );
 												}
-												$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )][$propertyname] = $value;
+
+
+												$begindate = Datetime::createFromFormat( 'Y-m-d', $attributes['beginDate'] );
+												$enddate   = Datetime::createFromFormat( 'Y-m-d', $attributes['endDate'] );
+												$value   = $attributes['value'];
+
+												$daterange = new \DatePeriod( $begindate, $interval, $enddate->modify( '+1 day' ) );
+
+												/* @var $date Datetime */
+												foreach ( $daterange as $date ) {
+													//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
+													if(empty($dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )])){
+														$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )] = array();
+													}
+													$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )][$propertyname] = $value;
+												}
+
+
 											}
-
-
 										}
 									}
 								}
-							}
+
+
+							//}
 
 							ksort($dailyplanning_bestprice_entity);
 							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -866,9 +895,20 @@ class Tmsm_Availpro_Public {
 											error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
 										}
 
+										$properties = $entity['property'];
+
+										if(!isset($properties[0])){
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+												error_log( 'properties not multiple');
+											}
+											$tmp = $properties;
+											unset($properties);
+											$properties[0] = $tmp;
+										}
+
 										$dailyplanning_bestprice_entity = [];
 
-										foreach ( $entity['property'] as $property ) {
+										foreach ( $properties as $property ) {
 
 											$propertyname = $property['@attributes']['name'];
 

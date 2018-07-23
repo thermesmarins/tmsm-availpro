@@ -1,5 +1,9 @@
 ### Unreleased ###
 
+### 1.0.9: July 23th, 2018
+* **Fix** - Better handling of prices when xml values 'property' are not formatted the same
+* **Fix** - Remove best year price when date is passed
+* **Tweak** - Execute cron when visiting the options page
 
 ### 1.0.8: July 23th, 2018
 * **New** - Shortcode displaying the best year price now with parameters:
