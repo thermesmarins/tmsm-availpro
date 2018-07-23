@@ -18,4 +18,6 @@
 	settings_fields( $this->plugin_name . '-options' );
 	do_settings_sections( $this->plugin_name );
 	submit_button( __( 'Save options', 'tmsm-availpro' ));
+
+	do_action( 'tmsmavailpro_cronaction' );
 	?></form>

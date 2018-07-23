@@ -1,8 +1,15 @@
 ### Unreleased ###
 
+
+### 1.0.8: July 23th, 2018
+* **New** - Shortcode displaying the best year price now with parameters:
+    * Best price of a room with `[tmsm-availpro-bestprice-year roomid="xxx"]`
+    * Best price of a rate with `[tmsm-availpro-bestprice-year rateid="xxx"]`
+    * Be sure to set the room and rate ids in the settings of the plugin
+
 ### 1.0.7: July 20th, 2018
 * **New** - Calculated data: tmsm-availpro-bestprice-year which is the best price of the next 12 months
-* **New** - Shortcode displaying the best year price [tmsm-availpro-bestprice-year]
+* **New** - Shortcode displaying the best year price `[tmsm-availpro-bestprice-year]`
 * **New** - Calculate OTA prices in stayplanning
 * **Fix** - Empty year best price when rechecking month with year best price
 

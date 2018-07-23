@@ -234,25 +234,38 @@ class Tmsm_Availpro_Public {
 	 */
 	public function bestpriceyear_shortcode($atts) {
 		$atts = shortcode_atts( array(
-			'option' => '',
+			'roomid' => '',
+			'rateid' => '',
 		), $atts, 'tmsm-availpro-bestprice-year' );
+
+		error_log(print_r($atts, true));
 
 		$price = null;
 		$output = null;
 		$date = null;
+		$bestprice_year_requested = null;
 
 		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
-		if ( $bestprice_year !== false ) {
-			if ( @$bestprice_year['Price'] !== null ) {
-				$price = $bestprice_year['Price'];
-			}
-			if ( @$bestprice_year['Date'] !== null ) {
-				$date = $bestprice_year['Date'];
+
+		if(!empty($atts['roomid']) && !empty($bestprice_year['Room'.$atts['roomid']])){
+			$bestprice_year_requested = $bestprice_year['Room'.$atts['roomid']];
+		}
+		elseif(!empty($atts['rateid']) && !empty($bestprice_year['Rate'.$atts['rateid']])){
+			$bestprice_year_requested = $bestprice_year['Rate'.$atts['rateid']];
+		}
+		else{
+			$bestprice_year_requested = (!empty($bestprice_year['Overall']) ? $bestprice_year['Overall'] : null);
+		}
+
+		if ( !empty($bestprice_year_requested) && !empty($bestprice_year_requested['Price'])) {
+			$price = sanitize_text_field($bestprice_year_requested['Price']);
+			if ( !empty($bestprice_year_requested['Date'])) {
+				$date = sanitize_text_field($bestprice_year_requested['Date']);
 			}
 		}
 
-		if($price !== null){
-			$output = '<span id="tmsm-availpro-bestprice-year" data-date="'.$date.'" data-price="'.$price.'"></span>';
+		if(!empty($price)){
+			$output = '<span class="tmsm-availpro-bestprice-year" data-date="'.$date.'" data-price="'.$price.'" data-roomid="'.(!empty($atts['roomid'])?esc_attr__($atts['roomid']):'').'" data-rateid="'.(!empty($atts['rateid'])?esc_attr__($atts['rateid']):'').'"></span>';
 		}
 		return $output;
 	}
@@ -493,7 +506,23 @@ class Tmsm_Availpro_Public {
 
 		// Empty year price
 		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
-		if(!empty($bestprice_year)){
+		if(!empty($bestprice_year) && is_array($bestprice_year)){
+			foreach($bestprice_year as $bestprice_year_item_key => $bestprice_year_item_value){
+				if(!empty($bestprice_year_item_value) && isset($bestprice_year_item_value['Date']) ){
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log('key $bestprice_year: '.$bestprice_year_item_key);
+						error_log('current $bestprice_year[Date]: '.$bestprice_year_item_value['Date']);
+					}
+					if(strpos($bestprice_year_item_value['Date'], $monthtocheck) !== false){
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+							error_log('current $bestprice_year[Date] is in month to check');
+							unset($bestprice_year[$bestprice_year_item_key]);
+						}
+					}
+				}
+			}
+
+			/*
 			if(!empty($bestprice_year) && isset($bestprice_year['Date']) ){
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 					error_log('current $bestprice_year[Date]: '.$bestprice_year['Date']);
@@ -505,6 +534,7 @@ class Tmsm_Availpro_Public {
 					}
 				}
 			}
+			*/
 		}
 
 		// Update last check value
@@ -519,15 +549,15 @@ class Tmsm_Availpro_Public {
 		$data       = $webservice::convert_to_array( $response );
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			//error_log( 'array:' );
-			//error_log( var_export( $data, true ) );
+			//error_log( 'webservice response as array:' );
+			//error_log( print_r( $data, true ) );
 		}
 
 		// Init data var
 		$dailyplanning_bestprice = [];
 		$dailyplanning_bestprice_year = null;
 
-		$interval           = new \DateInterval( 'P1D' );
+		$interval = new \DateInterval( 'P1D' );
 
 		if ( ! empty( $data ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -551,7 +581,10 @@ class Tmsm_Availpro_Public {
 							$dailyplanning_bestprice_entity = [];
 
 							foreach ( $entity['property'] as $property ) {
-
+								if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+									//error_log( 'property:');
+									//error_log( print_r($property,true));
+								}
 								$propertyname = $property['@attributes']['name'];
 
 								if ( ! empty( $property['period'] ) ) {
@@ -575,25 +608,10 @@ class Tmsm_Availpro_Public {
 											/* @var $date Datetime */
 											foreach ( $daterange as $date ) {
 												//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
-												@$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )][$propertyname] = $value;
-												/*switch ( $propertyname ) {
-													case 'Status':
-														@$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )]['status'] = 0;
-														break;
-													case 'Price':
-														@$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )]['price'] = $value;
-														break;
-													case 'Availability':
-														@$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )]['availability'] = $value;
-														break;
-
-													case 'MinimumStay':
-														@$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )]['availability'] = $value;
-														break;
-
-													default:
-														break;
-												}*/
+												if(empty($dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )])){
+													$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )] = array();
+												}
+												$dailyplanning_bestprice_entity[ $date->format( 'Y-m-d' )][$propertyname] = $value;
 											}
 
 
@@ -605,7 +623,7 @@ class Tmsm_Availpro_Public {
 							ksort($dailyplanning_bestprice_entity);
 							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 								//error_log('dailyplanning_bestprice_entity:');
-								//error_log(var_export($dailyplanning_bestprice_entity, true));
+								//error_log(print_r($dailyplanning_bestprice_entity, true));
 							}
 
 
@@ -617,19 +635,44 @@ class Tmsm_Availpro_Public {
 									//error_log('*Status: '.@$attributes['Status']);
 									if(@$attributes['Status'] !=='NotAvailable' && !empty($attributes['Price'])){
 
-
-										// Check year price
 										$attributes['Date'] = $date;
-										if(empty($dailyplanning_bestprice_year) && empty(@$dailyplanning_bestprice_year['Price'])){
-											$dailyplanning_bestprice_year = $attributes;
+
+										// Check year price overall
+
+										// Init overall year price
+										if(empty($dailyplanning_bestprice_year['Overall']) && empty($dailyplanning_bestprice_year['Overall']['Price'])){
+											$dailyplanning_bestprice_year['Overall'] = $attributes;
 										}
-										if(!empty($dailyplanning_bestprice_year) && !empty(@$dailyplanning_bestprice_year['Price']) && @$dailyplanning_bestprice_year['Price'] > $attributes['Price']){
-											$dailyplanning_bestprice_year = $attributes;
+										// Compare existing overall year price
+										if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Price']) && @$dailyplanning_bestprice_year['Overall']['Price'] > $attributes['Price']){
+											$dailyplanning_bestprice_year['Overall'] = $attributes;
 										}
 
+
+										// Check year price Room
+
+										// Init overall year price Room
+										if(empty($dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']]) && empty($dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']]['Price'])){
+											$dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']] = $attributes;
+										}
+										// Compare existing overall year price Room
+										if(!empty($dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']]) && !empty($dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']]['Price']) && $dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']]['Price'] > $attributes['Price']){
+											$dailyplanning_bestprice_year['Room'.$entity['@attributes']['roomId']] = $attributes;
+										}
+
+
+										// Check year price Rate
+
+										// Init overall year price Rate
+										if(empty($dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']]) && empty($dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']]['Price'])){
+											$dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']] = $attributes;
+										}
+										// Compare existing overall year price Rate
+										if(!empty($dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']]) && !empty($dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']]['Price']) && $dailyplanning_bestprice_year['Rate'.$entity['@attributes']['rateId']]['Price'] > $attributes['Price']) {
+											$dailyplanning_bestprice_year[ 'Rate' . $entity['@attributes']['rateId'] ] = $attributes;
+										}
 
 										// Check month price
-										//error_log('*Consider Price');
 										if(!empty($dailyplanning_bestprice[$date]['Price'])){
 											//error_log('*Current Best Price: '.$dailyplanning_bestprice[$date]['Price']);
 											if(
@@ -641,8 +684,11 @@ class Tmsm_Availpro_Public {
 											}
 										}
 										else{
-											@$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
-											@$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
+											if(empty($dailyplanning_bestprice[$date])){
+												$dailyplanning_bestprice[$date] = array();
+											}
+											$dailyplanning_bestprice[$date]['Price'] = $attributes['Price'];
+											$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
 											//error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['Price']);
 										}
 									}
@@ -658,7 +704,7 @@ class Tmsm_Availpro_Public {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			//error_log('dailyplanning_bestprice:');
-			//error_log(var_export($dailyplanning_bestprice, true));
+			//error_log(print_r($dailyplanning_bestprice, true));
 		}
 		// Save Month to check data
 		update_option('tmsm-availpro-bestprice-'.$monthtocheck, $dailyplanning_bestprice);
@@ -666,15 +712,52 @@ class Tmsm_Availpro_Public {
 		// Check year best price
 		$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('dailyplanning_bestprice_year:');
+			error_log(print_r($dailyplanning_bestprice_year, true));
+		}
+		if(($bestprice_year === false || $bestprice_year === '') && !empty($dailyplanning_bestprice_year)){
+			$bestprice_year = $dailyplanning_bestprice_year;
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log('Init bestprice_year');
+			}
+		}
+		else{
+			if(is_array($bestprice_year)){
+				foreach($bestprice_year as $bestprice_year_item_key => $bestprice_year_item_value){
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log('key bestprice_year: '.$bestprice_year_item_key);
+					}
+					if(isset($dailyplanning_bestprice_year[$bestprice_year_item_key]) && @$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']){
+						$bestprice_year[$bestprice_year_item_key] = $dailyplanning_bestprice_year[$bestprice_year_item_key];
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+							error_log('New bestprice_year');
+							error_log(print_r($dailyplanning_bestprice_year[$bestprice_year_item_key], true));
+						}
+					}
+					else{
+						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+							error_log('Not best bestprice_year');
+						}
+					}
+				}
+
+			}
+		}
+
+		update_option('tmsm-availpro-bestprice-year', $bestprice_year);
+
+
+		/*$bestprice_year = get_option( 'tmsm-availpro-bestprice-year', false );
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log('$dailyplanning_bestprice_year:');
-			error_log(var_export($dailyplanning_bestprice_year, true));
+			error_log(print_r($dailyplanning_bestprice_year, true));
 		}
 
 		if(($bestprice_year === false || $bestprice_year === '') && $dailyplanning_bestprice_year !== null){
 			update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log('Init bestprice_year');
-				error_log(var_export($dailyplanning_bestprice_year, true));
+				error_log(print_r($dailyplanning_bestprice_year, true));
 			}
 		}
 		else{
@@ -682,13 +765,14 @@ class Tmsm_Availpro_Public {
 				update_option('tmsm-availpro-bestprice-year', $dailyplanning_bestprice_year);
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 					error_log('New bestprice_year');
-					error_log(var_export($dailyplanning_bestprice_year, true));
+					error_log(print_r($dailyplanning_bestprice_year, true));
 				}
 			}
 			else{
 				error_log('Not best bestprice_year');
 			}
 		}
+		*/
 
 		// Delete previous month data
 		$today = new Datetime();
@@ -717,100 +801,100 @@ class Tmsm_Availpro_Public {
 
 		// Check security
 		if ( empty( $security ) || ! wp_verify_nonce( $security, 'tmsm-availpro-calculatetotal-nonce-action' ) ) {
-			$errors[] = __('The request is not valid', 'tmsm-availpro');
+			$errors[] = __('Token security not valid', 'tmsm-availpro');
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log('Ajax security not OK');
 			}
-			wp_die( -1 );
 		}
 		else{
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log('Ajax security OK');
 			}
-		}
-		check_ajax_referer( 'tmsm-availpro-calculatetotal-nonce-action', 'security' );
 
-		// Check date begin
-		if(empty($date_begin)){
-			$errors[] = __('Date is empty', 'tmsm-availpro');
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log('Date is empty');
-			}
-		}
-		// Check nights number
-		if(empty($nights)){
-			$errors[] = __('Nights number are empty', 'tmsm-availpro');
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log('Nights number is empty');
-			}
-		}
+			check_ajax_referer( 'tmsm-availpro-calculatetotal-nonce-action', 'security' );
 
-
-		// All rates
-		$rates = [ 'accommodation', 'ota'];
-		$options = get_option('tmsm-availpro-options', false);
-		foreach($rates as $rate){
-			$rateids = $options[$rate.'rateids'];
-
-			if(!empty($rateids)){
-				// Calculate price
-				$webservice = new Tmsm_Availpro_Webservice();
-				$response   = $webservice->get_stayplanning( $date_begin, $nights, $rateids);
-				$data       = $webservice::convert_to_array( $response );
+			// Check date begin
+			if(empty($date_begin)){
+				$errors[] = __('Date is empty', 'tmsm-availpro');
 				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log('response:');
-					error_log($response);
+					error_log('Date is empty');
 				}
+			}
+			// Check nights number
+			if(empty($nights)){
+				$errors[] = __('Nights number are empty', 'tmsm-availpro');
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log('Nights number is empty');
+				}
+			}
 
-				// Init data var
-				$dailyplanning_bestprice = [];
-				if ( ! empty( $data ) ) {
+
+			// All rates
+			$rates = [ 'accommodation', 'ota'];
+			$options = get_option('tmsm-availpro-options', false);
+			foreach($rates as $rate){
+				$rateids = $options[$rate.'rateids'];
+
+				if(!empty($rateids)){
+					// Calculate price
+					$webservice = new Tmsm_Availpro_Webservice();
+					$response   = $webservice->get_stayplanning( $date_begin, $nights, $rateids);
+					$data       = $webservice::convert_to_array( $response );
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						error_log( 'Data responsee' );
+						error_log('response:');
+						error_log($response);
 					}
 
-					if ( isset( $data['response']['success'] ) ) {
+					// Init data var
+					$dailyplanning_bestprice = [];
+					if ( ! empty( $data ) ) {
 						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-							error_log( 'data success' );
+							error_log( 'Data responsee' );
 						}
-						if ( isset( $data['response']['stayPlanning'] ) ) {
 
-							if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
-							     && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
+						if ( isset( $data['response']['success'] ) ) {
+							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+								error_log( 'data success' );
+							}
+							if ( isset( $data['response']['stayPlanning'] ) ) {
 
-								foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) {
-									if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-										error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
-									}
+								if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
+								     && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
 
-									$dailyplanning_bestprice_entity = [];
+									foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) {
+										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+											error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+										}
 
-									foreach ( $entity['property'] as $property ) {
+										$dailyplanning_bestprice_entity = [];
 
-										$propertyname = $property['@attributes']['name'];
+										foreach ( $entity['property'] as $property ) {
 
-										@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
+											$propertyname = $property['@attributes']['name'];
 
-									}
+											@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
 
-									ksort($dailyplanning_bestprice_entity);
-									if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-										//error_log('dailyplanning_bestprice_entity:');
-										//error_log(var_export($dailyplanning_bestprice_entity, true));
-									}
+										}
 
-									// Merge data
-									if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'){
-										$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
-									}
-									else{
-										if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price']) ){
-											// New Price is less than merged data
-											if(
-												$dailyplanning_bestprice_entity['Price'] < $dailyplanning_bestprice['Price']
-												&& @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'
-											){
-												$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+										ksort($dailyplanning_bestprice_entity);
+										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+											//error_log('dailyplanning_bestprice_entity:');
+											//error_log(print_r($dailyplanning_bestprice_entity, true));
+										}
+
+										// Merge data
+										if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'){
+											$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+										}
+										else{
+											if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price']) ){
+												// New Price is less than merged data
+												if(
+													$dailyplanning_bestprice_entity['Price'] < $dailyplanning_bestprice['Price']
+													&& @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'
+												){
+													$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+												}
 											}
 										}
 									}
@@ -818,30 +902,31 @@ class Tmsm_Availpro_Public {
 							}
 						}
 					}
-				}
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					//error_log('dailyplanning_bestprice:');
-					//error_log(var_export($dailyplanning_bestprice, true));
-				}
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						//error_log('dailyplanning_bestprice:');
+						//error_log(print_r($dailyplanning_bestprice, true));
+					}
 
-				$totalprice = null;
-				if ( ! empty( $dailyplanning_bestprice ) && @$dailyplanning_bestprice['Status'] !== 'NotAvailable' ) {
-					$totalprice = $dailyplanning_bestprice['Price'];
-					$jsondata['data'][$rate] = [
-						'totalprice' => money_format( '%.2n', $totalprice ),
-					];
-				} else {
-					if($rate == 'accommodation'){
-						$errors[] = __( 'No availability', 'tmsm-availpro' );
+					$totalprice = null;
+					if ( ! empty( $dailyplanning_bestprice ) && @$dailyplanning_bestprice['Status'] !== 'NotAvailable' ) {
+						$totalprice = $dailyplanning_bestprice['Price'];
+						$jsondata['data'][$rate] = [
+							'totalprice' => money_format( '%.2n', $totalprice ),
+						];
+					} else {
+						if($rate == 'accommodation'){
+							$errors[] = __( 'No availability', 'tmsm-availpro' );
+						}
+					}
+				}
+				else{
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log('rateids empty:');
 					}
 				}
 			}
-			else{
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					error_log('rateids empty:');
-				}
-			}
 		}
+
 
 		// Return a response
 		if( ! empty($errors) ) {
@@ -854,7 +939,7 @@ class Tmsm_Availpro_Public {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log('json data:');
-			error_log(var_export($jsondata, true));
+			error_log(print_r($jsondata, true));
 		}
 
 		wp_send_json($jsondata);
