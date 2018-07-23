@@ -316,8 +316,8 @@ class Tmsm_Availpro_Public {
 
 			'.(!empty($this->get_option('intro')) ? '<p id="tmsm-availpro-form-intro">'.html_entity_decode( $this->get_option('intro')).'</p>' : '' ).'
 			
-			<p id="tmsm-availpro-form-dates-container">
-				' . _x( 'From', 'date selection',  'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkindateinfo"  ></span> ' . _x( 'to', 'date selection', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkoutdateinfo" ></span>
+			<p id="tmsm-availpro-form-dates-container" style="display: none">
+				' . _x( 'From', 'date selection',  'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkindateinfo"></span> ' . _x( 'to', 'date selection', 'tmsm-availpro' ) . ' <span id="tmsm-availpro-form-checkoutdateinfo"></span>
 			</p>
             <p id="tmsm-availpro-form-nights-message" data-value="0">'.__('Number of nights:','tmsm-availpro').' <span id="tmsm-availpro-form-nights-number"></span></p>
             <p id="tmsm-availpro-form-minstay-message" data-value="0">'.__('Minimum stay:','tmsm-availpro').' <span id="tmsm-availpro-form-minstay-number"></span></p>

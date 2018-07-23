@@ -180,10 +180,13 @@
             }
 
             // Calculate nights
+            $('#tmsm-availpro-form-dates-container').hide();
             if(typeof tmsm_availpro_calendar_selected_begin !== 'undefined' && typeof tmsm_availpro_calendar_selected_end !== 'undefined'){
               tmsm_availpro_calendar_nights = tmsm_availpro_calendar_selected_end.diff(tmsm_availpro_calendar_selected_begin, "days");
               $('#tmsm-availpro-form-checkoutdateinfo').html(tmsm_availpro_calendar_selected_end.format('L'));
               $('#tmsm-availpro-form-checkoutdate').val(tmsm_availpro_calendar_selected_end.format('YYYY-MM-DD'));
+
+              $('#tmsm-availpro-form-dates-container').show();
 
               // Submit calculate total price
               $('#tmsm-availpro-calculatetotal').submit();
