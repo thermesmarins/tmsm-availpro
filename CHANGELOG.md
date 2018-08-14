@@ -1,4 +1,6 @@
+### 1.1.0: August 14th, 2018
 * **Tweak** - Show calendar selected dates only when begin/end dates are selected and valid
+* **Tweak** - Removed deprecated setting 'rateids'
 
 ### 1.0.9: July 23th, 2018
 * **Fix** - Better handling of prices when xml values 'property' are not formatted the same

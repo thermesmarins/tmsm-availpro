@@ -158,139 +158,130 @@ class Tmsm_Availpro_Admin {
 	 * Registers settings fields with WordPress
 	 */
 	public function register_fields() {
-		// add_settings_field( $id, $title, $callback, $menu_slug, $section, $args );
 
 		add_settings_field(
 			'consumerkey',
-			esc_html__( 'Consumer key', 'tmsm-availpro' ) ,
+			esc_html__( 'Consumer key', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-api',
 			array(
 				//'description' 	=> 'This message displays on the page if no job postings are found.',
-				'id' 			=> 'consumerkey',
+				'id' => 'consumerkey',
 				//'value' 		=> 'Thank you for your interest! There are no job openings at this time.',
 			)
 		);
 
 		add_settings_field(
 			'consumersecret',
-			esc_html__( 'Consumer secret', 'tmsm-availpro' ) ,
+			esc_html__( 'Consumer secret', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-api',
 			array(
-				'id' 			=> 'consumersecret',
+				'id' => 'consumersecret',
 			)
 		);
 
 		add_settings_field(
 			'accesstoken',
-			esc_html__( 'Access token', 'tmsm-availpro' ) ,
+			esc_html__( 'Access token', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-api',
 			array(
-				'id' 			=> 'accesstoken',
+				'id' => 'accesstoken',
 			)
 		);
 
 		add_settings_field(
 			'tokensecret',
-			esc_html__( 'Token secret', 'tmsm-availpro' ) ,
+			esc_html__( 'Token secret', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-api',
 			array(
-				'id' 			=> 'tokensecret',
+				'id' => 'tokensecret',
 			)
 		);
 
 		add_settings_field(
 			'groupid',
-			esc_html__( 'Group ID', 'tmsm-availpro' ) ,
+			esc_html__( 'Group ID', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'groupid',
+				'id' => 'groupid',
 			)
 		);
 
 		add_settings_field(
 			'hotelid',
-			esc_html__( 'Hotel ID', 'tmsm-availpro' ) ,
+			esc_html__( 'Hotel ID', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'hotelid',
+				'id' => 'hotelid',
 			)
 		);
 
 		add_settings_field(
 			'roomids',
-			esc_html__( 'Room IDs (separated by comma)', 'tmsm-availpro' ) ,
+			esc_html__( 'Room IDs', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'roomids',
-			)
-		);
-
-		add_settings_field(
-			'rateids',
-			esc_html__( 'Rate IDs (separated by comma)', 'tmsm-availpro' ) ,
-			array( $this, 'field_text' ),
-			$this->plugin_name,
-			$this->plugin_name . '-filters',
-			array(
-				'id' 			=> 'rateids',
+				'id'          => 'roomids',
+				'description' => esc_html__( 'Separated by comma.', 'tmsm-availpro' ),
 			)
 		);
 
 		add_settings_field(
 			'accommodationrateids',
-			esc_html__( 'Accommodation Rate IDs (separated by comma)', 'tmsm-availpro' ) ,
+			esc_html__( 'Accommodation Rate IDs', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'accommodationrateids',
+				'id'          => 'accommodationrateids',
+				'description' => esc_html__( 'Separated by comma.', 'tmsm-availpro' ),
 			)
 		);
 
 		add_settings_field(
 			'otarateids',
-			esc_html__( 'OTA Rate IDs (separated by comma)', 'tmsm-availpro' ) ,
+			esc_html__( 'OTA Rate IDs', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'otarateids',
+				'id'          => 'otarateids',
+				'description' => esc_html__( 'Separated by comma.', 'tmsm-availpro' ),
 			)
 		);
 
 		add_settings_field(
 			'currency',
-			esc_html__( 'Currency (ISO 4217 code)', 'tmsm-availpro' ) ,
+			esc_html__( 'Currency (ISO 4217 code)', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'currency',
+				'id' => 'currency',
 			)
 		);
 
 		add_settings_field(
 			'engine',
-			esc_html__( 'Engine (format: name/id/)', 'tmsm-availpro' ) ,
+			esc_html__( 'Engine (format: name/id/)', 'tmsm-availpro' ),
 			array( $this, 'field_text' ),
 			$this->plugin_name,
 			$this->plugin_name . '-filters',
 			array(
-				'id' 			=> 'engine',
+				'id' => 'engine',
 			)
 		);
 
@@ -634,7 +625,6 @@ class Tmsm_Availpro_Admin {
 		$options[] = array( 'groupid', 'text', '' );
 		$options[] = array( 'hotelid', 'text', '' );
 		$options[] = array( 'roomids', 'text', '' );
-		$options[] = array( 'rateids', 'text', '' );
 		$options[] = array( 'accommodationrateids', 'text', '' );
 		$options[] = array( 'otarateids', 'text', '' );
 		$options[] = array( 'currency', 'text', '' );
