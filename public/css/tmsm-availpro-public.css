@@ -265,6 +265,11 @@
 #tmsm-availpro-form .tmsm-availpro-form-fields {
   padding-bottom: 50px;
 }
+@media (min-width: 900px) {
+  #tmsm-availpro-form .tmsm-availpro-form-fields {
+    padding-bottom: 0;
+  }
+}
 #tmsm-availpro-form #tmsm-availpro-form-intro {
   display: none;
 }

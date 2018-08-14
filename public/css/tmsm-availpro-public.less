@@ -27,7 +27,6 @@
 @day-hover-price-color: @day-selected-price-color;
 @day-hover-day-number-color: @day-selected-day-number-color;
 
-
 @day-lowestprice-price-color: #0f9d58;
 @day-lowavailability-background: white;
 @day-number-background: transparent;
@@ -380,6 +379,9 @@
 
     .tmsm-availpro-form-fields{
         padding-bottom: 50px;
+        @media(min-width: @screen-md-min) {
+            padding-bottom: 0;
+        }
     }
 
     #tmsm-availpro-form-intro{
