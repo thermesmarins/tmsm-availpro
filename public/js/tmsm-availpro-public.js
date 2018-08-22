@@ -306,11 +306,16 @@
               if(data.data.ota && data.data.ota.totalprice){
                 var Price = data.data.ota.totalprice;
                 if(Price){
+                  $('#tmsm-availpro-form').addClass('tmsm-availpro-form-has-ota-price');
+
                   $('#tmsm-availpro-calculatetotal-ota').show();
                   var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
                   if(PriceWithCurrency){
                     $('#tmsm-availpro-calculatetotal-ota').html(_.unescape(tmsm_availpro_params.i18n.otacomparelabel.replace(/%/g,PriceWithCurrency)));
                   }
+                }
+                else{
+                  $('#tmsm-availpro-form').removeClass('tmsm-availpro-form-has-ota-price');
                 }
               }
 
@@ -320,6 +325,7 @@
               $('#tmsm-availpro-calculatetotal-totalprice').hide();
               $('#tmsm-availpro-calculatetotal-ota').hide();
               $('#tmsm-availpro-calculatetotal-errors').show().html(data.errors);
+              $('#tmsm-availpro-form').removeClass('tmsm-availpro-form-has-ota-price');
             }
           },
           error: function (jqXHR, textStatus) {

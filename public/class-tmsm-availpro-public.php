@@ -356,7 +356,7 @@ class Tmsm_Availpro_Public {
             <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</button>
             </p>
             <p id="tmsm-availpro-calculatetotal-ota" style="display: none"></p>
-            '.(!empty($this->get_option('outro')) ? '<p id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</p>' : '' ).'
+            '.(!empty($this->get_option('outro')) ? '<div id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</div>' : '' ).'
             </div>
             </form>
             <form action="" method="post" id="tmsm-availpro-calculatetotal">

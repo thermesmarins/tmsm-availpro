@@ -1,3 +1,6 @@
+### 1.1.1: August 22nd, 2018
+* **Tweak** - Outro alignment
+
 ### 1.1.0: August 14th, 2018
 * **Tweak** - Show calendar selected dates only when begin/end dates are selected and valid
 * **Tweak** - Removed deprecated setting 'rateids'

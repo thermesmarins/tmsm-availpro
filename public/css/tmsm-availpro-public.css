@@ -345,3 +345,17 @@
 #tmsm-availpro-container {
   background: white;
 }
+#tmsm-availpro-form-outro {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  padding: 15px;
+  left: 50%;
+}
+.tmsm-availpro-form-has-ota-price #tmsm-availpro-form-outro {
+  position: relative;
+  right: auto;
+  left: auto;
+  padding: 0;
+}
