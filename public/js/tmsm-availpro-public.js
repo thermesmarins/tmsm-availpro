@@ -268,6 +268,7 @@
       $('#tmsm-availpro-form-submit').prop('disabled', true);
       $('#tmsm-availpro-calculatetotal-loading').show();
       $('#tmsm-availpro-calculatetotal-errors').hide();
+      $('#tmsm-availpro-form').removeClass('tmsm-availpro-form-has-ota-price');
 
       // Calculate date if begin and end are defined
       if(tmsm_availpro_calendar_selected_begin && tmsm_availpro_calendar_nights > 0){

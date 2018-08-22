@@ -1,3 +1,5 @@
+* **Tweak** - Outro behaviour
+
 ### 1.1.1: August 22nd, 2018
 * **Tweak** - Outro alignment
 
