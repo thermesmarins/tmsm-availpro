@@ -172,7 +172,12 @@ class Tmsm_Availpro_Public {
 		wp_enqueue_script( 'moment', plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/min/moment.min.js', array( 'jquery' ), $this->version, true );
 		if ( function_exists( 'PLL' ) && $language = PLL()->model->get_language( get_locale() ) && pll_current_language() !== 'en')
 		{
-			wp_enqueue_script( 'moment-'.pll_current_language(), plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/locale/'.pll_current_language().'.js', array( 'jquery' ), $this->version, true );
+			$moment_locale = pll_current_language();
+			if ( pll_current_language() === 'zh' ) {
+				$moment_locale = 'zh-cn';
+			}
+
+			wp_enqueue_script( 'moment-'.$moment_locale, plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/locale/'.$moment_locale.'.js', array( 'jquery' ), $this->version, true );
 		}
 
 		wp_enqueue_script( 'clndr', plugin_dir_url( dirname(__FILE__) ) . 'vendor/clndr/clndr.min.js', array( 'jquery', 'moment', 'underscore' ), $this->version, true );

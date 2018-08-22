@@ -1,4 +1,5 @@
 * **Tweak** - Outro behaviour
+* **Tweak** - Handle ZH-CN Moment locale
 
 ### 1.1.1: August 22nd, 2018
 * **Tweak** - Outro alignment
