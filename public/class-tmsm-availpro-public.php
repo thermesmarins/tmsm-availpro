@@ -306,10 +306,10 @@ class Tmsm_Availpro_Public {
 		<form target="_blank" action="'.self::ENGINE_URL.$this->get_option('engine').'" method="get" id="tmsm-availpro-form">
 		
 		<input type="hidden" name="language" value="'.$this->get_locale().'">
-		<input type="hidden" name="arrivalDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-arrivaldate">
+		<input type="hidden" name="arrivalDate" value="" id="tmsm-availpro-form-arrivaldate">
 		<input type="hidden" name="nights" value="1" id="tmsm-availpro-form-nights">
-		<input type="hidden" name="checkinDate" value="'.$today->format('Y-m-d').'" id="tmsm-availpro-form-checkindate">
-		<input type="hidden" name="checkoutDate" value="'.$tomorrow->format('Y-m-d').'" id="tmsm-availpro-form-checkoutdate">
+		<input type="hidden" name="checkinDate" value="" id="tmsm-availpro-form-checkindate">
+		<input type="hidden" name="checkoutDate" value="" id="tmsm-availpro-form-checkoutdate">
 		<input type="hidden" name="selectedAdultCount" value="2">
 		<input type="hidden" name="selectedChildCount" value="0">
 		<input type="hidden" name="guestCountSelector" value="ReadOnly">
