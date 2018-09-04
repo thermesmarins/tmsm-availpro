@@ -1,6 +1,7 @@
 * **Tweak** - Outro behaviour
 * **Tweak** - Handle ZH-CN Moment locale
 * **Tweak** - Empty default dates
+* **Tweak** - Align Outro on mobile
 
 ### 1.1.1: August 22nd, 2018
 * **Tweak** - Outro alignment
