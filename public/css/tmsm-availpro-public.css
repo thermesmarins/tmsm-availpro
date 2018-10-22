@@ -345,11 +345,11 @@
 #tmsm-availpro-container {
   background: white;
 }
-@media (min-width: 500px) {
+@media (min-width: 900px) {
   #tmsm-availpro-form-outro {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: auto;
     right: 0;
     padding: 15px;
     left: 50%;
