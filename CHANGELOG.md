@@ -1,3 +1,4 @@
+### 1.1.2: November 1st, 2018
 * **Tweak** - Outro behaviour
 * **Tweak** - Handle ZH-CN Moment locale
 * **Tweak** - Empty default dates
