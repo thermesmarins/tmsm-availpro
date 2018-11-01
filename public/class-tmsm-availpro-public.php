@@ -349,7 +349,13 @@ class Tmsm_Availpro_Public {
 		*/
 
 		$theme = wp_get_theme();
-		$buttonclass = ( 'StormBringer' == $theme->get('Name') || 'stormbringer' == $theme->get('Template')  ? 'btn btn-primary': '');
+		$buttonclass = '';
+		if ( 'StormBringer' == $theme->get( 'Name' ) || 'stormbringer' == $theme->get( 'Template' ) ) {
+			$buttonclass = 'btn btn-primary';
+		}
+		if ( 'OceanWP' == $theme->get( 'Name' ) || 'oceanwp' == $theme->get( 'Template' ) ) {
+			$buttonclass = 'button';
+		}
 
         $output.='  
             <p id="tmsm-availpro-calculatetotal-results">
@@ -358,7 +364,7 @@ class Tmsm_Availpro_Public {
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
             <p>
-            <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</button>
+            <a href="'.self::ENGINE_URL.$this->get_option('engine').'" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</a>
             </p>
             <p id="tmsm-availpro-calculatetotal-ota" style="display: none"></p>
             '.(!empty($this->get_option('outro')) ? '<div id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</div>' : '' ).'

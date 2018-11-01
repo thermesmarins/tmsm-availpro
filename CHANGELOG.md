@@ -2,6 +2,7 @@
 * **Tweak** - Handle ZH-CN Moment locale
 * **Tweak** - Empty default dates
 * **Tweak** - Align Outro on mobile
+* **Tweak** - Change for button with link to allow better Google Tag Manager tracking
 
 ### 1.1.1: August 22nd, 2018
 * **Tweak** - Outro alignment
