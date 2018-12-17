@@ -1,3 +1,4 @@
+### 1.1.3: December 17th, 2018
 * **Fix** - Best Price not updated when date has passed
 
 ### 1.1.2: November 1st, 2018
