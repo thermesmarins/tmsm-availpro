@@ -681,12 +681,35 @@ class Tmsm_Availpro_Public {
 
 										// Init overall year price
 										if(empty($dailyplanning_bestprice_year['Overall']) && empty($dailyplanning_bestprice_year['Overall']['Price'])){
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+												error_log('Overall is empty');
+											}
 											$dailyplanning_bestprice_year['Overall'] = $attributes;
 										}
+
 										// Compare existing overall year price
-										if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Price']) && @$dailyplanning_bestprice_year['Overall']['Price'] > $attributes['Price']){
+										if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Price']) &&
+										   @$dailyplanning_bestprice_year['Overall']['Price'] > $attributes['Price']
+										){
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+												error_log('New price: inferior');
+												error_log(print_r($attributes, true));
+												error_log('old price:'.$dailyplanning_bestprice_year['Overall']['Price']);
+											}
 											$dailyplanning_bestprice_year['Overall'] = $attributes;
 										}
+
+										// Check if price date has passed
+										/*if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Date']) &&
+                                           @$dailyplanning_bestprice_year['Overall']['Date'] < date('Y-m-d')
+										){
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+												error_log('New price: date passed');
+												error_log(print_r($attributes, true));
+												error_log('old date:'.$dailyplanning_bestprice_year['Overall']['Date']);
+											}
+											$dailyplanning_bestprice_year['Overall'] = $attributes;
+										}*/
 
 
 										// Check year price Room
@@ -766,8 +789,25 @@ class Tmsm_Availpro_Public {
 				foreach($bestprice_year as $bestprice_year_item_key => $bestprice_year_item_value){
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 						error_log('key bestprice_year: '.$bestprice_year_item_key);
+						error_log('isset:'.isset($dailyplanning_bestprice_year[$bestprice_year_item_key]));
+						error_log('price:'.(@$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']));
+						error_log('best:'.@$bestprice_year[$bestprice_year_item_key]['Price']);
+						error_log('current:'.@$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']);
+						error_log('date:'.(@$bestprice_year[$bestprice_year_item_key]['Date'] < date('Y-m-d')));
+						error_log('date best:'.@$bestprice_year[$bestprice_year_item_key]['Date']);
+						error_log('date current:'.date('Y-m-d'));
 					}
-					if(isset($dailyplanning_bestprice_year[$bestprice_year_item_key]) && @$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']){
+
+					if(
+						isset($dailyplanning_bestprice_year[$bestprice_year_item_key])
+						&&
+						(
+						@$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']
+							||
+						@$bestprice_year[$bestprice_year_item_key]['Date'] < date('Y-m-d')
+						)
+
+					){
 						$bestprice_year[$bestprice_year_item_key] = $dailyplanning_bestprice_year[$bestprice_year_item_key];
 						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 							error_log('New bestprice_year');

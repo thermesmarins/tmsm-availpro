@@ -1,3 +1,5 @@
+* **Fix** - Best Price not updated when date has passed
+
 ### 1.1.2: November 1st, 2018
 * **Tweak** - Outro behaviour
 * **Tweak** - Handle ZH-CN Moment locale
