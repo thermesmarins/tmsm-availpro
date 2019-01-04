@@ -1,3 +1,5 @@
+* **Revert** - Change for button with link to allow better Google Tag Manager tracking
+
 ### 1.1.3: December 17th, 2018
 * **Fix** - Best Price not updated when date has passed
 

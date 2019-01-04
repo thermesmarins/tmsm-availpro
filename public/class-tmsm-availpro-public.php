@@ -357,6 +357,10 @@ class Tmsm_Availpro_Public {
 			$buttonclass = 'button';
 		}
 
+		/**
+		 *             <a href="'.self::ENGINE_URL.$this->get_option('engine').'" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</a>
+		 */
+
         $output.='  
             <p id="tmsm-availpro-calculatetotal-results">
                 <span id="tmsm-availpro-calculatetotal-totalprice" style="display: none"></span>
@@ -364,7 +368,7 @@ class Tmsm_Availpro_Public {
                 <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
 			</p>
             <p>
-            <a href="'.self::ENGINE_URL.$this->get_option('engine').'" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</a>
+            <button type="submit" id="tmsm-availpro-form-submit" class="'.$buttonclass.'">' .(!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __( 'Book now', 'tmsm-availpro' ) ). '</button>
             </p>
             <p id="tmsm-availpro-calculatetotal-ota" style="display: none"></p>
             '.(!empty($this->get_option('outro')) ? '<div id="tmsm-availpro-form-outro">'.html_entity_decode($this->get_option('outro')).'</div>' : '' ).'

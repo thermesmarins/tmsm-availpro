@@ -340,10 +340,10 @@
     });
 
 
-    $('#tmsm-availpro-form-submit').on('click', function(e){
+    /*$('#tmsm-availpro-form-submit').on('click', function(e){
       e.preventDefault();
       $(this).closest('form').submit();
-    });
+    });*/
 
     // Display year best price in shortcode
     var tmsm_availpro_bestprice_year = $('.tmsm-availpro-bestprice-year');
