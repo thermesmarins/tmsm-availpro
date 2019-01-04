@@ -1,3 +1,4 @@
+### 1.1.4: January 4th, 2019
 * **Revert** - Change for button with link to allow better Google Tag Manager tracking
 
 ### 1.1.3: December 17th, 2018
