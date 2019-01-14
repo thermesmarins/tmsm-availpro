@@ -1,3 +1,4 @@
+### 1.1.5: January 14th, 2019
 * **Fix** - Fix days of the week switching language after clicking next month
 
 ### 1.1.4: January 4th, 2019
