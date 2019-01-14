@@ -1,3 +1,5 @@
+* **Fix** - Fix days of the week switching language after clicking next month
+
 ### 1.1.4: January 4th, 2019
 * **Revert** - Change for button with link to allow better Google Tag Manager tracking
 

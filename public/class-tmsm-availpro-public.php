@@ -408,8 +408,8 @@ class Tmsm_Availpro_Public {
 
                 <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
 <th class="header-day">
-                    <span class=""><%= moment().weekday(i).format(\'dd\').charAt(0) %></span>
-                    
+                    <span class="hide"><%= moment().weekday(i).format(\'dd\').charAt(0) %></span>
+                    <span class=""><%= daysOfTheWeek[i] %></span>
                 </th>
                 <% } %>
             </tr>
