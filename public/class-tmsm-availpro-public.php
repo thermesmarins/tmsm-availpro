@@ -789,8 +789,8 @@ class Tmsm_Availpro_Public {
 			}
 		}
 		else{
-			if(is_array($bestprice_year)){
-				foreach($bestprice_year as $bestprice_year_item_key => $bestprice_year_item_value){
+			if(is_array($dailyplanning_bestprice_year)){
+				foreach($dailyplanning_bestprice_year as $bestprice_year_item_key => $bestprice_year_item_value){
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 						error_log('key bestprice_year: '.$bestprice_year_item_key);
 						error_log('isset:'.isset($dailyplanning_bestprice_year[$bestprice_year_item_key]));
@@ -803,12 +803,16 @@ class Tmsm_Availpro_Public {
 					}
 
 					if(
-						isset($dailyplanning_bestprice_year[$bestprice_year_item_key])
-						&&
+						!isset($bestprice_year[$bestprice_year_item_key])
+						||
 						(
-						@$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']
-							||
-						@$bestprice_year[$bestprice_year_item_key]['Date'] < date('Y-m-d')
+							isset($dailyplanning_bestprice_year[$bestprice_year_item_key])
+							&&
+							(
+								@$bestprice_year[$bestprice_year_item_key]['Price'] > @$dailyplanning_bestprice_year[$bestprice_year_item_key]['Price']
+								||
+								@$bestprice_year[$bestprice_year_item_key]['Date'] < date('Y-m-d')
+							)
 						)
 
 					){

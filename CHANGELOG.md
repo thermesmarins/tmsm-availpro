@@ -1,3 +1,5 @@
+* **Fix** - For new rooms, was not getting prices
+
 ### 1.1.5: January 14th, 2019
 * **Fix** - Fix days of the week switching language after clicking next month
 
