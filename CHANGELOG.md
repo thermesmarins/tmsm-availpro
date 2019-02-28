@@ -1,4 +1,5 @@
 * **Fix** - For new rooms, was not getting prices
+* **Fix** - Price maximum fractions : 2 instead of 0
 
 ### 1.1.5: January 14th, 2019
 * **Fix** - Fix days of the week switching language after clicking next month
