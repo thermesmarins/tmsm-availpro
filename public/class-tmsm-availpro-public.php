@@ -243,7 +243,9 @@ class Tmsm_Availpro_Public {
 			'rateid' => '',
 		), $atts, 'tmsm-availpro-bestprice-year' );
 
-		error_log(print_r($atts, true));
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log(print_r($atts, true));
+		}
 
 		$price = null;
 		$output = null;

@@ -1,3 +1,5 @@
+* **Tweak** - Remove error_log
+
 ### 1.1.6: April 12th, 2019
 * **Fix** - For new rooms, was not getting prices
 * **Fix** - Price maximum fractions : 2 instead of 0
