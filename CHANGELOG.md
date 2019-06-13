@@ -1,3 +1,6 @@
+### 1.1.7: June 13th, 2019
+* **Tweak** - Deregistrer Moment from WP core
+* **Tweak** - Update Moment from 2.22.2 to 2.24
 * **Tweak** - Remove error_log
 
 ### 1.1.6: April 12th, 2019
