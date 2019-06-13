@@ -169,6 +169,8 @@ class Tmsm_Availpro_Public {
 	public function enqueue_scripts() {
 
 		// Scripts
+		wp_dequeue_script('moment');
+		wp_deregister_script('moment');
 		wp_enqueue_script( 'moment', plugin_dir_url( dirname(__FILE__) ) . 'vendor/moment/min/moment.min.js', array( 'jquery' ), $this->version, true );
 		if ( function_exists( 'PLL' ) && $language = PLL()->model->get_language( get_locale() ) && pll_current_language() !== 'en')
 		{
