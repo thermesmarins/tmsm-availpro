@@ -81,15 +81,19 @@ export function defineCommonLocaleTests(locale, options) {
             var r;
             r = moment(m.format(format), format);
             assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format);
-            r = moment(m.format(format).toLocaleUpperCase(), format);
-            assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' upper');
+            if (locale !== 'ka') {
+                r = moment(m.format(format).toLocaleUpperCase(), format);
+                assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' upper');
+            }
             r = moment(m.format(format).toLocaleLowerCase(), format);
             assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' lower');
 
             r = moment(m.format(format), format, true);
             assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' strict');
-            r = moment(m.format(format).toLocaleUpperCase(), format, true);
-            assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' upper strict');
+            if (locale !== 'ka') {
+                r = moment(m.format(format).toLocaleUpperCase(), format, true);
+                assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' upper strict');
+            }
             r = moment(m.format(format).toLocaleLowerCase(), format, true);
             assert.equal(r.month(), m.month(), 'month ' + i + ' fmt ' + format + ' lower strict');
         }
@@ -106,11 +110,12 @@ export function defineCommonLocaleTests(locale, options) {
     test('weekday parsing correctness', function (assert) {
         var i, m;
 
-        if (locale === 'tr' || locale === 'az' || locale === 'ro' || locale === 'mt') {
+        if (locale === 'tr' || locale === 'az' || locale === 'ro' || locale === 'mt' || locale === 'ga') {
             // tr, az: There is a lower-case letter (ı), that converted to
             // upper then lower changes to i
             // ro: there is the letter ț which behaves weird under IE8
             // mt: letter Ħ
+            // ga: month with spaces
             assert.expect(0);
             return;
         }
@@ -118,14 +123,18 @@ export function defineCommonLocaleTests(locale, options) {
             var r, baseMsg = 'weekday ' + m.weekday() + ' fmt ' + format + ' ' + m.toISOString();
             r = moment(m.format(format), format);
             assert.equal(r.weekday(), m.weekday(), baseMsg);
-            r = moment(m.format(format).toLocaleUpperCase(), format);
-            assert.equal(r.weekday(), m.weekday(), baseMsg + ' upper');
+            if (locale !== 'ka') {
+                r = moment(m.format(format).toLocaleUpperCase(), format);
+                assert.equal(r.weekday(), m.weekday(), baseMsg + ' upper');
+            }
             r = moment(m.format(format).toLocaleLowerCase(), format);
             assert.equal(r.weekday(), m.weekday(), baseMsg + ' lower');
             r = moment(m.format(format), format, true);
             assert.equal(r.weekday(), m.weekday(), baseMsg + ' strict');
-            r = moment(m.format(format).toLocaleUpperCase(), format, true);
-            assert.equal(r.weekday(), m.weekday(), baseMsg + ' upper strict');
+            if (locale !== 'ka') {
+                r = moment(m.format(format).toLocaleUpperCase(), format, true);
+                assert.equal(r.weekday(), m.weekday(), baseMsg + ' upper strict');
+            }
             r = moment(m.format(format).toLocaleLowerCase(), format, true);
             assert.equal(r.weekday(), m.weekday(), baseMsg + ' lower strict');
         }
@@ -145,5 +154,23 @@ export function defineCommonLocaleTests(locale, options) {
         assert.equal(moment().localeData().weekdaysShort().length, 7, 'weekdaysShort should return 7 days');
         assert.equal(moment().localeData().weekdaysMin().length, 7, 'monthsShort should return 7 days');
     });
-}
 
+    test('localeData weekdays can localeSort', function (assert) {
+        var weekdays = moment().localeData().weekdays();
+        var weekdaysShort = moment().localeData().weekdaysShort();
+        var weekdaysMin = moment().localeData().weekdaysMin();
+        var shift = moment().localeData()._week.dow;
+        assert.deepEqual(
+            moment().localeData().weekdays(true),
+            weekdays.slice(shift, 7).concat(weekdays.slice(0, shift)),
+            'weekdays should localeSort');
+        assert.deepEqual(
+            moment().localeData().weekdaysShort(true),
+            weekdaysShort.slice(shift, 7).concat(weekdaysShort.slice(0, shift)),
+            'weekdaysShort should localeSort');
+        assert.deepEqual(
+            moment().localeData().weekdaysMin(true),
+            weekdaysMin.slice(shift, 7).concat(weekdaysMin.slice(0, shift)),
+            'weekdaysMin should localeSort');
+    });
+}
