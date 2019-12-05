@@ -217,6 +217,23 @@ class Tmsm_Availpro_Public {
 		add_shortcode( 'tmsm-availpro-bestprice-year', array( $this, 'bestpriceyear_shortcode') );
 	}
 
+
+	/**
+	 * Send an email to admin if the scheduled cron is not defined
+	 */
+	public function check_cron_schedule_exists(){
+
+		if ( ! wp_next_scheduled( 'tmsmavailpro_cronaction' ) ) {
+
+			$email = wp_mail(
+				get_option( 'admin_email' ),
+				wp_specialchars_decode( sprintf( __('TMSM Availpro cron is not scheduled on %s', 'tmsm-availpro'), get_option( 'blogname' ) ) ),
+				wp_specialchars_decode( sprintf( __('TMSM Availpro cron is not scheduled on %s', 'tmsm-availpro'), get_option( 'blogname' ) ) )
+			);
+		}
+
+	}
+
 	/**
 	 * Calendar shortcode
 	 *
@@ -456,11 +473,11 @@ class Tmsm_Availpro_Public {
 		return $output;
 	}
 
-
 	/**
 	 * Get options for all bestprices months
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
 	private function get_options_bestprice(){
 
@@ -501,6 +518,7 @@ class Tmsm_Availpro_Public {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'Check not initiated yet' );
 			}
+			// Initialize value
 			$monthtocheck = date( 'Y-m' );
 		} else {
 			$lastmonthchecked_object = DateTime::createFromFormat( 'Y-m-d', $lastmonthchecked.'-01' );

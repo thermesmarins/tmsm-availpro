@@ -223,7 +223,8 @@ class Tmsm_Availpro {
 		$this->loader->add_action( 'tmsmavailpro_cronaction', $plugin_public, 'checkprices' );
 
 		$this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
-		
+		$this->loader->add_action( 'wp_update_plugins', $plugin_public, 'check_cron_schedule_exists' );
+
 		// Ajax
 		$this->loader->add_action( 'wp_ajax_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );
 		$this->loader->add_action( 'wp_ajax_nopriv_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );

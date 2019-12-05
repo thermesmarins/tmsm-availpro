@@ -1,4 +1,5 @@
 * **New** - Health Check for cron schedule
+* **New** - Notify admin if cron is not scheduled
 
 ### 1.1.7: June 13th, 2019
 * **Tweak** - Deregistrer Moment from WP core
