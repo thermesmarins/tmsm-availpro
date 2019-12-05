@@ -87,6 +87,62 @@ class Tmsm_Availpro_Admin {
 
 	}
 
+	/**
+	 * Health Check Test
+	 *
+	 * @param $tests
+	 *
+	 * @return mixed
+	 */
+	function test_cron_schedule_exists( $tests ) {
+		$tests['direct']['tmsm_availpro'] = array(
+			'label' => __('TMSM Availpro Cron Schedule Exists', 'tmsm-availpro'),
+			'test'  => 'tmsm_availpro_test_schedule_exists',
+		);
+		return $tests;
+	}
+
+	/**
+	 * Add item to the admin menu.
+	 *
+	 * @uses add_dashboard_page()
+	 * @uses __()
+	 *
+	 * @return void
+	 */
+	public function action_admin_menu() {
+		$critical_issues = 0;
+		$issue_counts    = get_transient( 'health-check-site-status-result' );
+
+		if ( false !== $issue_counts ) {
+			$issue_counts = json_decode( $issue_counts );
+
+			$critical_issues = absint( $issue_counts->critical );
+		}
+
+		$critical_count = sprintf(
+			'<span class="update-plugins count-%d"><span class="update-count">%s</span></span>',
+			esc_attr( $critical_issues ),
+			sprintf(
+				'%d<span class="screen-reader-text"> %s</span>',
+				esc_html( $critical_issues ),
+				esc_html_x( 'Critical issues', 'Issue counter label for the admin menu', 'health-check' )
+			)
+		);
+
+		$menu_title = __( 'Site Health' ) . ' '.( ! $issue_counts || $critical_issues < 1 ? '' : $critical_count );
+
+		remove_submenu_page( 'tools.php', 'site-health.php' );
+
+		add_submenu_page(
+			'tools.php',
+			__( 'Site Health' ),
+			$menu_title,
+			'view_site_health_checks',
+			'site-health.php'
+		);
+	}
+
 
 	/**
 	 * Register the Settings page.
@@ -97,7 +153,6 @@ class Tmsm_Availpro_Admin {
 		add_options_page( __('Availpro', 'tmsm-availpro'), __('Availpro', 'tmsm-availpro'), 'manage_options', $this->plugin_name.'-settings', array($this, 'options_page_display'));
 
 	}
-
 
 	/**
 	 * Plugin Settings Link on plugin page
@@ -694,4 +749,42 @@ class Tmsm_Availpro_Admin {
 		) ) );
 		
 	}
+}
+
+/**
+ * Health Check Test
+ * @return array
+ */
+function tmsm_availpro_test_schedule_exists() {
+	$result = array(
+		'label'       => __('TMSM Availpro Cron Schedule Exists', 'tmsm-availpro'),
+		'status'      => 'good',
+		'badge'       => array(
+			'label' => __( 'Performance' ),
+			'color' => 'green',
+		),
+		'description' => sprintf(
+			'<p>%s</p>',
+			__( 'Cron Schedule is not fired', 'tmsm-availpro' )
+		),
+		'actions'     => '',
+		'test'        => 'tmsm_availpro',
+	);
+
+	if ( ! wp_next_scheduled( 'tmsmavailpro_cronaction' ) ) {
+		$result['status'] = 'critical';
+		$result['badge']['color'] = 'red';
+		$result['label'] = __('TMSM Availpro Cron Schedule is not added', 'tmsm-availpro');
+		$result['description'] = sprintf(
+			'<p>%s</p>',
+			__('Cron schedule is not fired, prices will not update from Availpro.', 'tmsm-availpro')
+		);
+		$result['actions'] .= sprintf(
+			'<p><a href="%s">%s</a></p>',
+			esc_url( admin_url( 'plugins.php' ) ),
+			__( 'Disable and enable again the plugin', 'tmsm-availpro' )
+		);
+	}
+
+	return $result;
 }

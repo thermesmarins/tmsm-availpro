@@ -184,6 +184,10 @@ class Tmsm_Availpro {
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
 		$this->loader->add_filter( 'plugin_action_links_'.$plugin_basename, $plugin_admin, 'settings_link' );
 
+		// Health Check
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'action_admin_menu' );
+		$this->loader->add_filter( 'site_status_tests', $plugin_admin, 'test_cron_schedule_exists' );
+
 	}
 
 	/**
