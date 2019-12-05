@@ -139,6 +139,7 @@ class Tmsm_Availpro_Webservice {
 		'';
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log('filters:');
 			error_log($filters);
 		}
 
