@@ -1,3 +1,5 @@
+* **Tweak** - Better click zone for next/prev month arrow buttons
+
 ### 1.1.8: December 5th, 2019
 * **New** - Health Check for cron schedule
 * **New** - Notify admin if cron is not scheduled
