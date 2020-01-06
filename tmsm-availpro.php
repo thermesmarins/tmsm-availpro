@@ -16,7 +16,7 @@
  * Plugin Name:       TMSM Availpro
  * Plugin URI:        https://github.com/thermesmarins/tmsm-availpro
  * Description:       Display Availpro daily prices (best price) in a calendar view
- * Version:           1.1.8
+ * Version:           1.1.9
  * Author:            Nicolas Mollet
  * Author URI:        https://github.com/nicomollet
  * Requires PHP:      5.6
