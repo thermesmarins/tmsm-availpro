@@ -1,3 +1,4 @@
+### 1.1.9: January 6th, 2020
 * **Tweak** - Better click zone for next/prev month arrow buttons
 
 ### 1.1.8: December 5th, 2019
