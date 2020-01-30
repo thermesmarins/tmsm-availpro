@@ -1,3 +1,4 @@
+### 1.2.0: January 30th, 2020
 * Make use of shortcode [tmsm-availpro-bestprice-year] possible even if no calendar is set
 
 ### 1.1.9: January 6th, 2020
