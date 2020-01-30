@@ -1,6 +1,7 @@
 (function( $ ) {
 	'use strict';
 
+	// Availpro calendar for shortcode [tmsm-availpro-calendar]
   var tmsm_availpro_calendar = $('#tmsm-availpro-calendar');
 
   if(tmsm_availpro_calendar.length > 0){
@@ -340,21 +341,17 @@
     });
 
 
-    /*$('#tmsm-availpro-form-submit').on('click', function(e){
-      e.preventDefault();
-      $(this).closest('form').submit();
-    });*/
+  }
 
-    // Display year best price in shortcode
-    var tmsm_availpro_bestprice_year = $('.tmsm-availpro-bestprice-year');
-    if(tmsm_availpro_bestprice_year.length > 0){
-      tmsm_availpro_bestprice_year.each(function(e){
-        if($(this).data('price')){
-          $(this).html(_.unescape(tmsm_availpro_params.i18n.yearbestpricelabel.replace('%',Number($(this).data('price')).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0}))));
-        }
-      });
+  // Display year best price in shortcode [tmsm-availpro-bestprice-year]
+  var tmsm_availpro_bestprice_year = $('.tmsm-availpro-bestprice-year');
+  if(tmsm_availpro_bestprice_year.length > 0){
+    tmsm_availpro_bestprice_year.each(function(e){
+      if($(this).data('price')){
+        $(this).html(_.unescape(tmsm_availpro_params.i18n.yearbestpricelabel.replace('%',Number($(this).data('price')).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0}))));
+      }
+    });
 
-    }
   }
 
 })( jQuery );
