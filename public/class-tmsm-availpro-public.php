@@ -410,6 +410,7 @@ class Tmsm_Availpro_Public {
 	private function calendar_template(){
 		$output = '
 <div id="tmsm-availpro-calendar">
+</div>
 <script id="tmsm-availpro-calendar-template" type="text/template">
 
         <table class="table-calendarprices table-condensed" border="0" cellspacing="0" cellpadding="0">
@@ -466,7 +467,6 @@ class Tmsm_Availpro_Public {
         </table>
 
 </script>
-</div>
 ';
 
 		$output = '<div id="tmsm-availpro-calendar-container">'.$output.$this->legend_template().'</div>';
@@ -593,7 +593,7 @@ class Tmsm_Availpro_Public {
 		$dailyplanning_bestprice = [];
 		$dailyplanning_bestprice_year = null;
 
-		$interval = new \DateInterval( 'P1D' );
+		$interval = new DateInterval( 'P1D' );
 
 		if ( ! empty( $data ) ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -666,7 +666,7 @@ class Tmsm_Availpro_Public {
 												$enddate   = Datetime::createFromFormat( 'Y-m-d', $attributes['endDate'] );
 												$value   = $attributes['value'];
 
-												$daterange = new \DatePeriod( $begindate, $interval, $enddate->modify( '+1 day' ) );
+												$daterange = new DatePeriod( $begindate, $interval, $enddate->modify( '+1 day' ) );
 
 												/* @var $date Datetime */
 												foreach ( $daterange as $date ) {

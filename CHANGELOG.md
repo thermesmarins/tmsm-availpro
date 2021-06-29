@@ -1,3 +1,6 @@
+### 1.2.1: June 29th, 2021
+* Allow use of shortcode in Elementor Popup
+
 ### 1.2.0: January 30th, 2020
 * Make use of shortcode [tmsm-availpro-bestprice-year] possible even if no calendar is set
 
