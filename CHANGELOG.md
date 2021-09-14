@@ -1,3 +1,4 @@
+### 1.2.2: September 14th, 2021
 * Fix minified public javascript causing javascript errors
 
 ### 1.2.1: June 29th, 2021
