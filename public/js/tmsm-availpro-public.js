@@ -8,7 +8,7 @@
 
 var TmsmAvailproApp = TmsmAvailproApp || {};
 
-(function ($, TmsmAquatonicCourse) {
+(function ($, TmsmAvailproApp) {
   'use strict';
 
 
@@ -134,16 +134,13 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
           click: function (target) {
 
             console.log('clickEvents click');
-            var reoderdates = false;
+            var reorderdates = false;
 
             $('.day.mouseover').removeClass('mouseover');
 
-            //if(target.events.length && !$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
             if (!$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
-              //$('.day').removeClass('selected').removeClass('selected-range').removeClass('active');
 
               tmsm_availpro_calendar_lastdateclicked = target.date;
-
 
               // Reorder dates
               if (typeof tmsm_availpro_calendar_selected_begin !== 'undefined') {
@@ -152,16 +149,16 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
                   $('.calendar-day-' + tmsm_availpro_calendar_selected_begin.format('YYYY-MM-DD')).removeClass('selected').removeClass('selected-hover').removeClass('selected-begin').removeClass(
                     'selected-end').removeClass('active');
 
-                  reoderdates = true;
+                  reorderdates = true;
                   tmsm_availpro_calendar_selected_begin = undefined;
                   tmsm_availpro_calendar_selected_end = undefined;
                 }
                 else {
-                  reoderdates = false;
+                  reorderdates = false;
                 }
               }
               else {
-                reoderdates = false;
+                reorderdates = false;
               }
 
               // Reinitialize selected days if begin and end have both been initialized
@@ -190,7 +187,7 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
 
               }
               else {
-                if (reoderdates === false) {
+                if (reorderdates === false) {
                   tmsm_availpro_calendar_selected_end = tmsm_availpro_calendar_lastdateclicked;
 
                   // Check if dates respect minstay

@@ -1,3 +1,5 @@
+* Fix minified public javascript causing javascript errors
+
 ### 1.2.1: June 29th, 2021
 * Allow use of shortcode in Elementor Popup
 

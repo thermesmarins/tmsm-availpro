@@ -184,7 +184,7 @@ class Tmsm_Availpro_Public {
 
 		wp_enqueue_script( 'clndr', plugin_dir_url( dirname(__FILE__) ) . 'vendor/clndr/clndr.min.js', array( 'jquery', 'moment', 'underscore' ), $this->version, true );
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public.js', array( 'jquery', 'wp-util' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tmsm-availpro-public'.(!WP_DEBUG?'.min':'').'.js', array( 'jquery', 'wp-util' ), $this->version, true );
 
 
 		// Params
