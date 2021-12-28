@@ -1,3 +1,4 @@
+### 1.2.3: December 28th, 2021
 * WP Rocket: exclude inline JS from minification
 
 ### 1.2.2: September 14th, 2021
