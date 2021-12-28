@@ -229,6 +229,9 @@ class Tmsm_Availpro {
 		$this->loader->add_action( 'wp_ajax_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );
 		$this->loader->add_action( 'wp_ajax_nopriv_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );
 
+		// WP Rocket
+		$this->loader->add_filter( 'rocket_excluded_inline_js_content', $plugin_public, 'rocket_excluded_inline_js_content', 1, 10 );
+
 	}
 
 	/**

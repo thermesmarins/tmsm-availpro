@@ -1068,4 +1068,17 @@ class Tmsm_Availpro_Public {
 
     }
 
+	/**
+	 * WP Rocket: Filters inline JS excluded from being combined
+	 *
+	 * @param array $excluded_inline
+	 *
+	 * @return array
+	 */
+	function rocket_excluded_inline_js_content( array $excluded_inline){
+
+		$excluded_inline[] = 'tmsm_availpro_params';
+
+		return $excluded_inline;
+	}
 }
