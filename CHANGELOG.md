@@ -1,3 +1,4 @@
+### 1.2.4: April 11th, 2022
 * Update Moment to 2.29.2
 
 ### 1.2.3: December 28th, 2021
