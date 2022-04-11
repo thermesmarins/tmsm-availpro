@@ -15,7 +15,6 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
 
   // Animate Display
   TmsmAvailproApp.animateTransition = function(element){
-    console.log('animateTransition ' + element.attr('id'));
     element.show();
     $('html, body').animate({
       scrollTop: element.offset().top
@@ -26,13 +25,11 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
    * Set initial data into view and start recurring display updates.
    */
   TmsmAvailproApp.init = function() {
-    console.log('TmsmAvailproApp.init');
 
     // Availpro calendar for shortcode [tmsm-availpro-calendar]
     var tmsm_availpro_calendar = $('#tmsm-availpro-calendar');
 
     if (tmsm_availpro_calendar.length > 0) {
-      console.log('tmsm_availpro_calendar length');
       var tmsm_availpro_calendar_today = moment().subtract(1, 'days');
       var tmsm_availpro_calendar_startdate = moment();
       var tmsm_availpro_calendar_enddate = moment().add(1, 'year');
@@ -52,7 +49,6 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
        * @param month
        */
       var tmsm_availpro_calendar_set_events = function (month) {
-        console.log('tmsm_availpro_calendar_set_events');
         tmsm_availpro_calendar_current_year = month.format('YYYY');
         tmsm_availpro_calendar_current_month = month.format('MM');
 
@@ -118,7 +114,6 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
       });
       setCalendarWidth();
 
-      console.log($('#tmsm-availpro-calendar-template').html());
       // Clndr
       var tmsm_availpro_calendar_clndr = tmsm_availpro_calendar.clndr({
         template: $('#tmsm-availpro-calendar-template').html(),
@@ -133,7 +128,6 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
         clickEvents: {
           click: function (target) {
 
-            console.log('clickEvents click');
             var reorderdates = false;
 
             $('.day.mouseover').removeClass('mouseover');
@@ -379,7 +373,6 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
 
 
   $( document ).on( 'elementor/popup/show', ( event, id, instance ) => {
-    console.log('elementor/popup/show');
     TmsmAvailproApp.init();
   } );
 

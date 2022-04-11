@@ -1,3 +1,5 @@
+* Update Moment to 2.29.2
+
 ### 1.2.3: December 28th, 2021
 * WP Rocket: exclude inline JS from minification
 
