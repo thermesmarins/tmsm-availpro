@@ -1,3 +1,4 @@
+### 1.2.5: August 25th, 2022
 * Fix "Array and string offset access syntax with curly braces is deprecated" depreciation in oauth library
 
 ### 1.2.4: April 11th, 2022
