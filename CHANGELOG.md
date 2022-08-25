@@ -1,3 +1,5 @@
+* Fix money_format function is deprecated
+
 ### 1.2.5: August 25th, 2022
 * Fix "Array and string offset access syntax with curly braces is deprecated" depreciation in oauth library
 

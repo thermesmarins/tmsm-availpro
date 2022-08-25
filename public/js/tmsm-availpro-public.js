@@ -319,8 +319,9 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
                   var Price = data.data.accommodation.totalprice;
                   if (Price) {
                     $('#tmsm-availpro-calculatetotal-totalprice').show();
-                    var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale,
-                      {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+                    var PriceWithCurrency = Price;
+
                     if (PriceWithCurrency) {
                       $('#tmsm-availpro-calculatetotal-totalprice').html(_.unescape(tmsm_availpro_params.i18n.selecteddatepricelabel.replace(/%/g, PriceWithCurrency)));
                     }
@@ -333,10 +334,10 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
                     $('#tmsm-availpro-form').addClass('tmsm-availpro-form-has-ota-price');
 
                     $('#tmsm-availpro-calculatetotal-ota').show();
-                    var PriceWithCurrency = Number(Price).toLocaleString(tmsm_availpro_params.locale,
-                      {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+                    var PriceWithCurrency = Price;
                     if (PriceWithCurrency) {
-                      $('#tmsm-availpro-calculatetotal-ota').html(_.unescape(tmsm_availpro_params.i18n.otacomparelabel.replace(/%/g, PriceWithCurrency)));
+                      $('#tmsm-availpro-calculatetotal-ota').html('.' + _.unescape(tmsm_availpro_params.i18n.otacomparelabel.replace(/%/g, PriceWithCurrency)));
                     }
                   }
                   else {
