@@ -1,3 +1,4 @@
+### 1.2.6: August 25th, 2022
 * Fix money_format function is deprecated
 
 ### 1.2.5: August 25th, 2022
