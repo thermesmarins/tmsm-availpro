@@ -1,3 +1,5 @@
+* Oauth library default $code variable if it is not found
+
 ### 1.2.7: August 25th, 2022
 * Update moment library to 2.29.4
 

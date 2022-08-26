@@ -450,6 +450,8 @@ class OAuthRequester extends OAuthRequestSigner
 	 */
 	protected function curl_parse ( $response )
 	{
+		$code = 200;
+
 		if (empty($response))
 		{
 			return array();
