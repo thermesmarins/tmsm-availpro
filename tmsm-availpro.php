@@ -16,10 +16,10 @@
  * Plugin Name:       TMSM Availpro
  * Plugin URI:        https://github.com/thermesmarins/tmsm-availpro
  * Description:       Display Availpro daily prices (best price) in a calendar view
- * Version:           1.2.7
+ * Version:           1.2.8
  * Author:            Nicolas Mollet
  * Author URI:        https://github.com/nicomollet
- * Requires PHP:      5.6
+ * Requires PHP:      7.4
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       tmsm-availpro
@@ -38,7 +38,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TMSM_AVAILPRO_VERSION', '1.2.7' );
+define( 'TMSM_AVAILPRO_VERSION', '1.2.8' );
 
 /**
  * The code that runs during plugin activation.

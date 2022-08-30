@@ -1,3 +1,4 @@
+### 1.2.8: August 30th, 2022
 * Oauth library default $code variable if it is not found
 
 ### 1.2.7: August 25th, 2022
