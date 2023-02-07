@@ -79,8 +79,9 @@ class OAuthStore2Leg extends OAuthStoreAbstract
 	{
 		//This method just needs to exist. It doesn't have to do anything!
 	}
-	
-	public function listServers ( $q = '', $user_id ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
+
+	public function listServers ( $user_id, $q = '' ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__);}
+//	public function listServers ( $q = '', $user_id ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__);}
 	public function updateServer ( $server, $user_id, $user_is_admin = false ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
 
 	public function updateConsumer ( $consumer, $user_id, $user_is_admin = false ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
@@ -106,8 +107,7 @@ class OAuthStore2Leg extends OAuthStoreAbstract
 	
 	public function addLog ( $keys, $received, $sent, $base_string, $notes, $user_id = null ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
 	public function listLog ( $options, $user_id ) { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
-	
-	public function install () { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }		
+
+	public function install () { throw new OAuthException2("OAuthStore2Leg doesn't support " . __METHOD__); }
 }
 
-?>
