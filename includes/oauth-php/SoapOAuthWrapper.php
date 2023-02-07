@@ -13,7 +13,7 @@ class OAuthBasicRequest extends OAuthRequester
   private $accessSecret;
   private $signatureMethod;
   
-  function __construct ($consumerKey, $consumerSecret, $accessToken, $accessSecret, $signatureMethod='HMAC-SHA1', $request, $method = null, $params = null, $body = null, $files = null)
+  function __construct ($request, $consumerKey, $consumerSecret, $accessToken, $accessSecret, $signatureMethod='HMAC-SHA1', $method = null, $params = null, $body = null, $files = null)
   {
     parent::__construct($request, $method, $params, $body, $files);
     
