@@ -1,3 +1,6 @@
+### 1.2.9: June 6th, 2024
+* comment line 202 in tmsm-availpro-public.css file, to not show the green color on the price
+  
 ### 1.2.8: August 30th, 2022
 * Oauth library default $code variable if it is not found
 
