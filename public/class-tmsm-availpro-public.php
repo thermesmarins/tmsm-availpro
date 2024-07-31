@@ -949,34 +949,57 @@ class Tmsm_Availpro_Public {
 					// Calculate price
 					$webservice = new Tmsm_Availpro_Webservice();
 					$response   = $webservice->get_stayplanning( $date_begin, $nights, $rateids);
-					$data       = $webservice::convert_to_array( $response );
+					$data = $response;
+					// $data       = $webservice::convert_to_array( $response );
+					// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					// 	error_log('response:');
+					// 	error_log($response);
+					// }
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						error_log('response:');
-						error_log($response);
+						error_log('data:');
+						error_log(print_r($data, true));
+						error_log(print_r($data['ratePlans'][0]['hotels']['0']['entities'], true));
 					}
-
+					
 					// Init data var
 					$dailyplanning_bestprice = [];
 					if ( ! empty( $data ) ) {
 						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 							error_log( 'Data responsee' );
 						}
+						//TODO voir car checker directement 
 
-						if ( isset( $data['response']['success'] ) ) {
-							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-								error_log( 'data success' );
-							}
-							if ( isset( $data['response']['stayPlanning'] ) ) {
+						// if ( isset( $data['response']['success'] ) ) {
+						// 	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						// 		error_log( 'data success' );
+						// 	}
+							
+							// if ( isset( $data['response']['stayPlanning'] ) ) {
+							if ( isset( $data['ratePlans'] ) ) {
 
-								if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
-								     && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
+								// if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
+								//      && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
+								//TODO voir une boucle for pour le ratePlans['0'] ?
+								 if ( isset( $data['ratePlans'][0]['hotels'] )
+								      && is_array( $data['ratePlans'][0]['hotels'] ) ) {
+									//TODO changement json
+									// foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) 
+									//TODO faire une boucle for pour hotels['0']
+									error_log('count(ratePlans)');
+									error_log(count($data['ratePlans']));
+									
 
-									foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) {
+									foreach ( $data['ratePlans'][0]['hotels'][0]['entities'] as $entity ) 
+									{
 										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-											error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+											// error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
+											error_log( 'Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId'] );
 										}
+										
 
-										$properties = $entity['property'];
+										// $properties = $entity['property'];
+										//TODO changer properties par entities
+										$properties = $entity;
 
 										if(!isset($properties[0])){
 											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -986,33 +1009,37 @@ class Tmsm_Availpro_Public {
 											unset($properties);
 											$properties[0] = $tmp;
 										}
-
+										//TODO voir si nécessaire !! pas d'@attributes
 										$dailyplanning_bestprice_entity = [];
+										$dailyplanning_bestprice_entity[] = $properties;
 
-										foreach ( $properties as $property ) {
+										// foreach ( $properties as $property ) {
 
-											$propertyname = $property['@attributes']['name'];
+										// 	$propertyname = $property['@attributes']['name'];
 
-											@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
+										// 	@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
 
-										}
+										// }
 
 										ksort($dailyplanning_bestprice_entity);
+									
+
+
 										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-											//error_log('dailyplanning_bestprice_entity:');
-											//error_log(print_r($dailyplanning_bestprice_entity, true));
+											error_log('dailyplanning_bestprice_entity:');
+											error_log(print_r($dailyplanning_bestprice_entity, true));
 										}
 
 										// Merge data
-										if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'){
+										if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'){
 											$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 										}
 										else{
-											if(!empty($dailyplanning_bestprice_entity['Price']) && !empty($dailyplanning_bestprice['Price']) ){
-												// New Price is less than merged data
+											if(!empty($dailyplanning_bestprice_entity['totalPrice']) && !empty($dailyplanning_bestprice[0]['totalPrice']) ){
+												// New totalPrice is less than merged data
 												if(
-													$dailyplanning_bestprice_entity['Price'] < $dailyplanning_bestprice['Price']
-													&& @$dailyplanning_bestprice_entity['Status'] !== 'NotAvailable'
+													$dailyplanning_bestprice_entity['totalPrice'] < $dailyplanning_bestprice[0]['totalPrice']
+													&& @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'
 												){
 													$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 												}
@@ -1021,17 +1048,18 @@ class Tmsm_Availpro_Public {
 									}
 								}
 							}
-						}
+						// }
 					}
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						//error_log('dailyplanning_bestprice:');
-						//error_log(print_r($dailyplanning_bestprice, true));
+						//TODO commenter !
+						error_log('dailyplanning_bestprice:');
+						error_log(print_r($dailyplanning_bestprice, true));
 					}
 
 					$totalprice = null;
 					$fmt = new NumberFormatter( 'fr_FR', NumberFormatter::CURRENCY );
-					if ( ! empty( $dailyplanning_bestprice ) && @$dailyplanning_bestprice['Status'] !== 'NotAvailable' ) {
-						$totalprice = $dailyplanning_bestprice['Price'];
+					if ( ! empty( $dailyplanning_bestprice[0][0] ) && @$dailyplanning_bestprice[0][0]['status'] !== 'NotAvailable' ) {
+						$totalprice = $dailyplanning_bestprice[0][0]['totalPrice'];
 						$jsondata['data'][$rate] = [
 							'totalprice' => $fmt->formatCurrency( $totalprice, 'EUR' ),
 						];

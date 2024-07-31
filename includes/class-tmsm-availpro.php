@@ -134,6 +134,11 @@ class Tmsm_Availpro {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-webservice.php';
 
 		/**
+		 * The class responsible for Availpro webservice signature oauth
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-webservice-oauth.php';
+
+		/**
 		 * Oauth Class
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/oauth-php/SoapOAuthWrapper.php';
