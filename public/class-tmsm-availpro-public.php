@@ -950,20 +950,16 @@ class Tmsm_Availpro_Public {
 					$webservice = new Tmsm_Availpro_Webservice();
 					$response   = $webservice->get_stayplanning( $date_begin, $nights, $rateids);
 					$data = $response;
-					// $data       = $webservice::convert_to_array( $response );
-					// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					// 	error_log('response:');
-					// 	error_log($response);
-					// }
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 						error_log('data:');
 						error_log(print_r($data, true));
-						error_log(print_r($data['ratePlans'][0]['hotels']['0']['entities'], true));
+						error_log(print_r($data['ratePlans'][0]['hotels'][0]['entities'], true));
 					}
 					
 					// Init data var
 					$dailyplanning_bestprice = [];
-					if ( ! empty( $data ) ) {
+					if ( ! empty( $data ) ) 
+					{
 						if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 							error_log( 'Data responsee' );
 						}
@@ -974,87 +970,73 @@ class Tmsm_Availpro_Public {
 						// 		error_log( 'data success' );
 						// 	}
 							
-							// if ( isset( $data['response']['stayPlanning'] ) ) {
-							if ( isset( $data['ratePlans'] ) ) {
-
-								// if ( isset( $data['response']['stayPlanning']['ratePlan']['hotel'] )
-								//      && is_array( $data['response']['stayPlanning']['ratePlan']['hotel'] ) ) {
-								//TODO voir une boucle for pour le ratePlans['0'] ?
-								 if ( isset( $data['ratePlans'][0]['hotels'] )
-								      && is_array( $data['ratePlans'][0]['hotels'] ) ) {
-									//TODO changement json
-									// foreach ( $data['response']['stayPlanning']['ratePlan']['hotel']['entity'] as $entity ) 
-									//TODO faire une boucle for pour hotels['0']
-									error_log('count(ratePlans)');
-									error_log(count($data['ratePlans']));
-									
-
-									foreach ( $data['ratePlans'][0]['hotels'][0]['entities'] as $entity ) 
+						if ( isset( $data['ratePlans'] ) ) 
+						{
+							//TODO voir une boucle for pour le ratePlans['0'] ?
+								if ( isset( $data['ratePlans'][0]['hotels'] )
+									&& is_array( $data['ratePlans'][0]['hotels'] ) ) 
+							{
+								// Boucle pour chaque ratePlans
+								for($i = 0 ; $i < count($data['ratePlans']) ; $i++)
+								{
+								// Boucle pour chaque ratePlans => hotels
+									for($h = $i ; $h < count($data['ratePlans'][$i]['hotels']) ; $h++)
 									{
-										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-											// error_log( 'Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
-											error_log( 'Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId'] );
-										}
-										
-
-										// $properties = $entity['property'];
-										//TODO changer properties par entities
-										$properties = $entity;
-
-										if(!isset($properties[0])){
-											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-												error_log( 'properties not multiple');
+										// Boucle pour chaque entitées de chaque hotel et de chaque ratePlans
+										foreach ( $data['ratePlans'][$i]['hotels'][$h]['entities'] as $entity ) 
+										{
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) 
+											{
+												error_log( 'Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId'] );
 											}
-											$tmp = $properties;
-											unset($properties);
-											$properties[0] = $tmp;
-										}
-										//TODO voir si nécessaire !! pas d'@attributes
-										$dailyplanning_bestprice_entity = [];
-										$dailyplanning_bestprice_entity[] = $properties;
-
-										// foreach ( $properties as $property ) {
-
-										// 	$propertyname = $property['@attributes']['name'];
-
-										// 	@$dailyplanning_bestprice_entity[$propertyname] = $property['@attributes']['value'];
-
-										// }
-
-										ksort($dailyplanning_bestprice_entity);
-									
-
-
-										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-											error_log('dailyplanning_bestprice_entity:');
-											error_log(print_r($dailyplanning_bestprice_entity, true));
-										}
-
-										// Merge data
-										if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'){
-											$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
-										}
-										else{
-											if(!empty($dailyplanning_bestprice_entity['totalPrice']) && !empty($dailyplanning_bestprice[0]['totalPrice']) ){
-												// New totalPrice is less than merged data
-												if(
-													$dailyplanning_bestprice_entity['totalPrice'] < $dailyplanning_bestprice[0]['totalPrice']
-													&& @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'
-												){
-													$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+											$properties = $entity;
+											if(!isset($properties[0])){
+												if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) 
+												{
+													error_log( 'properties not multiple');
+												}
+												$tmp = $properties;
+												unset($properties);
+												$properties[0] = $tmp;
+											}
+											$dailyplanning_bestprice_entity = [];
+											$dailyplanning_bestprice_entity[] = $properties;
+											ksort($dailyplanning_bestprice_entity);
+											if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) 
+											{
+												error_log('dailyplanning_bestprice_entity:');
+												error_log(print_r($dailyplanning_bestprice_entity, true));
+											}
+											// Merge data
+											if(empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable')
+											{
+												$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+											}
+											else
+											{
+												if(!empty($dailyplanning_bestprice_entity['totalPrice']) && !empty($dailyplanning_bestprice[0]['totalPrice']) ){
+													// New totalPrice is less than merged data
+													if(
+														$dailyplanning_bestprice_entity['totalPrice'] < $dailyplanning_bestprice[0]['totalPrice']
+														&& @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'
+													)
+													{
+														$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+													}
 												}
 											}
 										}
 									}
 								}
+
 							}
-						// }
+						}
 					}
-					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						//TODO commenter !
-						error_log('dailyplanning_bestprice:');
-						error_log(print_r($dailyplanning_bestprice, true));
-					}
+					// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					// 	// TODO commenter !
+					// 	error_log('dailyplanning_bestprice:');
+					// 	error_log(print_r($dailyplanning_bestprice, true));
+					// }
 
 					$totalprice = null;
 					$fmt = new NumberFormatter( 'fr_FR', NumberFormatter::CURRENCY );
@@ -1077,7 +1059,12 @@ class Tmsm_Availpro_Public {
 			}
 		}
 
-
+		// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		// 	//TODO commenter !
+		// 	error_log('jsondata:');
+		// 	error_log(print_r($jsondata, true));
+		// }
+			
 		// Return a response
 		if( ! empty($errors) ) {
 			$jsondata['success'] = false;

@@ -325,8 +325,6 @@ class Tmsm_Availpro_Webservice {
 		$arrivaldate = DateTime::createFromFormat('Y-m-d', $arrivaldate, $timezone);
 		$options = get_option('tmsm-availpro-options', false);
 		$soap_parameters = array(
-			// 'groupId'   => $options['groupid'],
-			// 'hotelId'   => $options['hotelid'],
 			'arrivalDate' => $arrivaldate->format('Y-m-d'),
 			'nightCount'   => $nights,
 			'layout' => array( 
