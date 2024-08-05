@@ -71,18 +71,20 @@ class Tmsm_Availpro_Webservice {
 	 */
 	private function get_layout(){
 		$layout = array(
-			'levels' => [
-				'name' => 'ArticlesRate',
-				'properties'=> [
-					'Availability',
-					'Status',
-					'MinimumStayTrough',
-					'TotalPrice',
+			'levels' => array(
+				[
+					'name' => 'ArticleRate',
+					'properties'=> [
+						'Availability',
+						'Status',
+						'MinimumStayThrough',
+						'TotalPrice',
+					]
 				]
-			]
-				);
+			)
+		);
 
-		return json_encode($layout);
+		return $layout;
 
 	}
 	// private function get_layout(){
@@ -176,7 +178,8 @@ class Tmsm_Availpro_Webservice {
 	    //             '<status><include status="Available" /><include status="NotAvailable" /></status>'.
 		// '';
 		//TODO json
-		$filters = array( 
+		$filters = 
+			array( 
 			'ratePlans'=> array([ 
 				 'groupId' => $option_groupid,
 				 'hotels' => array( 
@@ -199,10 +202,10 @@ class Tmsm_Availpro_Webservice {
 			)			  
 		);
 
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log('filters:');
-			error_log(print_r($filters, true));
-		}
+		// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		// 	error_log('filters:');
+		// 	error_log(print_r($filters, true));
+		// }
 
 		return $filters;
 
@@ -226,9 +229,9 @@ class Tmsm_Availpro_Webservice {
 		//$month_lastday->modify('first day of this month')->modify('+6 days');
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			//error_log('get_data');
-			//error_log('firstday:'.$month_firstday->format('Y-m-d'));
-			//error_log('lastday:'.$month_lastday->format('Y-m-d'));
+			error_log('get_data');
+			error_log('firstday:'.$month_firstday->format('Y-m-d'));
+			error_log('lastday:'.$month_lastday->format('Y-m-d'));
 		}
 
 		// if(!class_exists('SoapOAuthWrapper')){
@@ -241,42 +244,31 @@ class Tmsm_Availpro_Webservice {
 		$soap_parameters = array(
 			'groupId'   => $options['groupid'],
 			'hotelId'   => $options['hotelid'],
-			'beginDate' => $month_firstday->format('Y-m-d'),
-			'endDate'   => $month_lastday->format('Y-m-d'),
+			'beginDate' => "2024-08-01",
+			'endDate'   => "2024-08-31",
+			// 'beginDate' => $month_firstday->format('Y-m-d'),
+			// 'endDate'   => $month_lastday->format('Y-m-d'),
 			'layout'    => $this->get_layout(),
 			// 'filter'    => json_encode($this->get_filters($rateids)),
 			'filter'    => $this->get_filters($rateids),
 		);
-		// $jsonBody = '{"beginDate": "2024-12-12","endDate": "2024-12-20","filter": {"ratePlans": [{"hotels": {"exceptions": ["6286"],"default": "Excluded"},"groupId": "5692","referenceRateCode": ""}],"status": ["Available","NotAvailable"]},"layout": {"levels": [{"name": "ArticleRate","properties": ["Availability","Status","Price","TotalPrice","CrossedOutPrice","MaximumPrice","MinimumPrice","DiscountPrice","DiscountNightCount","PublicOffer","MixedRates","IncludedArticles","Occupancies","OriginalPrice","Taxes","MaximumStayOnDeparture","MaximumStayThrough","MaximumStayOnArrival","MinimumStayOnDeparture","MinimumStayThrough","MinimumStayOnArrival","ClosedOnDeparture","ClosedOnArrival"]}]},"impersonation": {"hotelId": "6286","groupId": "5692"}}';
-		$jsonBody = json_encode($soap_parameters);
-		
-
 		try {
 			$method='POST';
-			// $result = SoapOAuthWrapper::Invoke( self::URL, self::WSNAMESPACE, 'GetDailyPlanning', $soap_parameters, $this->oauth_identifiers );
-			// return $result;
 			$signature = new Tmsm_Availpro_Webservice_Oauth();
 			$oauth_signature = $signature->getSignature(self::URL.'GetDailyPlanning', $method);
-			
 			$options = array(
-				'http' => array(
-					'header'  => $oauth_signature . "\r\n" .
+					'headers'  => $oauth_signature . "\r\n" .
 								 "Content-Type: application/json\r\n",
-					'method'  => $method,
-					'body' => $jsonBody,
-				),
+					'body' => json_encode($soap_parameters),
 			);
-			$context  = stream_context_create($options);
-			 
-			$result = file_get_contents(self::URL.'GetDailyPlanning', false, $context);
-			error_log('TMSM_SIGNATURE');
-				error_log( print_r($result, true));
-				return $result;
-			if ($result === FALSE) {
+			$response = wp_remote_post( self::URL.'GetDailyPlanning', $options );
+				//TODO traiter les différentes erreurs de retour 200 300 400
+				return json_decode($response['body'], true);
+			if ($response === FALSE) {
 				echo "Error: " . error_get_last()['message'] . "\n";
 			} else {
 				error_log('TMSM_SIGNATURE');
-				error_log( print_r(json_decode($result), true));
+				error_log( print_r(json_decode($oauth_signature), true));
 				
 			}
 			die;

@@ -582,13 +582,14 @@ class Tmsm_Availpro_Public {
 		// API call
 		$webservice = new Tmsm_Availpro_Webservice();
 		$response   = $webservice->get_data( $monthtocheck );
-		$data       = $webservice::convert_to_array( $response );
+		$data = $response;
+		// $data       = $webservice::convert_to_array( $response );
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			error_log( 'webservice response as array:' );
 			error_log( print_r( $data, true ) );
 		}
-
+die;
 		// Init data var
 		$dailyplanning_bestprice = [];
 		$dailyplanning_bestprice_year = null;
