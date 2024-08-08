@@ -225,7 +225,7 @@ class Tmsm_Availpro_Webservice {
 		$month_firstday = DateTime::createFromFormat('Y-m-d', $month.'-01', $timezone);
 		$month_firstday->modify('first day of this month');
 		$month_lastday = clone $month_firstday;
-		$month_lastday->modify('last day of this month');
+		$month_lastday->modify('last day of this month')->modify('+1 day');
 		//$month_lastday->modify('first day of this month')->modify('+6 days');
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -244,10 +244,10 @@ class Tmsm_Availpro_Webservice {
 		$soap_parameters = array(
 			'groupId'   => $options['groupid'],
 			'hotelId'   => $options['hotelid'],
-			'beginDate' => "2024-08-01",
-			'endDate'   => "2024-08-31",
-			// 'beginDate' => $month_firstday->format('Y-m-d'),
-			// 'endDate'   => $month_lastday->format('Y-m-d'),
+			// 'beginDate' => "2024-09-01",
+			// 'endDate'   => "2024-09-30",
+			'beginDate' => $month_firstday->format('Y-m-d'),
+			'endDate'   => $month_lastday->format('Y-m-d'),
 			'layout'    => $this->get_layout(),
 			// 'filter'    => json_encode($this->get_filters($rateids)),
 			'filter'    => $this->get_filters($rateids),
@@ -263,6 +263,8 @@ class Tmsm_Availpro_Webservice {
 			);
 			$response = wp_remote_post( self::URL.'GetDailyPlanning', $options );
 				//TODO traiter les différentes erreurs de retour 200 300 400
+				error_log(print_r(json_decode($response['body']), true));
+			
 				return json_decode($response['body'], true);
 			if ($response === FALSE) {
 				echo "Error: " . error_get_last()['message'] . "\n";

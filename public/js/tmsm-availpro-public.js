@@ -62,13 +62,23 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
             var lowest_price = null;
 
             // Get lowest price
+            // $.each(days, function (index, value) {
+            //   if (typeof value.Price !== 'undefined' && value.Status !== 'NotAvailable') {
+            //     if (lowest_price === null) {
+            //       lowest_price = Number(value.Price);
+            //     }
+            //     if (Number(value.Price) < lowest_price) {
+            //       lowest_price = Number(value.Price);
+            //     }
+            //   }
+            // });
             $.each(days, function (index, value) {
-              if (typeof value.Price !== 'undefined' && value.Status !== 'NotAvailable') {
+              if (typeof value.totalPrice !== 'undefined' && value.Status !== 'NotAvailable') {
                 if (lowest_price === null) {
-                  lowest_price = Number(value.Price);
+                  lowest_price = Number(value.totalPrice);
                 }
-                if (Number(value.Price) < lowest_price) {
-                  lowest_price = Number(value.Price);
+                if (Number(value.totalPrice) < lowest_price) {
+                  lowest_price = Number(value.totalPrice);
                 }
               }
             });
@@ -76,12 +86,24 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
             // Create Events
             $.each(days, function (index, value) {
               value.date = index;
-              if (typeof value.Price !== 'undefined' && value.Status !== 'NotAvailable') {
-                value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale,
+              // if (typeof value.Price !== 'undefined' && value.Status !== 'NotAvailable') {
+              //   value.PriceWithCurrency = Number(value.Price).toLocaleString(tmsm_availpro_params.locale,
+              //     {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 2});
+
+              //   value.Test = tmsm_availpro_params.locale;
+              //   if (Number(value.Price) === lowest_price) {
+              //     value.LowestPrice = 1;
+              //   }
+              //   events[i] = value;
+              //   events_toload.push(events[i]);
+              //   i++;
+              // }
+              if (typeof value.totalPrice !== 'undefined' && value.Status !== 'NotAvailable') {
+                value.PriceWithCurrency = Number(value.totalPrice).toLocaleString(tmsm_availpro_params.locale,
                   {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 2});
 
                 value.Test = tmsm_availpro_params.locale;
-                if (Number(value.Price) === lowest_price) {
+                if (Number(value.totalPrice) === lowest_price) {
                   value.LowestPrice = 1;
                 }
                 events[i] = value;
