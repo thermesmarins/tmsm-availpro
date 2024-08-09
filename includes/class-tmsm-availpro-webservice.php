@@ -278,29 +278,29 @@ class Tmsm_Availpro_Webservice {
 			return $e;
 		}
 	}
+// TODO remove the function no more needed
+	// /**
+	//  * Convert XML results in array
+	//  *
+	//  * @param string $xml
+	//  *
+	//  * @return array
+	//  */
+	// static public function convert_to_array($xml){
 
-	/**
-	 * Convert XML results in array
-	 *
-	 * @param string $xml
-	 *
-	 * @return array
-	 */
-	static public function convert_to_array($xml){
+	// 	$domObject = new DOMDocument();
+	// 	$domObject->loadXML($xml);
 
-		$domObject = new DOMDocument();
-		$domObject->loadXML($xml);
+	// 	$domXPATH = new DOMXPath($domObject);
+	// 	$results = $domXPATH->query("//soap:Body/*");
 
-		$domXPATH = new DOMXPath($domObject);
-		$results = $domXPATH->query("//soap:Body/*");
-
-		$array = [];
-		foreach($results as $result)
-		{
-			$array = json_decode(json_encode(simplexml_load_string($result->ownerDocument->saveXML($result))), true);
-		}
-		return $array;
-	}
+	// 	$array = [];
+	// 	foreach($results as $result)
+	// 	{
+	// 		$array = json_decode(json_encode(simplexml_load_string($result->ownerDocument->saveXML($result))), true);
+	// 	}
+	// 	return $array;
+	// }
 
 
 
