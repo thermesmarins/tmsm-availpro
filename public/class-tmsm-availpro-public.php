@@ -1052,9 +1052,9 @@ error_log(print_r($bestprice_year, true));
 					$response   = $webservice->get_stayplanning($date_begin, $nights, $rateids);
 					$data = $response;
 					if (defined('WP_DEBUG') && WP_DEBUG) {
-						error_log('data:');
-						error_log(print_r($data, true));
-						error_log(print_r($data['ratePlans'][0]['hotels'][0]['entities'], true));
+						// error_log('data:');
+						// error_log(print_r($data, true));
+						// error_log(print_r($data['ratePlans'][0]['hotels'][0]['entities'], true));
 					}
 
 					// Init data var
@@ -1085,17 +1085,22 @@ error_log(print_r($bestprice_year, true));
 											if (defined('WP_DEBUG') && WP_DEBUG) {
 												error_log('Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
 											}
-											$properties = $entity;
-											if (!isset($properties[0])) {
-												if (defined('WP_DEBUG') && WP_DEBUG) {
-													error_log('properties not multiple');
-												}
-												$tmp = $properties;
-												unset($properties);
-												$properties[0] = $tmp;
-											}
+											error_log('$entity');
+											error_log(print_r($entity, true));
+											// $properties = $entity;
+											// if (!isset($properties[0])) {
+											// 	if (defined('WP_DEBUG') && WP_DEBUG) {
+											// 		error_log('properties not multiple');
+											// 	}
+											// 	$tmp = $properties;
+											// 	unset($properties);
+											// 	$properties[0] = $tmp;
+											// }
+											// error_log('$properties');
+											// error_log(print_r($properties, true));
 											$dailyplanning_bestprice_entity = [];
-											$dailyplanning_bestprice_entity[] = $properties;
+											// $dailyplanning_bestprice_entity[] = $entity;
+											$dailyplanning_bestprice_entity = $entity;
 											ksort($dailyplanning_bestprice_entity);
 											if (defined('WP_DEBUG') && WP_DEBUG) {
 												error_log('dailyplanning_bestprice_entity:');
@@ -1103,38 +1108,60 @@ error_log(print_r($bestprice_year, true));
 											}
 											// Merge data
 											if (empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable') {
+												error_log('Je passe ici *****');
 												$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 											} else {
-												if (!empty($dailyplanning_bestprice_entity['totalPrice']) && !empty($dailyplanning_bestprice[0]['totalPrice'])) {
+												if (!empty($dailyplanning_bestprice_entity['totalPrice']) && !empty($dailyplanning_bestprice['totalPrice'])) {
 													// New totalPrice is less than merged data
 													if (
-														$dailyplanning_bestprice_entity['totalPrice'] < $dailyplanning_bestprice[0]['totalPrice']
+														$dailyplanning_bestprice_entity['totalPrice'] < $dailyplanning_bestprice['totalPrice']
 														&& @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'
 													) {
 														$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
 													}
 												}
 											}
+											// if (empty($dailyplanning_bestprice) && @$dailyplanning_bestprice_entity[0][0]['status'] !== 'NotAvailable') {
+											// 	error_log('Je passe ici *****');
+											// 	$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+											// } else {
+											// 	if (!empty($dailyplanning_bestprice_entity[0][0]['totalPrice']) && !empty($dailyplanning_bestprice[0][0]['totalPrice'])) {
+											// 		// New totalPrice is less than merged data
+											// 		if (
+											// 			$dailyplanning_bestprice_entity[0][0]['totalPrice'] < $dailyplanning_bestprice[0][0]['totalPrice']
+											// 			&& @$dailyplanning_bestprice_entity['status'] !== 'NotAvailable'
+											// 		) {
+											// 			$dailyplanning_bestprice = $dailyplanning_bestprice_entity;
+											// 		}
+											// 	}
+											// }
 										}
 									}
 								}
 							}
 						}
 					}
-					// if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					// 	// TODO commenter !
-					// 	error_log('dailyplanning_bestprice:');
-					// 	error_log(print_r($dailyplanning_bestprice, true));
-					// }
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						// // TODO commenter !
+						// error_log('dailyplanning_bestprice:');
+						// error_log(print_r($dailyplanning_bestprice, true));
+					}
 
 					$totalprice = null;
 					$fmt = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
-					if (!empty($dailyplanning_bestprice[0][0]) && @$dailyplanning_bestprice[0][0]['status'] !== 'NotAvailable') {
-						$totalprice = $dailyplanning_bestprice[0][0]['totalPrice'];
+					if (!empty($dailyplanning_bestprice) && @$dailyplanning_bestprice['status'] !== 'NotAvailable') {
+						$totalprice = $dailyplanning_bestprice['totalPrice'];
 						$jsondata['data'][$rate] = [
 							'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
 						];
-					} else {
+					} 
+					// if (!empty($dailyplanning_bestprice[0][0]) && @$dailyplanning_bestprice[0][0]['status'] !== 'NotAvailable') {
+					// 	$totalprice = $dailyplanning_bestprice[0][0]['totalPrice'];
+					// 	$jsondata['data'][$rate] = [
+					// 		'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
+					// 	];
+					// } 
+					else {
 						if ($rate == 'accommodation') {
 							$errors[] = __('No availability', 'tmsm-availpro');
 						}
