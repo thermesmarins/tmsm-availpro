@@ -599,8 +599,8 @@ error_log(print_r($bestprice_year, true));
 						// TODO boucle for pour les 2 tableaux !!!
 						foreach ($data['ratePlans'][0]['hotels'][0]['entities'] as $entity) {
 							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
-								// error_log( print_r($entity,true));
+								error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
+								error_log( print_r($entity,true));
 
 							}
 
@@ -627,8 +627,8 @@ error_log(print_r($bestprice_year, true));
 							$dailyplanning_bestprice_entity = [];
 							foreach ($properties as $property) {
 								if (defined('WP_DEBUG') && WP_DEBUG) {
-									// error_log( '***property:');
-									// error_log( print_r($property,true));
+									error_log( '***property:');
+									error_log( print_r($property,true));
 								}
 
 								if (!empty($property)) {
@@ -679,7 +679,7 @@ error_log(print_r($bestprice_year, true));
 
 
 							foreach ($dailyplanning_bestprice_entity as $date => $attributes) {
-								if($date == '2018-07-05'){
+								// if($date == '2018-07-05'){
 								error_log('*roomid: '.$entity['roomId']);
 								error_log('*Date: '.$date);
 								error_log('*Price: '.@$attributes['totalPrice']);
@@ -804,7 +804,7 @@ error_log(print_r($bestprice_year, true));
 										error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['totalPrice']);
 									}
 								}
-								}
+								// }
 
 							}
 						}
