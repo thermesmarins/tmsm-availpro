@@ -1,3 +1,6 @@
+### 2.0: August 12th,2024
+* Update to the new version of API availpro
+
 ### 1.2.9: June 6th, 2024
 * comment line 202 in tmsm-availpro-public.css file, to not show the green color on the price
   
