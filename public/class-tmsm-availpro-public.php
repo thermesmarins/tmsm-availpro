@@ -597,7 +597,11 @@ error_log(print_r($bestprice_year, true));
 					) {
 
 						// TODO boucle for pour les 2 tableaux !!!
-						foreach ($data['ratePlans'][0]['hotels'][0]['entities'] as $entity) {
+						// Boucle pour chaque ratePlans
+						for ($i = 0; $i < count($data['ratePlans']); $i++) {
+							// Boucle pour chaque ratePlans => hotels
+							for ($h = $i; $h < count($data['ratePlans'][$i]['hotels']); $h++) {
+						foreach ($data['ratePlans'][$i]['hotels'][$h]['entities'] as $entity) {
 							if (defined('WP_DEBUG') && WP_DEBUG) {
 								error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
 								error_log( print_r($entity,true));
@@ -782,6 +786,8 @@ error_log(print_r($bestprice_year, true));
 
 							}
 						}
+					}
+				}
 					}
 				}
 			}
