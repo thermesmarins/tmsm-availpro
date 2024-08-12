@@ -293,13 +293,6 @@ error_log(print_r($bestprice_year, true));
 				$date = sanitize_text_field($bestprice_year_requested['Date']);
 			}
 		}
-		// !if (!empty($bestprice_year_requested) && !empty($bestprice_year_requested['Price'])) {
-		// 	$price = sanitize_text_field($bestprice_year_requested['Price']);
-		// 	if (!empty($bestprice_year_requested['Date'])) {
-		// 		$date = sanitize_text_field($bestprice_year_requested['Date']);
-		// 	}
-		// }
-
 		if (!empty($price)) {
 			$output = '<span class="tmsm-availpro-bestprice-year" data-date="' . $date . '" data-price="' . $price . '" data-roomid="' . (!empty($atts['roomid']) ? esc_attr__($atts['roomid']) : '') . '" data-rateid="' . (!empty($atts['rateid']) ? esc_attr__($atts['rateid']) : '') . '"></span>';
 		}
@@ -360,26 +353,6 @@ error_log(print_r($bestprice_year, true));
             <p id="tmsm-availpro-form-nights-message" data-value="0">' . __('Number of nights:', 'tmsm-availpro') . ' <span id="tmsm-availpro-form-nights-number"></span></p>
             <p id="tmsm-availpro-form-minstay-message" data-value="0">' . __('Minimum stay:', 'tmsm-availpro') . ' <span id="tmsm-availpro-form-minstay-number"></span></p>
 			';
-
-		/*$output.='
-
-			<p>
-				<label for="tmsm-availpro-form-adults" id="tmsm-availpro-form-adults-label">'.__( 'Number of adults:', 'tmsm-availpro' ).'</label>
-				<select name="selectedAdultCount" id="tmsm-availpro-form-adults">
-				<option value="2">'.__( 'Number of adults', 'tmsm-availpro' ).'</option>';
-
-
-				for ( $adults = 1; $adults <= 6; $adults ++ ) {
-					$output .= '<option value="' . $adults . '">';
-					$output .= sprintf( _n( '%s adult', '%s adults', $adults, 'tmsm-availpro' ), number_format_i18n( $adults ) );
-					$output .= '</option>';
-				}
-
-		$output.='
-
-				</select>
-			</p>';
-		*/
 
 		$theme = wp_get_theme();
 		$buttonclass = '';
@@ -596,7 +569,6 @@ error_log(print_r($bestprice_year, true));
 		$webservice = new Tmsm_Availpro_Webservice();
 		$response   = $webservice->get_data($monthtocheck);
 		$data = $response;
-		// $data       = $webservice::convert_to_array( $response );
 
 		if (defined('WP_DEBUG') && WP_DEBUG) {
 			// error_log( 'webservice response as array:' );
@@ -613,18 +585,12 @@ error_log(print_r($bestprice_year, true));
 			if (defined('WP_DEBUG') && WP_DEBUG) {
 				error_log('Data responsee');
 			}
-			// TODO json
-			// if ( isset( $data['response']['success'] ) ) {
 			if (isset($data)) {
 				if (defined('WP_DEBUG') && WP_DEBUG) {
 					error_log('data success');
 				}
-				// TODO json
-				// if ( isset( $data['response']['dailyPlanning'] ) ) {
+
 				if (isset($data['ratePlans'])) {
-					// TODO json
-					// if ( isset( $data['response']['dailyPlanning']['ratePlan']['hotel'] )
-					//      && is_array( $data['response']['dailyPlanning']['ratePlan']['hotel'] ) ) {
 					if (
 						isset($data['ratePlans'][0]['hotels'])
 						&& is_array($data['ratePlans'][0]['hotels'])
@@ -633,19 +599,18 @@ error_log(print_r($bestprice_year, true));
 						// TODO boucle for pour les 2 tableaux !!!
 						foreach ($data['ratePlans'][0]['hotels'][0]['entities'] as $entity) {
 							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// error_log( '******************Entity: roomId=' . $entity['@attributes']['roomId'] . ' rateId=' . $entity['@attributes']['rateId'] );
-								error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
+								// error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
 								// error_log( print_r($entity,true));
 
 							}
-							// $properties = $entity['property'];
+
 							$properties = $entity;
 
 							if (defined('WP_DEBUG') && WP_DEBUG) {
 								// error_log( '******properties before:');
 								// error_log( print_r($properties,true));
 							}
-
+							//  TODO voir si nécessaire ?? 
 							if (!isset($properties[0])) {
 								if (defined('WP_DEBUG') && WP_DEBUG) {
 									error_log('properties not multiple');
@@ -659,34 +624,19 @@ error_log(print_r($bestprice_year, true));
 								// error_log( '******properties after:');
 								// error_log( print_r($properties,true));
 							}
-
-
 							$dailyplanning_bestprice_entity = [];
-
-							//foreach ( $entity['property'] as $properties ) {
-
 							foreach ($properties as $property) {
 								if (defined('WP_DEBUG') && WP_DEBUG) {
 									// error_log( '***property:');
 									// error_log( print_r($property,true));
 								}
 
-
-								// $propertyname = (!empty($property['@attributes']['name']) ? $property['@attributes']['name'] : $property['name']);
-
-								// TODO json
-								// if ( ! empty( $property['period'] ) ) {
-								// 	foreach ( $property['period'] as $period ) {
-
 								if (!empty($property)) {
 									foreach ($property as $key => $period) {
-										// TODO json 
-										
+
 										$propertyname = $key;
-										// $attributes = ( isset( $period['@attributes'] ) ? $period['@attributes'] : $period );
 										$attributes = (isset($period[$key]) ? $period[$key] : $period);
-									
-										// error_log(print_r($attributes, true));
+
 										// TODO Json
 										// TODO vérifier que ce soit un tableau
 										// TODO si oui bouclé sur le tableau pour pouvoir récupérer les données de dates et valeurs ( totalPrice, availability, status)
@@ -702,7 +652,6 @@ error_log(print_r($bestprice_year, true));
 												$value   = $attribute['value'];
 
 												$daterange = new DatePeriod($begindate, $interval, $enddate);
-												//! $daterange = new DatePeriod($begindate, $interval, $enddate->modify('+1 day'));
 
 												/* @var $date Datetime */
 												foreach ($daterange as $date) {
@@ -715,29 +664,6 @@ error_log(print_r($bestprice_year, true));
 												
 											}
 										}
-									
-										// if ( ! empty( $attributes['beginDate'] ) && ! empty( $attributes['endDate'] ) && ! empty( $attributes['value'] ) ) {
-										// if (!empty($attributes['start']) && !empty($attributes['end']) && !empty($attributes['value'])) {
-
-										// 	if (defined('WP_DEBUG') && WP_DEBUG) {
-										// 		error_log($propertyname . ': beginDate=' . $attributes['start'] . ' endDate=' . $attributes['end'] . ' value=' . $attributes['value']);
-										// 	}
-
-											// $begindate = Datetime::createFromFormat('Y-m-d', $attributes['beginDate']);
-											// $enddate   = Datetime::createFromFormat('Y-m-d', $attributes['endDate']);
-											// $value   = $attributes['value'];
-
-											// $daterange = new DatePeriod($begindate, $interval, $enddate->modify('+1 day'));
-
-											// /* @var $date Datetime */
-											// foreach ($daterange as $date) {
-											// 	//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
-											// 	if (empty($dailyplanning_bestprice_entity[$date->format('Y-m-d')])) {
-											// 		$dailyplanning_bestprice_entity[$date->format('Y-m-d')] = array();
-											// 	}
-											// 	$dailyplanning_bestprice_entity[$date->format('Y-m-d')][$propertyname] = $value;
-											// }
-										// }
 									}
 								}
 							}
@@ -747,23 +673,18 @@ error_log(print_r($bestprice_year, true));
 
 							ksort($dailyplanning_bestprice_entity);
 							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// TODO Voir pourquoi je n'ai pas les mêmes résultat que sur la prod !! 
 								// error_log('dailyplanning_bestprice_entity:');
 								// error_log(print_r($dailyplanning_bestprice_entity, true));
 							}
 
 
 							foreach ($dailyplanning_bestprice_entity as $date => $attributes) {
-								//if($date == '2018-07-05'){
-								// error_log('*roomid: '.$entity['@attributes']['roomId']);
+								if($date == '2018-07-05'){
 								error_log('*roomid: '.$entity['roomId']);
 								error_log('*Date: '.$date);
-								// error_log('*Price: '.@$attributes['Price']);
 								error_log('*Price: '.@$attributes['totalPrice']);
-								// error_log('*Status: '.@$attributes['Status']);
 								error_log('*Status: '.@$attributes['status']);
 								if (@$attributes['status'] !== 'NotAvailable' && !empty($attributes['totalPrice'])) {
-								// if (@$attributes['Status'] !== 'NotAvailable' && !empty($attributes['Price'])) {
 
 									$attributes['Date'] = $date;
 
@@ -883,7 +804,7 @@ error_log(print_r($bestprice_year, true));
 										error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['totalPrice']);
 									}
 								}
-								//}
+								}
 
 							}
 						}
