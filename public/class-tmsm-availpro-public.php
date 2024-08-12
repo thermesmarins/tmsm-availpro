@@ -1044,14 +1044,25 @@ error_log(print_r($bestprice_year, true));
 						// error_log('dailyplanning_bestprice:');
 						// error_log(print_r($dailyplanning_bestprice, true));
 					}
+					
 
 					$totalprice = null;
-					$fmt = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
+					// $fmt = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
 					if (!empty($dailyplanning_bestprice) && @$dailyplanning_bestprice['status'] !== 'NotAvailable') {
+						$language = pll_current_language();
 						$totalprice = $dailyplanning_bestprice['totalPrice'];
-						$jsondata['data'][$rate] = [
-							'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
-						];
+						if($language == 'en') {
+							$jsondata['data'][$rate] = [
+								// 'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
+								'totalprice' => '€'.$totalprice,
+							];
+						} else {
+							$jsondata['data'][$rate] = [
+								// 'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
+								'totalprice' => $totalprice . ' €',
+							];
+						}
+						
 					} 
 					// if (!empty($dailyplanning_bestprice[0][0]) && @$dailyplanning_bestprice[0][0]['status'] !== 'NotAvailable') {
 					// 	$totalprice = $dailyplanning_bestprice[0][0]['totalPrice'];
