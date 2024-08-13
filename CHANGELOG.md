@@ -1,3 +1,6 @@
+### 2.0.1: August 12th,2024
+* Fix best-year-price shortcode not working
+
 ### 2.0: August 12th,2024
 * Update to the new version of API availpro
 
