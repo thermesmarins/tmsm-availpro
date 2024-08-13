@@ -749,7 +749,7 @@ error_log(print_r($bestprice_year, true));
 									// Check year price Rate
 
 									// Init overall year price Rate
-									if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['Price'])) {
+									if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalrice'])) {
 										$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
 										error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
 										error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
