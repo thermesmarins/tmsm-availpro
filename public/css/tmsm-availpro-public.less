@@ -1,4 +1,4 @@
-@screen-sm-min:500px;
+@screen-sm-min: 500px;
 @screen-md-min: 900px;
 @font-size-small: 13px;
 @font-size-large: 16px;
@@ -12,7 +12,7 @@
 @day-border: @calendar-background;
 
 @day-background: white;
-@day-price-color:  rgba(0, 0, 0, 0.4);
+@day-price-color: rgba(0, 0, 0, 0.4);
 @day-number-color: @calendar-text-color;
 
 @day-selected-background: @selected-color;
@@ -36,45 +36,53 @@
 @minstay-background: transparent;
 @minstay-color: #333;
 
-#tmsm-availpro-calendar{
+#tmsm-availpro-calendar {
     padding: 2px;
 
-    &.calendar-small{
+    &.calendar-small {
         .hide-small {
             display: none;
         }
-        .clndr-controls{
+
+        .clndr-controls {
             font-size: ceil(@font-size-small*1.1);
+
             @media(min-width: @screen-md-min) {
                 font-size: ceil(@font-size-small*1.4);
             }
-            td{
+
+            td {
                 padding: 5px;
             }
         }
-        .day{
+
+        .day {
             font-size: @font-size-small;
             border: 1px solid @day-border;
         }
-        .cell{
+
+        .cell {
             padding: 4px 3px 4px 3px;
         }
     }
 
-    &.calendar-large{
+    &.calendar-large {
 
         .hide-large {
             display: none;
         }
-        .clndr-controls{
+
+        .clndr-controls {
             font-size: ceil(@font-size-large*1.4);
         }
-        .day{
+
+        .day {
             font-size: @font-size-large;
             border: 3px solid @day-border;
 
         }
-        .cell{
+
+        .cell {
             padding: 8px;
         }
     }
@@ -88,76 +96,84 @@
     //    min-height: 375px;
     //}
 
-    .table-calendarprices{
+    .table-calendarprices {
         width: 100%;
+
         ::-moz-selection {
             background: transparent;
-            color:inherit;
+            color: inherit;
         }
+
         ::selection {
             background: transparent;
-            color:inherit;
+            color: inherit;
         }
-        .clndr-controls{
+
+        .clndr-controls {
             background: white;
             border-bottom: 2px solid @controls-border;
         }
 
-        .header-days{
-            .header-day{
+        .header-days {
+            .header-day {
                 text-align: center;
             }
         }
 
-        .month{
+        .month {
             //height: 40px;
 
 
             font-weight: normal;
             text-align: center;
-            &:first-letter{
+
+            &:first-letter {
                 text-transform: uppercase;
             }
-            small{
+
+            small {
                 display: none;
             }
         }
 
-        th{
+        th {
             line-height: 2;
         }
 
-        .clndr-control-button{
+        .clndr-control-button {
 
-            > span {
+            >span {
 
-                &:hover{
+                &:hover {
                     cursor: pointer;
                 }
-                &.inactive{
+
+                &.inactive {
                     opacity: 0.5;
                     cursor: not-allowed;
                 }
             }
-            &.clndr-control-button-previous{
+
+            &.clndr-control-button-previous {
                 text-align: left;
             }
-            &.clndr-control-button-next{
+
+            &.clndr-control-button-next {
                 text-align: right;
             }
 
         }
 
-        .cell{
+        .cell {
             vertical-align: middle;
             position: relative;
 
-            + .cell{
+            +.cell {
                 display: none;
             }
         }
 
-        .day-number{
+        .day-number {
             background: @day-number-background;
             color: @day-number-color;
             //position: absolute;
@@ -172,7 +188,7 @@
             line-height: normal;
         }
 
-        .minstay{
+        .minstay {
             position: absolute;
             line-height: 14px;
             top: 0;
@@ -183,28 +199,29 @@
             color: @minstay-color;
         }
 
-        .day-special{
+        .day-special {
             position: absolute;
             top: 1px;
             left: 16px;
             padding: 1px;
             width: 16px;
+
             //display: none;
-            &.glyphicon-alert{
+            &.glyphicon-alert {
                 display: block;
             }
         }
 
-        .price{
+        .price {
             font-weight: bold;
             margin: 0;
             font-size: 11px;
             line-height: normal;
         }
 
-        tbody{
+        tbody {
 
-            .day{
+            .day {
 
                 padding: 0;
                 text-align: center;
@@ -213,102 +230,122 @@
                 color: @calendar-text-color;
                 width: 14%;
 
-                .day-number{
+                .day-number {
                     color: @day-number-color
                 }
-                .price{
+
+                .price {
                     color: @day-price-color;
                 }
-                &:hover{
+
+                &:hover {
                     cursor: pointer;
                 }
             }
 
 
-            .day.past, .day.next-month, .day.inactive, .day.last-month{
-                .cell{
+            .day.past,
+            .day.next-month,
+            .day.inactive,
+            .day.last-month {
+                .cell {
                     background: @day-background !important;
                 }
 
-                .cell{
-                    .day-number{
-                        color: @day-past-color  !important;;
+                .cell {
+                    .day-number {
+                        color: @day-past-color !important;
+                        ;
                     }
-                    .price{
+
+                    .price {
                         visibility: hidden;
                     }
                 }
 
-                &.inactive{
-                    &:hover{
+                &.inactive {
+                    &:hover {
                         cursor: not-allowed;
                     }
                 }
             }
 
-            .day.selected{
-                .cell{
+            .day.selected {
+                .cell {
                     background: @day-selected-range-background;
                 }
-                .day-number{
-                    color:@day-selected-range-day-number-color;
+
+                .day-number {
+                    color: @day-selected-range-day-number-color;
                 }
-                .price{
+
+                .price {
                     color: @day-selected-range-price-color;
                 }
-                &.active{
-                    .instead, .price{
+
+                &.active {
+
+                    .instead,
+                    .price {
                         opacity: 1;
                     }
                 }
             }
 
-            .day.selected-hover{
-                .cell{
+            .day.selected-hover {
+                .cell {
                     background: @day-selected-range-background;
                 }
             }
 
-            .day.selected-begin, .day.selected-end {
-                .cell{
+            .day.selected-begin,
+            .day.selected-end {
+                .cell {
                     background: @day-selected-background;
                 }
-                .price{
+
+                .price {
                     color: @day-selected-price-color;
                 }
-                .day-number{
+
+                .day-number {
                     color: @day-selected-day-number-color;
                 }
             }
 
-            .day.mouseover{
-                .cell{
+            .day.mouseover {
+                .cell {
                     background: @day-hover-background;
                 }
-                .price{
+
+                .price {
                     color: @day-hover-price-color;
                 }
-                .day-number{
+
+                .day-number {
                     color: @day-hover-day-number-color;
                 }
             }
 
-            .day:not(.selected):not(.past):not(.mouseover){
-                .cell[data-lowestprice='1']{
-                    .price{
+            .day:not(.selected):not(.past):not(.mouseover) {
+                .cell[data-lowestprice='1'] {
+                    .price {
 
                         color: @day-lowestprice-price-color;
                     }
                 }
-                .cell[data-availability='1'], .cell[data-availability='2'] {
+
+                .cell[data-availability='1'],
+                .cell[data-availability='2'] {
                     background: @day-lowavailability-background;
                 }
 
 
             }
-            .day:not(.selected):not(.past):not(.mouseover){
-                .cell[data-minstay]:not([data-minstay=""]){
-                    .minstay{
+
+            .day:not(.selected):not(.past):not(.mouseover) {
+                .cell[data-minstay]:not([data-minstay="1"]) {
+                    .minstay {
                         display: inline-block;
                     }
                 }
@@ -318,8 +355,9 @@
 
         }
 
-        .cell[data-equal='1'], .cell[data-equal='true']{
-            .instead{
+        .cell[data-equal='1'],
+        .cell[data-equal='true'] {
+            .instead {
                 visibility: hidden;
             }
         }
@@ -328,15 +366,16 @@
     }
 }
 
-.tmsm-availpro-form-legend{
+.tmsm-availpro-form-legend {
     margin-top: 5px;
-    .legend-item{
+
+    .legend-item {
 
         margin-bottom: 5px;
 
-        &:before{
+        &:before {
             content: '';
-            border:1px solid black;
+            border: 1px solid black;
             background: white;
             width: 18px;
             line-height: 7px;
@@ -345,35 +384,44 @@
             display: inline-block;
             margin-right: 5px;
         }
-        &.legend-item-available{
+
+        &.legend-item-available {
             display: none;
         }
-        &.legend-item-notavailable{
+
+        &.legend-item-notavailable {
             display: none;
-            &:before{
+
+            &:before {
                 background: @day-background;
             }
         }
-        &.legend-item-lowestprice{
+
+        &.legend-item-lowestprice {
             display: none;
-            &:before{
+
+            &:before {
                 background: @day-lowestprice-price-color;
             }
         }
-        &.legend-item-lastrooms{
+
+        &.legend-item-lastrooms {
             display: none;
-            &:before{
+
+            &:before {
                 background: @day-lowavailability-background;
             }
         }
-        &.legend-item-minstay{
+
+        &.legend-item-minstay {
             display: none;
+
             @media(min-width: @screen-md-min) {
                 display: block;
             }
 
-            &:before{
-                content:'⇾';
+            &:before {
+                content: '⇾';
                 background: @minstay-background;
                 color: @minstay-color;
             }
@@ -381,62 +429,70 @@
     }
 }
 
-#tmsm-availpro-form{
+#tmsm-availpro-form {
 
-    .tmsm-availpro-form-fields{
+    .tmsm-availpro-form-fields {
         padding-bottom: 50px;
+
         @media(min-width: @screen-md-min) {
             padding-bottom: 0;
         }
     }
 
-    #tmsm-availpro-form-intro{
+    #tmsm-availpro-form-intro {
         display: none;
+
         @media(min-width: @screen-md-min) {
             display: block;
         }
     }
 
-    #tmsm-availpro-calculatetotal-totalprice-label{
+    #tmsm-availpro-calculatetotal-totalprice-label {
         display: none;
     }
 
-    #tmsm-availpro-form-checkindateinfo-label, #tmsm-availpro-form-adults-label{
+    #tmsm-availpro-form-checkindateinfo-label,
+    #tmsm-availpro-form-adults-label {
         display: none;
 
     }
-    #tmsm-availpro-form-checkoutdateinfo-label{
+
+    #tmsm-availpro-form-checkoutdateinfo-label {
         text-align: center;
         display: inline-block;
     }
-    #tmsm-availpro-form-checkindateinfo, #tmsm-availpro-form-checkoutdateinfo{
-        &:empty{
+
+    #tmsm-availpro-form-checkindateinfo,
+    #tmsm-availpro-form-checkoutdateinfo {
+        &:empty {
             border-bottom: 1px dotted @controls-border;
             min-width: 60px;
             display: inline-block;
         }
     }
 
-    #tmsm-availpro-form-minstay-message{
-        &[data-value='0']{
+    #tmsm-availpro-form-minstay-message {
+        &[data-value='0'] {
             display: none;
         }
     }
 
-    #tmsm-availpro-form-adults{
+    #tmsm-availpro-form-adults {
         width: auto;
     }
 
-    #tmsm-availpro-form-dates-container{
+    #tmsm-availpro-form-dates-container {
         //padding-top: 35px;
         position: relative;
     }
 
-    #tmsm-availpro-form-nights-message{
+    #tmsm-availpro-form-nights-message {
         display: none;
+
         @media(min-width: @screen-md-min) {
             display: block;
-            &[data-value='0']{
+
+            &[data-value='0'] {
                 display: none;
             }
         }
@@ -444,9 +500,10 @@
 
 }
 
-#tmsm-availpro-calendar-container{
+#tmsm-availpro-calendar-container {
     padding: 10px;
     background: @controls-border;
+
     @media(min-width: @screen-md-min) {
         width: 50%;
         display: inline-block;
@@ -454,13 +511,13 @@
     }
 }
 
-#tmsm-availpro-calendar{
+#tmsm-availpro-calendar {
     @media(min-width: @screen-md-min) {
         min-height: 325px;
     }
 }
 
-#tmsm-availpro-form{
+#tmsm-availpro-form {
     padding: 10px;
     background: white;
 
@@ -470,11 +527,12 @@
         padding: 15px;
     }
 }
-#tmsm-availpro-container{
+
+#tmsm-availpro-container {
     background: white;
 }
 
-#tmsm-availpro-form-outro{
+#tmsm-availpro-form-outro {
 
     @media(min-width: @screen-md-min) {
         position: absolute;
@@ -492,4 +550,3 @@
         padding: 0;
     }
 }
-

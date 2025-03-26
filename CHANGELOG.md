@@ -1,3 +1,6 @@
+### 2.0.2: March 26th, 2025
+* Fix minimum stay variable didn't work
+
 ### 2.0.1: August 12th,2024
 * Fix best-year-price shortcode not working
 

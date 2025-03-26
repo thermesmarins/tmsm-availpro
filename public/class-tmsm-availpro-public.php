@@ -431,7 +431,7 @@ error_log(print_r($bestprice_year, true));
 
                     <% if (days[d].events.length != 0) { %>
                     <% _.each(days[d].events, function(event) { %>
-                    <div class="cell" data-price="<%= event.totalPrice %>" data-status="<%= event.Status %>"  data-lowestprice="<%= event.LowestPrice %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.MinimumStayThrough %>">
+                    <div class="cell" data-price="<%= event.totalPrice %>" data-status="<%= event.Status %>"  data-lowestprice="<%= event.LowestPrice %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.minimumStayThrough %>">
                         <span class="day-number"><%= days[d].day %></span>
                         <span class="minstay">⇾</span>
                         <p class="price" data-test="<%= event.Test %>"><%= event.PriceWithCurrency %></p>

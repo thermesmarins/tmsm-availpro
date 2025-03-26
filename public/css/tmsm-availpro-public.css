@@ -206,7 +206,7 @@
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
   background: #ffffff;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay=""]) .minstay {
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay="1"]) .minstay {
   display: inline-block;
 }
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='1'] .instead,
