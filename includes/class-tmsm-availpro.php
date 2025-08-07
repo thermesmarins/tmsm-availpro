@@ -27,7 +27,8 @@
  * @subpackage Tmsm_Availpro/includes
  * @author     Nicolas Mollet <nico.mollet@gmail.com>
  */
-class Tmsm_Availpro {
+class Tmsm_Availpro
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,8 +67,9 @@ class Tmsm_Availpro {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
-		if ( defined( 'TMSM_AVAILPRO_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('TMSM_AVAILPRO_VERSION')) {
 			$this->version = TMSM_AVAILPRO_VERSION;
 		} else {
 			$this->version = '1.0.0';
@@ -79,7 +81,6 @@ class Tmsm_Availpro {
 		$this->define_cron_schedule();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -98,53 +99,53 @@ class Tmsm_Availpro {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tmsm-availpro-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tmsm-availpro-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tmsm-availpro-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-tmsm-availpro-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-tmsm-availpro-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-tmsm-availpro-public.php';
 
 		/**
 		 * The class responsible for sanitizing user input
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-sanitize.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tmsm-availpro-sanitize.php';
 
 		/**
 		 * The class responsible for Availpro webservice calls
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-webservice.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tmsm-availpro-webservice.php';
 
 		/**
 		 * The class responsible for Availpro webservice signature oauth
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tmsm-availpro-webservice-oauth.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-tmsm-availpro-webservice-oauth.php';
 
 		/**
 		 * Oauth Class
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/oauth-php/SoapOAuthWrapper.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/oauth-php/SoapOAuthWrapper.php';
 
 		$this->loader = new Tmsm_Availpro_Loader();
-
 	}
 
 	/**
@@ -156,12 +157,12 @@ class Tmsm_Availpro {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Tmsm_Availpro_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -171,28 +172,28 @@ class Tmsm_Availpro {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Tmsm_Availpro_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Tmsm_Availpro_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
 		// Customizer
-		$this->loader->add_action( 'customize_register', $plugin_admin, 'customize_register' );
+		$this->loader->add_action('customize_register', $plugin_admin, 'customize_register');
 
 		// Settings
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_sections' );
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_fields' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'options_page_menu' );
-		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
-		$this->loader->add_filter( 'plugin_action_links_'.$plugin_basename, $plugin_admin, 'settings_link' );
+		$this->loader->add_action('admin_init', $plugin_admin, 'register_settings');
+		$this->loader->add_action('admin_init', $plugin_admin, 'register_sections');
+		$this->loader->add_action('admin_init', $plugin_admin, 'register_fields');
+		$this->loader->add_action('admin_menu', $plugin_admin, 'options_page_menu');
+		$plugin_basename = plugin_basename(plugin_dir_path(__DIR__) . $this->plugin_name . '.php');
+		$this->loader->add_filter('plugin_action_links_' . $plugin_basename, $plugin_admin, 'settings_link');
 
 		// Health Check
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'action_admin_menu' );
-		$this->loader->add_filter( 'site_status_tests', $plugin_admin, 'test_cron_schedule_exists' );
-
+		$this->loader->add_action('admin_menu', $plugin_admin, 'action_admin_menu');
+		$this->loader->add_filter('site_status_tests', $plugin_admin, 'test_cron_schedule_exists');
 	}
 
 	/**
@@ -201,11 +202,12 @@ class Tmsm_Availpro {
 	 * @since    1.0.6
 	 * @access   private
 	 */
-	private function define_cron_schedule() {
-		add_filter('cron_schedules', function($schedules) {
+	private function define_cron_schedule()
+	{
+		add_filter('cron_schedules', function ($schedules) {
 			$schedules['tmsm_availpro_refresh_schedule'] = array(
 				'interval' => MINUTE_IN_SECONDS * 5,
-				'display'  => __( 'Every 5 minutes', 'tmsm-availpro' ),
+				'display'  => __('Every 5 minutes', 'tmsm-availpro'),
 			);
 			return $schedules;
 		}, 99);
@@ -218,25 +220,25 @@ class Tmsm_Availpro {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Tmsm_Availpro_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Tmsm_Availpro_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
-		$this->loader->add_action( 'tmsmavailpro_cronaction', $plugin_public, 'checkprices' );
+		$this->loader->add_action('tmsmavailpro_cronaction', $plugin_public, 'checkprices');
 
-		$this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
-		$this->loader->add_action( 'wp_update_plugins', $plugin_public, 'check_cron_schedule_exists' );
+		$this->loader->add_action('init', $plugin_public, 'register_shortcodes');
+		$this->loader->add_action('wp_update_plugins', $plugin_public, 'check_cron_schedule_exists');
 
 		// Ajax
-		$this->loader->add_action( 'wp_ajax_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );
-		$this->loader->add_action( 'wp_ajax_nopriv_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice' );
+		$this->loader->add_action('wp_ajax_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice');
+		$this->loader->add_action('wp_ajax_nopriv_tmsm-availpro-calculatetotal', $plugin_public, 'ajax_calculate_totalprice');
 
 		// WP Rocket
-		$this->loader->add_filter( 'rocket_excluded_inline_js_content', $plugin_public, 'rocket_excluded_inline_js_content', 1, 10 );
-
+		$this->loader->add_filter('rocket_excluded_inline_js_content', $plugin_public, 'rocket_excluded_inline_js_content', 1, 10);
 	}
 
 	/**
@@ -244,7 +246,8 @@ class Tmsm_Availpro {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -255,7 +258,8 @@ class Tmsm_Availpro {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -265,7 +269,8 @@ class Tmsm_Availpro {
 	 * @since     1.0.0
 	 * @return    Tmsm_Availpro_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -275,8 +280,8 @@ class Tmsm_Availpro {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }

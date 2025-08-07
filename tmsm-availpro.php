@@ -16,7 +16,7 @@
  * Plugin Name:       TMSM Availpro
  * Plugin URI:        https://github.com/thermesmarins/tmsm-availpro
  * Description:       Display Availpro daily prices (best price) in a calendar view
- * Version:           2.0.2
+ * Version:           2.0.3
  * Author:            Nicolas Mollet
  * Author URI:        https://github.com/nicomollet
  * Requires PHP:      7.4
@@ -29,7 +29,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (! defined('WPINC')) {
 	die;
 }
 
@@ -38,14 +38,15 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TMSM_AVAILPRO_VERSION', '2.0.2' );
+define('TMSM_AVAILPRO_VERSION', '2.0.3');
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-tmsm-availpro-activator.php
  */
-function activate_tmsm_availpro() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tmsm-availpro-activator.php';
+function activate_tmsm_availpro()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-tmsm-availpro-activator.php';
 	Tmsm_Availpro_Activator::activate();
 }
 
@@ -53,19 +54,20 @@ function activate_tmsm_availpro() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-tmsm-availpro-deactivator.php
  */
-function deactivate_tmsm_availpro() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tmsm-availpro-deactivator.php';
+function deactivate_tmsm_availpro()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-tmsm-availpro-deactivator.php';
 	Tmsm_Availpro_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_tmsm_availpro' );
-register_deactivation_hook( __FILE__, 'deactivate_tmsm_availpro' );
+register_activation_hook(__FILE__, 'activate_tmsm_availpro');
+register_deactivation_hook(__FILE__, 'deactivate_tmsm_availpro');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-tmsm-availpro.php';
+require plugin_dir_path(__FILE__) . 'includes/class-tmsm-availpro.php';
 
 /**
  * Begins execution of the plugin.
@@ -76,10 +78,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-tmsm-availpro.php';
  *
  * @since    1.0.0
  */
-function run_tmsm_availpro() {
+function run_tmsm_availpro()
+{
 
 	$plugin = new Tmsm_Availpro();
 	$plugin->run();
-
 }
 run_tmsm_availpro();

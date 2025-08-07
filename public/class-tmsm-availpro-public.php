@@ -193,7 +193,7 @@ class Tmsm_Availpro_Public
 		$params = [
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'locale'   => $this->get_locale(),
-			'security' => wp_create_nonce('security'),
+			'security' => wp_create_nonce('tmsm-availpro-calculatetotal-nonce-action'),
 			'i18n'     => [
 				'fromprice'          => _x('From', 'price', 'tmsm-availpro'),
 				'yearbestpricelabel' => $this->get_option('yearbestpricelabel'),
@@ -277,8 +277,6 @@ class Tmsm_Availpro_Public
 		$bestprice_year_requested = null;
 
 		$bestprice_year = get_option('tmsm-availpro-bestprice-year', false);
-error_log('BestPrice shortcode');
-error_log(print_r($bestprice_year, true));
 		if (!empty($atts['roomid']) && !empty($bestprice_year['Room' . $atts['roomid']])) {
 			$bestprice_year_requested = $bestprice_year['Room' . $atts['roomid']];
 		} elseif (!empty($atts['rateid']) && !empty($bestprice_year['Rate' . $atts['rateid']])) {
@@ -298,6 +296,10 @@ error_log(print_r($bestprice_year, true));
 		}
 		return $output;
 	}
+
+
+
+
 
 	/**
 	 * Legend template
@@ -601,126 +603,124 @@ error_log(print_r($bestprice_year, true));
 						for ($i = 0; $i < count($data['ratePlans']); $i++) {
 							// Boucle pour chaque ratePlans => hotels
 							for ($h = $i; $h < count($data['ratePlans'][$i]['hotels']); $h++) {
-						foreach ($data['ratePlans'][$i]['hotels'][$h]['entities'] as $entity) {
-							if (defined('WP_DEBUG') && WP_DEBUG) {
-								error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
-								error_log( print_r($entity,true));
+								foreach ($data['ratePlans'][$i]['hotels'][$h]['entities'] as $entity) {
+									if (defined('WP_DEBUG') && WP_DEBUG) {
+										error_log('******************Entity: roomId=' . $entity['roomId'] . ' rateId=' . $entity['rateId']);
+										error_log(print_r($entity, true));
+									}
 
-							}
+									$properties = $entity;
 
-							$properties = $entity;
+									if (defined('WP_DEBUG') && WP_DEBUG) {
+										// error_log( '******properties before:');
+										// error_log( print_r($properties,true));
+									}
+									//  TODO voir si nécessaire ?? 
+									if (!isset($properties[0])) {
+										if (defined('WP_DEBUG') && WP_DEBUG) {
+											error_log('properties not multiple');
+										}
+										$tmp = $properties;
+										unset($properties);
+										$properties[0] = $tmp;
+									}
 
-							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// error_log( '******properties before:');
-								// error_log( print_r($properties,true));
-							}
-							//  TODO voir si nécessaire ?? 
-							if (!isset($properties[0])) {
-								if (defined('WP_DEBUG') && WP_DEBUG) {
-									error_log('properties not multiple');
-								}
-								$tmp = $properties;
-								unset($properties);
-								$properties[0] = $tmp;
-							}
+									if (defined('WP_DEBUG') && WP_DEBUG) {
+										// error_log( '******properties after:');
+										// error_log( print_r($properties,true));
+									}
+									$dailyplanning_bestprice_entity = [];
+									foreach ($properties as $property) {
+										if (defined('WP_DEBUG') && WP_DEBUG) {
+											error_log('***property:');
+											error_log(print_r($property, true));
+										}
 
-							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// error_log( '******properties after:');
-								// error_log( print_r($properties,true));
-							}
-							$dailyplanning_bestprice_entity = [];
-							foreach ($properties as $property) {
-								if (defined('WP_DEBUG') && WP_DEBUG) {
-									error_log( '***property:');
-									error_log( print_r($property,true));
-								}
+										if (!empty($property)) {
+											foreach ($property as $key => $period) {
 
-								if (!empty($property)) {
-									foreach ($property as $key => $period) {
+												$propertyname = $key;
+												$attributes = (isset($period[$key]) ? $period[$key] : $period);
 
-										$propertyname = $key;
-										$attributes = (isset($period[$key]) ? $period[$key] : $period);
-
-										if (is_array($attributes)) {
-											foreach ($attributes as $attribute) {
-												if (!empty($attribute['start']) && ! empty($attribute['end']) && !empty($attribute['value'])){
-												// error_log(print_r($attribute, true));
-												error_log($propertyname . ': beginDate=' . $attribute['start'] . ' endDate=' . $attribute['end'] . ' value=' . $attribute['value']);}
+												if (is_array($attributes)) {
+													foreach ($attributes as $attribute) {
+														if (!empty($attribute['start']) && ! empty($attribute['end']) && !empty($attribute['value'])) {
+															// error_log(print_r($attribute, true));
+															error_log($propertyname . ': beginDate=' . $attribute['start'] . ' endDate=' . $attribute['end'] . ' value=' . $attribute['value']);
+														}
 
 
-												$begindate = Datetime::createFromFormat('Y-m-d', $attribute['start']);
-												$enddate   = Datetime::createFromFormat('Y-m-d', $attribute['end']);
-												$value   = $attribute['value'];
+														$begindate = Datetime::createFromFormat('Y-m-d', $attribute['start']);
+														$enddate   = Datetime::createFromFormat('Y-m-d', $attribute['end']);
+														$value   = $attribute['value'];
 
-												$daterange = new DatePeriod($begindate, $interval, $enddate);
+														$daterange = new DatePeriod($begindate, $interval, $enddate);
 
-												/* @var $date Datetime */
-												foreach ($daterange as $date) {
-													//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
-													if (empty($dailyplanning_bestprice_entity[$date->format('Y-m-d')])) {
-														$dailyplanning_bestprice_entity[$date->format('Y-m-d')] = array();
+														/* @var $date Datetime */
+														foreach ($daterange as $date) {
+															//error_log( 'date: ' . $date->format( 'Y-m-d' ) );
+															if (empty($dailyplanning_bestprice_entity[$date->format('Y-m-d')])) {
+																$dailyplanning_bestprice_entity[$date->format('Y-m-d')] = array();
+															}
+															$dailyplanning_bestprice_entity[$date->format('Y-m-d')][$propertyname] = $value;
+														}
 													}
-													$dailyplanning_bestprice_entity[$date->format('Y-m-d')][$propertyname] = $value;
 												}
-												
 											}
 										}
 									}
-								}
-							}
 
 
-							//}
+									//}
 
-							ksort($dailyplanning_bestprice_entity);
-							if (defined('WP_DEBUG') && WP_DEBUG) {
-								// error_log('dailyplanning_bestprice_entity:');
-								// error_log(print_r($dailyplanning_bestprice_entity, true));
-							}
-
-
-							foreach ($dailyplanning_bestprice_entity as $date => $attributes) {
-								// if($date == '2018-07-05'){
-								if(defined('WP_DEBUG') && WP_DEBUG){
-								error_log('*roomid: '.$entity['roomId']);
-								error_log('*Date: '.$date);
-								error_log('*Price: '.@$attributes['totalPrice']);
-								error_log('*Status: '.@$attributes['status']);
-								}
-								if (@$attributes['status'] !== 'NotAvailable' && !empty($attributes['totalPrice'])) {
-
-									$attributes['Date'] = $date;
-
-									// Check year price overall
-
-									// Init overall year price
-									if (empty($dailyplanning_bestprice_year['Overall']) && empty($dailyplanning_bestprice_year['Overall']['totalPrice'])) {
-										if (defined('WP_DEBUG') && WP_DEBUG) {
-											error_log('Overall is empty');
-										}
-										$dailyplanning_bestprice_year['Overall'] = $attributes;
+									ksort($dailyplanning_bestprice_entity);
+									if (defined('WP_DEBUG') && WP_DEBUG) {
+										// error_log('dailyplanning_bestprice_entity:');
+										// error_log(print_r($dailyplanning_bestprice_entity, true));
 									}
 
-									error_log('attributes dailyplanning_best_price_year');
+
+									foreach ($dailyplanning_bestprice_entity as $date => $attributes) {
+										// if($date == '2018-07-05'){
+										if (defined('WP_DEBUG') && WP_DEBUG) {
+											error_log('*roomid: ' . $entity['roomId']);
+											error_log('*Date: ' . $date);
+											error_log('*Price: ' . @$attributes['totalPrice']);
+											error_log('*Status: ' . @$attributes['status']);
+										}
+										if (@$attributes['status'] !== 'NotAvailable' && !empty($attributes['totalPrice'])) {
+
+											$attributes['Date'] = $date;
+
+											// Check year price overall
+
+											// Init overall year price
+											if (empty($dailyplanning_bestprice_year['Overall']) && empty($dailyplanning_bestprice_year['Overall']['totalPrice'])) {
+												if (defined('WP_DEBUG') && WP_DEBUG) {
+													error_log('Overall is empty');
+												}
+												$dailyplanning_bestprice_year['Overall'] = $attributes;
+											}
+
+											error_log('attributes dailyplanning_best_price_year');
 											// error_log(print_r($attributes, true));
 											// error_log('old price:' . $dailyplanning_bestprice_year['Overall']['totalPrice']);
-									
-									// Compare existing overall year totalPrice
-									if (
-										!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['totalPrice']) &&
-										@$dailyplanning_bestprice_year['Overall']['totalPrice'] > $attributes['totalPrice']
-									)
-									 {
-										if (defined('WP_DEBUG') && WP_DEBUG) {
-											// error_log('New price: inferior');
-											// error_log(print_r($attributes, true));
-											// error_log('old price:' . $dailyplanning_bestprice_year['Overall']['Price']);
-										}
-										$dailyplanning_bestprice_year['Overall'] = $attributes;
-									}
-									
-									// Check if price date has passed
-									/*if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Date']) &&
+
+											// Compare existing overall year totalPrice
+											if (
+												!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['totalPrice']) &&
+												@$dailyplanning_bestprice_year['Overall']['totalPrice'] > $attributes['totalPrice']
+											) {
+												if (defined('WP_DEBUG') && WP_DEBUG) {
+													// error_log('New price: inferior');
+													// error_log(print_r($attributes, true));
+													// error_log('old price:' . $dailyplanning_bestprice_year['Overall']['Price']);
+												}
+												$dailyplanning_bestprice_year['Overall'] = $attributes;
+											}
+
+											// Check if price date has passed
+											/*if(!empty($dailyplanning_bestprice_year['Overall']) && !empty($dailyplanning_bestprice_year['Overall']['Date']) &&
 									   @$dailyplanning_bestprice_year['Overall']['Date'] < date('Y-m-d')
 									){
 										if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -732,62 +732,62 @@ error_log(print_r($bestprice_year, true));
 									}*/
 
 
-									// Check year price Room
+											// Check year price Room
 
-									// Init overall year price Room
-									if (empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]) && empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice'])) {
-										$dailyplanning_bestprice_year['Room' . $entity['roomId']] = $attributes;
-										error_log('dailyplanning_bestprice_year');
-										error_log(print_r($dailyplanning_bestprice_year, true));
-									}
-									// Compare existing overall year price Room
-									if (!empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]) && !empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice']) && $dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice'] > $attributes['totalPrice']) {
-										$dailyplanning_bestprice_year['Room' . $entity['roomId']] = $attributes;
-										error_log('dailyplanning_bestprice_year[\'Room\' . $entity[\'roomId\']]');
-										error_log(print_r($dailyplanning_bestprice_year['Room' . $entity['roomId']], true));
-									}								
-									// Check year price Rate
+											// Init overall year price Room
+											if (empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]) && empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice'])) {
+												$dailyplanning_bestprice_year['Room' . $entity['roomId']] = $attributes;
+												error_log('dailyplanning_bestprice_year');
+												error_log(print_r($dailyplanning_bestprice_year, true));
+											}
+											// Compare existing overall year price Room
+											if (!empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]) && !empty($dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice']) && $dailyplanning_bestprice_year['Room' . $entity['roomId']]['totalPrice'] > $attributes['totalPrice']) {
+												$dailyplanning_bestprice_year['Room' . $entity['roomId']] = $attributes;
+												error_log('dailyplanning_bestprice_year[\'Room\' . $entity[\'roomId\']]');
+												error_log(print_r($dailyplanning_bestprice_year['Room' . $entity['roomId']], true));
+											}
+											// Check year price Rate
 
-									// Init overall year price Rate
-									if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalrice'])) {
-										$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
-										error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
-										error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
-									}
+											// Init overall year price Rate
+											if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice'])) {
+												$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
+												error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
+												error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
+											}
 
-								
-									// Compare existing overall year price Rate
-									if (!empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && !empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice']) && $dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice'] > $attributes['totalPrice']) {
-										$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
-										error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
-										error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
-									}
 
-									// Check month price
-									if (!empty($dailyplanning_bestprice[$date]['totalPrice'])) {
-										error_log('*Current Best totalPrice: '.$dailyplanning_bestprice[$date]['totalPrice']);
-										if (
-											$attributes['totalPrice'] < $dailyplanning_bestprice[$date]['totalPrice']
-										) {
-											error_log('*Price Inferior to Current Best Price: '.$attributes['totalPrice']);
-											$dailyplanning_bestprice[$date]['Price'] = $attributes['totalPrice'];
-											error_log('*New Best Price: '.$dailyplanning_bestprice[$date]['totalPrice']);
+											// Compare existing overall year price Rate
+											if (!empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && !empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice']) && $dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice'] > $attributes['totalPrice']) {
+												$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
+												error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
+												error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
+											}
+
+											// Check month price
+											if (!empty($dailyplanning_bestprice[$date]['totalPrice'])) {
+												error_log('*Current Best totalPrice: ' . $dailyplanning_bestprice[$date]['totalPrice']);
+												if (
+													$attributes['totalPrice'] < $dailyplanning_bestprice[$date]['totalPrice']
+												) {
+													error_log('*Price Inferior to Current Best Price: ' . $attributes['totalPrice']);
+													$dailyplanning_bestprice[$date]['Price'] = $attributes['totalPrice'];
+													error_log('*New Best Price: ' . $dailyplanning_bestprice[$date]['totalPrice']);
+												}
+											} else {
+												if (empty($dailyplanning_bestprice[$date])) {
+													$dailyplanning_bestprice[$date] = array();
+												}
+												$dailyplanning_bestprice[$date]['totalPrice'] = $attributes['totalPrice'];
+												$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
+												error_log('*Setting  Best Price: ' . $dailyplanning_bestprice[$date]['totalPrice']);
+											}
 										}
-									} else {
-										if (empty($dailyplanning_bestprice[$date])) {
-											$dailyplanning_bestprice[$date] = array();
-										}
-										$dailyplanning_bestprice[$date]['totalPrice'] = $attributes['totalPrice'];
-										$dailyplanning_bestprice[$date] = $dailyplanning_bestprice_entity[$date];
-										error_log('*Setting  Best Price: '.$dailyplanning_bestprice[$date]['totalPrice']);
+										// }
+
 									}
 								}
-								// }
-
 							}
 						}
-					}
-				}
 					}
 				}
 			}
@@ -887,6 +887,7 @@ error_log(print_r($bestprice_year, true));
 		$today = new Datetime();
 		delete_option('tmsm-availpro-bestprice-' . $today->modify('-1 month')->format('Y-m'));
 	}
+
 
 
 	/**
@@ -1039,22 +1040,22 @@ error_log(print_r($bestprice_year, true));
 							}
 						}
 					}
-					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					if (defined('WP_DEBUG') && WP_DEBUG) {
 						// // TODO commenter !
 						// error_log('dailyplanning_bestprice:');
 						// error_log(print_r($dailyplanning_bestprice, true));
 					}
-					
+
 
 					$totalprice = null;
 					// $fmt = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
 					if (!empty($dailyplanning_bestprice) && @$dailyplanning_bestprice['status'] !== 'NotAvailable') {
 						$language = pll_current_language();
 						$totalprice = $dailyplanning_bestprice['totalPrice'];
-						if($language == 'en') {
+						if ($language == 'en') {
 							$jsondata['data'][$rate] = [
 								// 'totalprice' => $fmt->formatCurrency($totalprice, 'EUR'),
-								'totalprice' => '€'.$totalprice,
+								'totalprice' => '€' . $totalprice,
 							];
 						} else {
 							$jsondata['data'][$rate] = [
@@ -1062,8 +1063,7 @@ error_log(print_r($bestprice_year, true));
 								'totalprice' => $totalprice . ' €',
 							];
 						}
-						
-					} 
+					}
 					// if (!empty($dailyplanning_bestprice[0][0]) && @$dailyplanning_bestprice[0][0]['status'] !== 'NotAvailable') {
 					// 	$totalprice = $dailyplanning_bestprice[0][0]['totalPrice'];
 					// 	$jsondata['data'][$rate] = [
@@ -1105,6 +1105,10 @@ error_log(print_r($bestprice_year, true));
 		wp_send_json($jsondata);
 		wp_die();
 	}
+
+
+
+
 
 	/**
 	 * WP Rocket: Filters inline JS excluded from being combined
