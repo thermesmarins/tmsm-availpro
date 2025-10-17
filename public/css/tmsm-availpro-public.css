@@ -1,94 +1,94 @@
-#tmsm-availpro-calendar {
+#tmsm-availpro-calendar , .tmsm-availpro-room-calendar {
   padding: 2px;
   color: #333333;
   background: #ffffff;
 }
-#tmsm-availpro-calendar.calendar-small .hide-small {
+#tmsm-availpro-calendar.calendar-small .hide-small, .tmsm-availpro-room-calendar.calendar-small .hide-small{
   display: none;
 }
-#tmsm-availpro-calendar.calendar-small .clndr-controls {
+#tmsm-availpro-calendar.calendar-small .clndr-controls, .tmsm-availpro-room-calendar.calendar-small .clndr-controls {
   font-size: 15px;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-calendar.calendar-small .clndr-controls {
+  #tmsm-availpro-calendar.calendar-small .clndr-controls, .tmsm-availpro-room-calendar.calendar-small .clndr-controls {
     font-size: 19px;
   }
 }
-#tmsm-availpro-calendar.calendar-small .clndr-controls td {
+#tmsm-availpro-calendar.calendar-small .clndr-controls td, .tmsm-availpro-room-calendar.calendar-small .clndr-controls td {
   padding: 5px;
 }
-#tmsm-availpro-calendar.calendar-small .day {
+#tmsm-availpro-calendar.calendar-small .day, .tmsm-availpro-room-calendar.calendar-small .day {
   font-size: 13px;
   border: 1px solid #ffffff;
 }
-#tmsm-availpro-calendar.calendar-small .cell {
+#tmsm-availpro-calendar.calendar-small .cell, .tmsm-availpro-room-calendar.calendar-small .cell {
   padding: 4px 3px 4px 3px;
 }
-#tmsm-availpro-calendar.calendar-large .hide-large {
+#tmsm-availpro-calendar.calendar-large .hide-large, .tmsm-availpro-room-calendar.calendar-large .hide-large {
   display: none;
 }
-#tmsm-availpro-calendar.calendar-large .clndr-controls {
+#tmsm-availpro-calendar.calendar-large .clndr-controls, .tmsm-availpro-room-calendar.calendar-large .clndr-controls {
   font-size: 23px;
 }
-#tmsm-availpro-calendar.calendar-large .day {
+#tmsm-availpro-calendar.calendar-large .day, .tmsm-availpro-room-calendar.calendar-large .day {
   font-size: 16px;
   border: 3px solid #ffffff;
 }
-#tmsm-availpro-calendar.calendar-large .cell {
+#tmsm-availpro-calendar.calendar-large .cell, .tmsm-availpro-room-calendar.calendar-large .cell {
   padding: 8px;
 }
-#tmsm-availpro-calendar .table-calendarprices {
+#tmsm-availpro-calendar .table-calendarprices, .tmsm-availpro-room-calendar .table-calendarprices {
   width: 100%;
 }
-#tmsm-availpro-calendar .table-calendarprices ::-moz-selection {
+#tmsm-availpro-calendar .table-calendarprices ::-moz-selection, .tmsm-availpro-room-calendar .table-calendarprices ::-moz-selection {
   background: transparent;
   color: inherit;
 }
-#tmsm-availpro-calendar .table-calendarprices ::selection {
+#tmsm-availpro-calendar .table-calendarprices ::selection, .tmsm-availpro-room-calendar .table-calendarprices ::selection {
   background: transparent;
   color: inherit;
 }
-#tmsm-availpro-calendar .table-calendarprices .clndr-controls {
+#tmsm-availpro-calendar .table-calendarprices .clndr-controls, .tmsm-availpro-room-calendar .table-calendarprices .clndr-controls {
   background: white;
   border-bottom: 2px solid #dddddd;
 }
-#tmsm-availpro-calendar .table-calendarprices .header-days .header-day {
+#tmsm-availpro-calendar .table-calendarprices .header-days .header-day, .tmsm-availpro-room-calendar .table-calendarprices .header-days .header-day {
   text-align: center;
 }
-#tmsm-availpro-calendar .table-calendarprices .month {
+#tmsm-availpro-calendar .table-calendarprices .month, .tmsm-availpro-room-calendar .table-calendarprices .month {
   font-weight: normal;
   text-align: center;
 }
-#tmsm-availpro-calendar .table-calendarprices .month:first-letter {
+#tmsm-availpro-calendar .table-calendarprices .month:first-letter, .tmsm-availpro-room-calendar .table-calendarprices .month:first-letter {
   text-transform: uppercase;
 }
-#tmsm-availpro-calendar .table-calendarprices .month small {
+#tmsm-availpro-calendar .table-calendarprices .month small, .tmsm-availpro-room-calendar .table-calendarprices .month small {
   display: none;
 }
-#tmsm-availpro-calendar .table-calendarprices th {
+#tmsm-availpro-calendar .table-calendarprices th, .tmsm-availpro-room-calendar .table-calendarprices th {
   line-height: 2;
 }
-#tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span:hover {
+#tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span:hover, .tmsm-availpro-room-calendar .table-calendarprices .clndr-control-button > span:hover {
   cursor: pointer;
 }
-#tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span.inactive {
+#tmsm-availpro-calendar .table-calendarprices .clndr-control-button > span.inactive, .tmsm-availpro-room-calendar .table-calendarprices .clndr-control-button > span.inactive {
   opacity: 0.5;
   cursor: not-allowed;
 }
-#tmsm-availpro-calendar .table-calendarprices .clndr-control-button.clndr-control-button-previous {
+#tmsm-availpro-calendar .table-calendarprices .clndr-control-button.clndr-control-button-previous, .tmsm-availpro-room-calendar .table-calendarprices .clndr-control-button.clndr-control-button-previous {
   text-align: left;
 }
-#tmsm-availpro-calendar .table-calendarprices .clndr-control-button.clndr-control-button-next {
+#tmsm-availpro-calendar .table-calendarprices .clndr-control-button.clndr-control-button-next, .tmsm-availpro-room-calendar .table-calendarprices .clndr-control-button.clndr-control-button-next {
   text-align: right;
 }
-#tmsm-availpro-calendar .table-calendarprices .cell {
+#tmsm-availpro-calendar .table-calendarprices .cell, .tmsm-availpro-room-calendar .table-calendarprices .cell {
   vertical-align: middle;
   position: relative;
 }
-#tmsm-availpro-calendar .table-calendarprices .cell + .cell {
+#tmsm-availpro-calendar .table-calendarprices .cell + .cell, .tmsm-availpro-room-calendar .table-calendarprices .cell + .cell {
   display: none;
 }
-#tmsm-availpro-calendar .table-calendarprices .day-number {
+#tmsm-availpro-calendar .table-calendarprices .day-number, .tmsm-availpro-room-calendar .table-calendarprices .day-number {
   background: transparent;
   color: inherit;
   padding: 1px;
@@ -96,7 +96,7 @@
   font-size: 15px;
   line-height: normal;
 }
-#tmsm-availpro-calendar .table-calendarprices .minstay {
+#tmsm-availpro-calendar .table-calendarprices .minstay, .tmsm-availpro-room-calendar .table-calendarprices .minstay {
   position: absolute;
   line-height: 14px;
   top: 0;
@@ -105,23 +105,23 @@
   background: transparent;
   color: #333333;
 }
-#tmsm-availpro-calendar .table-calendarprices .day-special {
+#tmsm-availpro-calendar .table-calendarprices .day-special, .tmsm-availpro-room-calendar .table-calendarprices .day-special {
   position: absolute;
   top: 1px;
   left: 16px;
   padding: 1px;
   width: 16px;
 }
-#tmsm-availpro-calendar .table-calendarprices .day-special.glyphicon-alert {
+#tmsm-availpro-calendar .table-calendarprices .day-special.glyphicon-alert, .tmsm-availpro-room-calendar .table-calendarprices .day-special.glyphicon-alert {
   display: block;
 }
-#tmsm-availpro-calendar .table-calendarprices .price {
+#tmsm-availpro-calendar .table-calendarprices .price, .tmsm-availpro-room-calendar .table-calendarprices .price {
   font-weight: bold;
   margin: 0;
   font-size: 11px;
   line-height: normal;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day {
+#tmsm-availpro-calendar .table-calendarprices tbody .day, .tmsm-availpro-room-calendar .table-calendarprices tbody .day {
   padding: 0;
   text-align: center;
   vertical-align: top;
@@ -129,88 +129,120 @@
   color: #333333;
   width: 14%;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day .day-number {
+#tmsm-availpro-calendar .table-calendarprices tbody .day .day-number, .tmsm-availpro-room-calendar .table-calendarprices tbody .day .day-number {
   color: inherit;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day .price {
+#tmsm-availpro-calendar .table-calendarprices tbody .day .price, .tmsm-availpro-room-calendar .table-calendarprices tbody .day .price {
   color: rgba(0, 0, 0, 0.4);
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day:hover {
+#tmsm-availpro-calendar .table-calendarprices tbody .day:hover, .tmsm-availpro-room-calendar .table-calendarprices tbody .day:hover {
   cursor: pointer;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.past .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.next-month .cell,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.inactive .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.last-month .cell {
   background: #ffffff !important;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell .day-number,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.past .cell .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell .day-number,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.next-month .cell .day-number,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell .day-number,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .day-number {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.inactive .cell .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .day-number,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.last-month .cell .day-number {
   color: rgba(0, 0, 0, 0.25) !important;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past .cell .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.past .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month .cell .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.next-month .cell .price,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive .cell .price,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .price {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.inactive .cell .price,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month .cell .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.last-month .cell .price {
   visibility: hidden;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.past.inactive:hover,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.past.inactive:hover,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.next-month.inactive:hover,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.next-month.inactive:hover,
 #tmsm-availpro-calendar .table-calendarprices tbody .day.inactive.inactive:hover,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month.inactive:hover {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.inactive.inactive:hover,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.last-month.inactive:hover,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.last-month.inactive:hover {
   cursor: not-allowed;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .cell, .tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected .cell {
   background: #808080;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .day-number {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .day-number, .tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected .day-number {
   color: #333333;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .price {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected .price, .tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected .price {
   color: rgba(0, 0, 0, 0.4);
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .instead,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .price {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected.active .instead,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected.active .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected.active .price {
   opacity: 1;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-hover .cell, .tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-hover .cell {
   background: #808080;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .cell, 
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-begin .cell,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .cell,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-end .cell {
   background: #333333;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .price,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .price {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-begin .price,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-end .price {
   color: #808080;
 }
 #tmsm-availpro-calendar .table-calendarprices tbody .day.selected-begin .day-number,
-#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .day-number {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-begin .day-number,
+#tmsm-availpro-calendar .table-calendarprices tbody .day.selected-end .day-number,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.selected-end .day-number {
   color: #ffffff;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .cell,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.mouseover .cell {
   background: #333333;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .price,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.mouseover .price {
   color: #808080;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .day-number {
+#tmsm-availpro-calendar .table-calendarprices tbody .day.mouseover .day-number,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day.mouseover .day-number {
   color: #ffffff;
 }
 /* #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-lowestprice='1'] .price {
   color: #0f9d58;
 } */
 #tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='1'],
-#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='1'],
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'],
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-availability='2'] {
   background: #ffffff;
 }
-#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay="1"]) .minstay {
+#tmsm-availpro-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay="1"]) .minstay,
+.tmsm-availpro-room-calendar .table-calendarprices tbody .day:not(.selected):not(.past):not(.mouseover) .cell[data-minstay]:not([data-minstay="1"]) .minstay {
   display: inline-block;
 }
 #tmsm-availpro-calendar .table-calendarprices .cell[data-equal='1'] .instead,
-#tmsm-availpro-calendar .table-calendarprices .cell[data-equal='true'] .instead {
+#tmsm-availpro-calendar .table-calendarprices .cell[data-equal='true'] .instead,
+.tmsm-availpro-room-calendar .table-calendarprices .cell[data-equal='1'] .instead,
+.tmsm-availpro-room-calendar .table-calendarprices .cell[data-equal='true'] .instead {
   visibility: hidden;
 }
 .tmsm-availpro-form-legend {
@@ -264,27 +296,29 @@
   background: transparent;
   color: #333333;
 }
-#tmsm-availpro-form .tmsm-availpro-form-fields {
+#tmsm-availpro-form .tmsm-availpro-form-fields, .tmsm-availpro-room-calendar .tmsm-availpro-form-fields {
   padding-bottom: 50px;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-form .tmsm-availpro-form-fields {
+  #tmsm-availpro-form .tmsm-availpro-form-fields, .tmsm-availpro-room-calendar .tmsm-availpro-form-fields {
     padding-bottom: 0;
   }
 }
-#tmsm-availpro-form #tmsm-availpro-form-intro {
+#tmsm-availpro-form #tmsm-availpro-form-intro, .tmsm-availpro-room-calendar #tmsm-availpro-room-form-intro {
   display: none;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-form #tmsm-availpro-form-intro {
+  #tmsm-availpro-form #tmsm-availpro-form-intro, .tmsm-availpro-room-calendar #tmsm-availpro-room-form-intro {
     display: block;
   }
 }
-#tmsm-availpro-form #tmsm-availpro-calculatetotal-totalprice-label {
+#tmsm-availpro-form #tmsm-availpro-calculatetotal-totalprice-label, .tmsm-availpro-room-calendar #tmsm-availpro-room-calculatetotal-totalprice-label {
   display: none;
 }
 #tmsm-availpro-form #tmsm-availpro-form-checkindateinfo-label,
-#tmsm-availpro-form #tmsm-availpro-form-adults-label {
+.tmsm-availpro-room-calendar #tmsm-availpro-room-form-checkindateinfo-label,
+#tmsm-availpro-form #tmsm-availpro-form-adults-label,
+.tmsm-availpro-room-calendar #tmsm-availpro-room-form-adults-label {
   display: none;
 }
 #tmsm-availpro-form #tmsm-availpro-form-checkoutdateinfo-label {
@@ -317,14 +351,15 @@
     display: none;
   }
 }
-#tmsm-availpro-calendar-container {
+#tmsm-availpro-calendar-container, .tmsm-availpro-room-calendar-container {
   padding: 10px;
   background: #dddddd;
+  margin: 20px
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-calendar-container {
-    width: 50%;
-    display: inline-block;
+  #tmsm-availpro-calendar-container, .tmsm-availpro-room-calendar-container {
+    /* width: 50%; */
+    /* display: inline-block; */
     padding: 15px;
   }
 }
@@ -333,22 +368,24 @@
     min-height: 325px;
   }
 }
-#tmsm-availpro-form {
+#tmsm-availpro-form .tmsm-availpro-form {
   padding: 10px;
   background: white;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-form {
+  #tmsm-availpro-form .tmsm-availpro-form {
     width: 50%;
     float: right;
     padding: 15px;
   }
 }
-#tmsm-availpro-container {
-  background: white;
+#tmsm-availpro-container, .tmsm-availpro-room-calendar-container {
+    display: flex;
+    background: white;
+    flex-direction: row;
 }
 @media (min-width: 900px) {
-  #tmsm-availpro-form-outro {
+  #tmsm-availpro-form-outro .tmsm-availpro-form-outro {
     position: absolute;
     bottom: 0;
     width: auto;
@@ -357,9 +394,269 @@
     left: 50%;
   }
 }
-.tmsm-availpro-form-has-ota-price #tmsm-availpro-form-outro {
+.tmsm-availpro-form-has-ota-price #tmsm-availpro-form-outro .tmsm-availpro-form-outro {
   position: relative;
   right: auto;
   left: auto;
   padding: 0;
 }
+
+/* Room-specific calendar styles */
+.tmsm-availpro-room-calendar {
+  /* Inherit all styles from the main calendar */
+}
+
+.tmsm-availpro-room-calendar .table-calendarprices {
+  /* Ensure room calendar table looks identical to main calendar */
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calendar-container {
+  width: auto;
+  /* padding: 20px; */
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+ .tmsm-availpro-room-calendar .clndr-controls th {
+
+  text-align: center;
+  padding: 10px;
+}
+
+.tmsm-availpro-room-calendar .clndr-control-button {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.tmsm-availpro-room-calendar .clndr-control-button:hover {
+  background-color: #f0f0f0;
+}
+
+.tmsm-availpro-room-calendar .month {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.tmsm-availpro-room-calendar .header-days th {
+  background-color: #f8f9fa;
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #dee2e6;
+}
+
+.tmsm-availpro-room-calendar td {
+  border: 1px solid #dee2e6;
+  padding: 0;
+  text-align: center;
+  vertical-align: top;
+  height: 60px;
+  width: 60px;
+}
+
+.tmsm-availpro-room-calendar .cell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+}
+
+.tmsm-availpro-room-calendar .day-number {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.tmsm-availpro-room-calendar .price {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+  color: #28a745;
+}
+
+.tmsm-availpro-room-calendar .minstay {
+  font-size: 10px;
+  color: #6c757d;
+} 
+
+/* Room calendar container - side by side layout */
+/* .tmsm-availpro-room-calendar-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calendar-container {
+  flex: 1;
+  max-width: 600px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form {
+  flex: 1;
+  max-width: 400px;
+  padding: 30px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-top: 0;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-intro {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0 0 10px 0;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-dates-container {
+  padding: 12px;
+  background-color: #e7f3ff;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+  font-weight: 500;
+  color: #004085;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-checkindateinfo,
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-checkoutdateinfo {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-nights-message {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-nights-number {
+  font-weight: bold;
+  color: #28a745;
+  font-size: 16px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-minstay-message {
+  padding: 10px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  margin: 0;
+  font-size: 14px;
+  color: #856404;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-minstay-number {
+  font-weight: bold;
+  color: #856404;
+  font-size: 16px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calculatetotal-results {
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  min-height: 40px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calculatetotal-totalprice {
+  font-size: 18px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calculatetotal-errors {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calculatetotal-loading {
+  color: #007bff;
+  font-size: 20px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-submit {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin: 10px auto;
+  display: block;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-submit:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-submit:active {
+  transform: translateY(0);
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-submit:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-calculatetotal-ota {
+  font-size: 13px;
+  color: #6c757d;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.tmsm-availpro-room-calendar-container .tmsm-availpro-form-outro {
+  font-size: 13px;
+  color: #6c757d;
+  text-align: center;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Responsive adjustments for room calendar */
+@media (max-width: 768px) {
+  .tmsm-availpro-room-calendar-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .tmsm-availpro-room-calendar-container .tmsm-availpro-calendar-container {
+    max-width: 100%;
+  }
+  
+  .tmsm-availpro-room-calendar-container .tmsm-availpro-form {
+    max-width: 100%;
+    padding: 20px;
+  }
+  
+  .tmsm-availpro-room-calendar-container .tmsm-availpro-form-submit {
+    max-width: 100%;
+  }
+} */

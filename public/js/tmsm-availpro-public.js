@@ -388,6 +388,204 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
 
     }
 
+    // Room-specific calendar initialization for shortcode [tmsm-availpro-room-calendar]
+    $('.tmsm-availpro-room-calendar').each(function() {
+      var $calendar = $(this);
+      var roomid = $calendar.data('roomid');
+      var params_var = 'tmsm_availpro_room_' + roomid + '_params';
+
+      // Check if room-specific params      console.log(params_var);
+      console.log(window[params_var]);
+      if (typeof window[params_var] === 'undefined') {
+        console.log('Room calendar params not found for room ' + roomid);
+        return;
+      }
+      
+      var room_params = window[params_var];
+      console.log('Initializing room calendar for room: ' + roomid);
+      
+      // Room calendar variables (similar to the main calendar)
+      var calendar_today = moment().subtract(1, 'days');
+      var calendar_startdate = moment();
+      var calendar_enddate = moment().add(1, 'year');
+      
+      var calendar_selected_date;
+      var calendar_selected_begin;
+      var calendar_selected_end;
+      var calendar_lastdateclicked;
+      var calendar_current_year;
+      var calendar_current_month;
+      var calendar_nights = 1;
+      var calendar_minstay = 0;
+      
+      /**
+       * Set Calendar Events for Month
+       */
+      var calendar_set_events = function (month) {
+        
+        calendar_current_year = month.format('YYYY');
+        calendar_current_month = month.format('MM');
+        
+        var events_toload = [];
+        if (typeof room_params.data !== 'undefined') {
+          
+          if (typeof room_params.data[month.format('YYYY-MM')] !== 'undefined') {
+            var days = room_params.data[month.format('YYYY-MM')];
+            var events = [];
+            var i = 0;
+            var lowest_price = null;
+            console.log('month' + month.format('YYYY-MM'));
+            // Get lowest price
+            $.each(days, function (index, value) {
+              if (typeof value.totalPrice !== 'undefined' && value.status !== 'NotAvailable') {
+                if (lowest_price === null) {
+                  lowest_price = Number(value.totalPrice);
+                }
+                if (Number(value.totalPrice) < lowest_price) {
+                  lowest_price = Number(value.totalPrice);
+                }
+              }
+            });
+            
+            // Create Events
+            $.each(days, function (index, value) {
+              value.date = index;
+              if (typeof value.totalPrice !== 'undefined' && value.status !== 'NotAvailable') {
+                value.PriceWithCurrency = Number(value.totalPrice).toLocaleString(room_params.locale,
+                  {style: "currency", currency: room_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 2});
+                
+                value.Test = room_params.locale;
+                if (Number(value.totalPrice) === lowest_price) {
+                  value.LowestPrice = 1;
+                }
+                events[i] = value;
+                events_toload.push(events[i]);
+                i++;
+              }
+            });
+          }
+        }
+        return events_toload;
+      };
+      
+      // Initialize the calendar with CLNDR
+      var calendar_clndr = $calendar.clndr({
+        template: $('#tmsm-availpro-room-calendar-template-' + roomid).html(),
+        
+        startWithMonth: calendar_startdate,
+        constraints: {
+          startDate: calendar_today,
+          endDate: calendar_enddate
+        },
+     
+        adjacentDaysChangeMonth: true,
+        forceSixRows: false,
+        trackSelectedDate: false,
+        clickEvents: {
+          click: function (target) {
+            
+            var reorderdates = false;
+            $('.day.mouseover').removeClass('mouseover');
+            if (!$(target.element).hasClass('inactive') && !$(target.element).hasClass('last-month') && !$(target.element).hasClass('next-month')) {
+              calendar_lastdateclicked = target.date;
+              
+              // Reorder dates if user clicks a date before the start date
+              if (typeof calendar_selected_begin !== 'undefined') {
+                if (calendar_selected_begin > calendar_lastdateclicked) {
+                  $('.calendar-day-' + calendar_selected_begin.format('YYYY-MM-DD')).removeClass('selected').removeClass('selected-hover').removeClass('selected-begin').removeClass('selected-end').removeClass('active');
+                  reorderdates = true;
+                  calendar_selected_begin = undefined;
+                  calendar_selected_end = undefined;
+                }
+              }
+              
+              // Reinitialize if both dates are already selected (start new selection)
+              if (typeof calendar_selected_begin !== 'undefined' && typeof calendar_selected_end !== 'undefined') {
+                $('.day').removeClass('selected').removeClass('selected-hover').removeClass('selected-begin').removeClass('selected-end').removeClass('active');
+                calendar_selected_begin = undefined;
+                calendar_selected_end = undefined;
+                $('#tmsm-availpro-room-form-checkoutdateinfo-' + roomid).html('');
+                $('#tmsm-availpro-room-form-checkoutdate-' + roomid).val('');
+              }
+              
+              // First date selection (check-in)
+              if (typeof calendar_selected_begin === 'undefined') {
+                calendar_selected_begin = calendar_lastdateclicked;
+                $('.calendar-day-' + calendar_selected_begin.format('YYYY-MM-DD')).addClass('selected selected-begin');
+                $('#tmsm-availpro-room-form-checkindateinfo-' + roomid).html(calendar_selected_begin.format('L'));
+                $('#tmsm-availpro-room-form-checkindate-' + roomid).val(calendar_selected_begin.format('YYYY-MM-DD'));
+                $('#tmsm-availpro-room-form-arrivaldate-' + roomid).val(calendar_selected_begin.format('YYYY-MM-DD'));
+                
+                // Get minimum stay from the selected date
+                calendar_minstay = $('.calendar-day-' + calendar_selected_begin.format('YYYY-MM-DD') + ' .cell').data('minstay');
+                if (!calendar_minstay) {
+                  calendar_minstay = 0;
+                }
+                $('#tmsm-availpro-room-form-minstay-message-' + roomid).attr('data-value', calendar_minstay);
+                $('#tmsm-availpro-room-form-minstay-number-' + roomid).html(calendar_minstay);
+              }
+              // Second date selection (check-out)
+              else {
+                if (reorderdates === false) {
+                  calendar_selected_end = calendar_lastdateclicked;
+                  
+                  // Check if dates respect minimum stay
+                  if (calendar_minstay > 0) {
+                    var checkminstay = moment(calendar_selected_begin);
+                    if (checkminstay.add(calendar_minstay, 'days') > calendar_selected_end) {
+                      console.warn('Selection does not respect minimum stay for room ' + roomid);
+                      calendar_selected_end = undefined;
+                    }
+                  }
+                  
+                  if (typeof calendar_selected_end !== 'undefined') {
+                    $('.calendar-day-' + calendar_selected_end.format('YYYY-MM-DD')).addClass('selected selected-end');
+                  }
+                }
+              }
+              
+              // Calculate nights and update form
+              $('#tmsm-availpro-room-form-dates-container-' + roomid).hide();
+              if (typeof calendar_selected_begin !== 'undefined' && typeof calendar_selected_end !== 'undefined') {
+                calendar_nights = calendar_selected_end.diff(calendar_selected_begin, "days");
+                $('#tmsm-availpro-room-form-nights-' + roomid).val(calendar_nights);
+                $('#tmsm-availpro-room-form-nights-message-' + roomid).attr('data-value', calendar_nights);
+                $('#tmsm-availpro-room-form-nights-number-' + roomid).html(calendar_nights);
+                $('#tmsm-availpro-room-form-checkoutdateinfo-' + roomid).html(calendar_selected_end.format('L'));
+                $('#tmsm-availpro-room-form-checkoutdate-' + roomid).val(calendar_selected_end.format('YYYY-MM-DD'));
+                $('#tmsm-availpro-room-form-dates-container-' + roomid).show();
+                
+                // Highlight the date range
+                var range_begin = moment(calendar_selected_begin);
+                while (range_begin < calendar_selected_end) {
+                  range_begin.add(1, 'days');
+                  if (range_begin < calendar_selected_end) {
+                    $('.calendar-day-' + range_begin.format('YYYY-MM-DD')).addClass('selected');
+                  }
+                }
+              }
+            }
+          }
+        },
+        doneRendering: function () {
+          // Calendar rendered successfully
+          console.log('Room calendar rendered for room: ' + roomid);
+        },
+        onMonthChange: function (month) {
+          // Load events for the new month
+          var events = calendar_set_events(month);
+          console.log('events' + events);
+          this.addEvents(events);
+           
+        }
+        
+      });
+      
+      // Load initial events for the starting month
+      var initial_events = calendar_set_events(calendar_startdate);
+      calendar_clndr.addEvents(initial_events);
+    });
+
   }
 
   $( document ).ready( function() {

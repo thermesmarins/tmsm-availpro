@@ -193,7 +193,7 @@ class Tmsm_Availpro_Public
 		$params = [
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'locale'   => $this->get_locale(),
-			'security' => wp_create_nonce('tmsm-availpro-calculatetotal-nonce-action'),
+			'security' => wp_create_nonce('security'),
 			'i18n'     => [
 				'fromprice'          => _x('From', 'price', 'tmsm-availpro'),
 				'yearbestpricelabel' => $this->get_option('yearbestpricelabel'),
@@ -218,6 +218,7 @@ class Tmsm_Availpro_Public
 	{
 		add_shortcode('tmsm-availpro-calendar', array($this, 'calendar_shortcode'));
 		add_shortcode('tmsm-availpro-bestprice-year', array($this, 'bestpriceyear_shortcode'));
+		add_shortcode('tmsm-availpro-room-calendar', array($this, 'roomcalendar_shortcode'));
 	}
 
 
@@ -277,6 +278,8 @@ class Tmsm_Availpro_Public
 		$bestprice_year_requested = null;
 
 		$bestprice_year = get_option('tmsm-availpro-bestprice-year', false);
+		error_log('BestPrice shortcode');
+		error_log(print_r($bestprice_year, true));
 		if (!empty($atts['roomid']) && !empty($bestprice_year['Room' . $atts['roomid']])) {
 			$bestprice_year_requested = $bestprice_year['Room' . $atts['roomid']];
 		} elseif (!empty($atts['rateid']) && !empty($bestprice_year['Rate' . $atts['rateid']])) {
@@ -297,9 +300,60 @@ class Tmsm_Availpro_Public
 		return $output;
 	}
 
+	/**
+	 * Room Calendar shortcode
+	 *
+	 * @since    1.0.0
+	 */
+	public function roomcalendar_shortcode($atts)
+	{
+		$atts = shortcode_atts(array(
+			'roomid' => '',
+		), $atts, 'tmsm-availpro-room-calendar');
 
+		// Validate roomid is provided
+		if (empty($atts['roomid'])) {
+			return '<p>' . __('Room ID is required for this calendar.', 'tmsm-availpro') . '</p>';
+		}
 
+		$roomid = sanitize_text_field($atts['roomid']);
 
+		// Get room-specific price data
+		try {
+			$room_data = $this->get_options_bestprice_room($roomid);
+		} catch (Exception $e) {
+			$room_data = [];
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				error_log('Error getting room data: ' . $e->getMessage());
+			}
+		}
+
+		// Prepare params for JavaScript
+		$params = [
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'locale'   => $this->get_locale(),
+			'options'  => get_option($this->plugin_name . '-options'),
+			'data'     => $room_data,
+			'i18n'     => [
+				'yearbestpricelabel' => __('From %', 'tmsm-availpro'),
+			]
+		];
+
+		// Localize script with room-specific variable name
+		wp_localize_script(
+			$this->plugin_name,
+			'tmsm_availpro_room_' . $roomid . '_params',
+			$params
+		);
+
+		// Get the room-specific calendar and form templates
+		$output = $this->calendar_template_room($roomid);
+		$output .= $this->form_template_room($roomid);
+
+		// Wrap in room-specific container
+		$output = '<div id="tmsm-availpro-room-calendar-container-' . $roomid . '" class="tmsm-availpro-container tmsm-availpro-room-calendar-container" data-roomid="' . $roomid . '">' . $output . '</div>';
+		return $output;
+	}
 
 	/**
 	 * Legend template
@@ -459,6 +513,261 @@ class Tmsm_Availpro_Public
 
 		$output = '<div id="tmsm-availpro-calendar-container">' . $output . $this->legend_template() . '</div>';
 		return $output;
+	}
+
+	/**
+	 * Display calendar template for a specific room
+	 *
+	 * @param string $roomid
+	 *
+	 * @return string
+	 */
+	private function calendar_template_room($roomid)
+	{
+		$output = '
+<div id="tmsm-availpro-room-calendar-' . $roomid . '" data-roomid="' . $roomid . '" class="tmsm-availpro-room-calendar">
+</div>
+<script id="tmsm-availpro-room-calendar-template-' . $roomid . '" type="text/template">
+
+        <table class="table-calendarprices table-condensed" border="0" cellspacing="0" cellpadding="0">
+            <thead>
+            <tr class="clndr-controls">
+                <th class="clndr-control-button clndr-control-button-previous">
+                    <span class="clndr-previous-button">&larr;</span>
+                </th>
+                <th class="month" colspan="5">
+                    <%= month %> <%= year %>
+                </th>
+                <th class="clndr-control-button clndr-control-button-next">
+                    <span class="clndr-next-button">&rarr;</span>
+                </th>
+            </tr>
+            <tr class="header-days">
+
+                <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
+<th class="header-day">
+                    <span class="hide"><%= moment().weekday(i).format(\'dd\').charAt(0) %></span>
+                    <span class=""><%= daysOfTheWeek[i] %></span>
+                </th>
+                <% } %>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i = 0; i < numberOfRows; i++){ %>
+            <tr>
+                <% for(var j = 0; j < 7; j++){ %>
+                <% var d = j + i * 7; %>
+                <td class="<%= days[d].classes %>" data-daynumber="<%= days[d].day %>">
+
+                    <% if (days[d].events.length != 0) { %>
+                    <% _.each(days[d].events, function(event) { %>
+                    <div class="cell" data-price="<%= event.totalPrice %>" data-status="<%= event.Status %>"  data-lowestprice="<%= event.LowestPrice %>" data-availability="<%= event.Availability %>" data-minstay="<%= event.minimumStayThrough %>">
+                        <span class="day-number"><%= days[d].day %></span>
+                        <span class="minstay">⇾</span>
+                        <p class="price" data-test="<%= event.Test %>"><%= event.PriceWithCurrency %></p>
+                    </div>
+                    <% }) %>
+
+                    <% } else { %>
+
+                    <div class="cell">
+                        <span class="day-number"><%= days[d].day %></span>
+                        <p class="price">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    </div>
+                    <% } %>
+                </td>
+                <% } %>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+
+</script>
+';
+
+		$output = '<div id="tmsm-availpro-room-calendar-container-' . $roomid . '" class="tmsm-availpro-calendar-container tmsm-availpro-room-calendar-container">' . $output .  '</div>';
+		return $output;
+	}
+
+	/**
+	 * Form template for a specific room
+	 *
+	 * @param string $roomid
+	 *
+	 * @return string
+	 */
+	private function form_template_room($roomid)
+	{
+
+		$today = new Datetime();
+		$tomorrow = (new DateTime())->modify('+1 day');
+
+		$output = '
+		<form target="_blank" action="' . self::ENGINE_URL . $this->get_option('engine') . '" method="get" id="tmsm-availpro-room-form-' . $roomid . '" class="tmsm-availpro-form" data-roomid="' . $roomid . '">
+		
+		<input type="hidden" name="language" value="' . $this->get_locale() . '">
+		<input type="hidden" name="arrivalDate" value="" id="tmsm-availpro-room-form-arrivaldate-' . $roomid . '" class="tmsm-availpro-form-arrivaldate">
+		<input type="hidden" name="nights" value="1" id="tmsm-availpro-room-form-nights-' . $roomid . '" class="tmsm-availpro-form-nights">
+		<input type="hidden" name="checkinDate" value="" id="tmsm-availpro-room-form-checkindate-' . $roomid . '" class="tmsm-availpro-form-checkindate">
+		<input type="hidden" name="checkoutDate" value="" id="tmsm-availpro-room-form-checkoutdate-' . $roomid . '" class="tmsm-availpro-form-checkoutdate">
+		<input type="hidden" name="selectedAdultCount" value="2">
+		<input type="hidden" name="selectedChildCount" value="0">
+		<input type="hidden" name="guestCountSelector" value="ReadOnly">
+		<input type="hidden" name="rate" value="">
+		<input type="hidden" name="roomid" value="' . esc_attr($roomid) . '">
+		<input type="hidden" name="showSearch" value="true">
+		
+        <div class="tmsm-availpro-form-fields">
+
+			' . (!empty($this->get_option('intro')) ? '<p id="tmsm-availpro-room-form-intro-' . $roomid . '" class="tmsm-availpro-form-intro">' . html_entity_decode($this->get_option('intro')) . '</p>' : '') . '
+			
+			<p id="tmsm-availpro-room-form-dates-container-' . $roomid . '" class="tmsm-availpro-form-dates-container" style="display: none">
+				' . _x('From', 'date selection',  'tmsm-availpro') . ' <span id="tmsm-availpro-room-form-checkindateinfo-' . $roomid . '" class="tmsm-availpro-form-checkindateinfo"></span> ' . _x('to', 'date selection', 'tmsm-availpro') . ' <span id="tmsm-availpro-room-form-checkoutdateinfo-' . $roomid . '" class="tmsm-availpro-form-checkoutdateinfo"></span>
+			</p>
+            <p id="tmsm-availpro-room-form-nights-message-' . $roomid . '" class="tmsm-availpro-form-nights-message" data-value="0">' . __('Number of nights:', 'tmsm-availpro') . ' <span id="tmsm-availpro-room-form-nights-number-' . $roomid . '" class="tmsm-availpro-form-nights-number"></span></p>
+            <p id="tmsm-availpro-room-form-minstay-message-' . $roomid . '" class="tmsm-availpro-form-minstay-message" data-value="0">' . __('Minimum stay:', 'tmsm-availpro') . ' <span id="tmsm-availpro-room-form-minstay-number-' . $roomid . '" class="tmsm-availpro-form-minstay-number"></span></p>
+			';
+
+		$theme = wp_get_theme();
+		$buttonclass = '';
+		if ('StormBringer' == $theme->get('Name') || 'stormbringer' == $theme->get('Template')) {
+			$buttonclass = 'btn btn-primary';
+		}
+		if ('OceanWP' == $theme->get('Name') || 'oceanwp' == $theme->get('Template')) {
+			$buttonclass = 'button';
+		}
+
+		$output .= '  
+            <p id="tmsm-availpro-room-calculatetotal-results-' . $roomid . '" class="tmsm-availpro-calculatetotal-results">
+                <span id="tmsm-availpro-room-calculatetotal-totalprice-' . $roomid . '" class="tmsm-availpro-calculatetotal-totalprice" style="display: none"></span>
+                <span id="tmsm-availpro-room-calculatetotal-errors-' . $roomid . '" class="tmsm-availpro-calculatetotal-errors" style="display: none"></span>
+                <i class="fa fa-spinner fa-spin" aria-hidden="true" id="tmsm-availpro-room-calculatetotal-loading-' . $roomid . '" class="tmsm-availpro-calculatetotal-loading" style="display: none"></i>
+			</p>
+            <p>
+            <button type="submit" id="tmsm-availpro-room-form-submit-' . $roomid . '" class="' . $buttonclass . ' tmsm-availpro-form-submit">' . (!empty($this->get_option('bookbuttonlabel')) ? html_entity_decode($this->get_option('bookbuttonlabel')) : __('Book now', 'tmsm-availpro')) . '</button>
+            </p>
+            <p id="tmsm-availpro-room-calculatetotal-ota-' . $roomid . '" class="tmsm-availpro-calculatetotal-ota" style="display: none"></p>
+            ' . (!empty($this->get_option('outro')) ? '<div id="tmsm-availpro-room-form-outro-' . $roomid . '" class="tmsm-availpro-form-outro">' . html_entity_decode($this->get_option('outro')) . '</div>' : '') . '
+            </div>
+            </form>
+            <form action="" method="post" id="tmsm-availpro-room-calculatetotal-' . $roomid . '" class="tmsm-availpro-calculatetotal">
+			' . wp_nonce_field('tmsm-availpro-calculatetotal-nonce-action', 'tmsm-availpro-calculatetotal-nonce', true, false) . '        
+			</form>
+		';
+		return $output;
+	}
+
+	/**
+	 * Get options for room-specific bestprices months
+	 *
+	 * @param string $roomid
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	private function get_options_bestprice_room($roomid)
+	{
+		$data = [];
+
+		$date = new Datetime();
+		$i    = 0;
+		while ($i <= 12) {
+			$monthtocheck = $date->format('Y-m');
+			$cached_data = get_option('tmsm-availpro-bestprice-room-' . $roomid . '-' . $monthtocheck, false);
+
+			if ($cached_data !== false) {
+				$data[$monthtocheck] = $cached_data;
+			}
+
+			$date->modify('+1 month');
+			$i++;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Check prices for a specific room
+	 *
+	 * @param string $roomid
+	 * @param string $monthtocheck
+	 *
+	 * @throws Exception
+	 */
+	public function checkprices_for_room($roomid, $monthtocheck)
+	{
+		if (defined('WP_DEBUG') && WP_DEBUG) {
+			error_log('Function checkprices_for_room() for room: ' . $roomid);
+			error_log('Month to check: ' . $monthtocheck);
+		}
+
+		$webservice = new Tmsm_Availpro_Webservice();
+		$response = $webservice->get_data_for_room($monthtocheck, $roomid);
+
+		if (defined('WP_DEBUG') && WP_DEBUG) {
+			error_log('webservice response for room ' . $roomid);
+		}
+
+		$dailyplanning_bestprice = [];
+
+		if (!empty($response)) {
+			if (isset($response['success']) && $response['success'] === true) {
+				if (defined('WP_DEBUG') && WP_DEBUG) {
+					error_log('data success');
+				}
+
+				if (isset($response['data']['entities']) && is_array($response['data']['entities'])) {
+					foreach ($response['data']['entities'] as $entity) {
+						$attributes = [];
+
+						if (isset($entity['properties'])) {
+							$properties = $entity['properties'];
+
+							foreach ($properties as $property) {
+								$propertyname = $property['name'];
+
+								if (isset($property['values']) && is_array($property['values'])) {
+									foreach ($property['values'] as $attribute) {
+										$date_begin = new DateTime($attribute['start']);
+										$date_end = new DateTime($attribute['end']);
+										$date_end->modify('-1 day');
+
+										while ($date_begin <= $date_end) {
+											$date = $date_begin->format('Y-m-d');
+											$attributes[$date][$propertyname] = $attribute['value'];
+											$date_begin->modify('+1 day');
+										}
+									}
+								}
+							}
+						}
+
+						// Process attributes and store best prices
+						foreach ($attributes as $date => $attribute_values) {
+							if (isset($attribute_values['totalPrice']) && $attribute_values['status'] !== 'NotAvailable') {
+								if (
+									!isset($dailyplanning_bestprice[$date]) ||
+									(float)$attribute_values['totalPrice'] < (float)$dailyplanning_bestprice[$date]['totalPrice']
+								) {
+									$dailyplanning_bestprice[$date] = $attribute_values;
+									$dailyplanning_bestprice[$date]['Date'] = $date;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Save cached data for this room and month
+		if (!empty($dailyplanning_bestprice)) {
+			update_option('tmsm-availpro-bestprice-room-' . $roomid . '-' . $monthtocheck, $dailyplanning_bestprice);
+
+			if (defined('WP_DEBUG') && WP_DEBUG) {
+				error_log('dailyplanning_bestprice for room ' . $roomid . ':');
+				error_log(print_r($dailyplanning_bestprice, true));
+			}
+		}
 	}
 
 	/**
@@ -749,7 +1058,7 @@ class Tmsm_Availpro_Public
 											// Check year price Rate
 
 											// Init overall year price Rate
-											if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalPrice'])) {
+											if (empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]) && empty($dailyplanning_bestprice_year['Rate' . $entity['rateId']]['totalrice'])) {
 												$dailyplanning_bestprice_year['Rate' . $entity['rateId']] = $attributes;
 												error_log('dailyplanning_bestprice_year[\'Rate\' . $entity[\'rateId\']]');
 												error_log(print_r($dailyplanning_bestprice_year['Rate' . $entity['rateId']], true));
@@ -887,7 +1196,6 @@ class Tmsm_Availpro_Public
 		$today = new Datetime();
 		delete_option('tmsm-availpro-bestprice-' . $today->modify('-1 month')->format('Y-m'));
 	}
-
 
 
 	/**
@@ -1105,10 +1413,6 @@ class Tmsm_Availpro_Public
 		wp_send_json($jsondata);
 		wp_die();
 	}
-
-
-
-
 
 	/**
 	 * WP Rocket: Filters inline JS excluded from being combined

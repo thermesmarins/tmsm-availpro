@@ -1,8 +1,3 @@
-### 2.0.3: August 07th, 2025
-* **Fixed** - Rate ID filtering bug that prevented multiple rate IDs from working correctly
-* **Fixed** - Variable scope issue in webservice API calls
-* **Fixed** - Typo in rate data storage logic
-
 ### 2.0.2: March 26th, 2025
 * Fix minimum stay variable didn't work
 
