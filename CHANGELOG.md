@@ -1,3 +1,6 @@
+### 2.0.3: October 28th, 2026
+* Fix best-price-year shortcode label not translated by Weglot (the label is now rendered in the HTML)
+
 ### 2.0.2: March 26th, 2025
 * Fix minimum stay variable didn't work
 
