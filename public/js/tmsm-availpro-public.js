@@ -404,7 +404,13 @@ var TmsmAvailproApp = TmsmAvailproApp || {};
   if(tmsm_availpro_bestprice_year.length > 0){
     tmsm_availpro_bestprice_year.each(function(e){
       if($(this).data('price')){
-        $(this).html(_.unescape(tmsm_availpro_params.i18n.yearbestpricelabel.replace('%',Number($(this).data('price')).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0}))));
+        var formattedPrice = Number($(this).data('price')).toLocaleString(tmsm_availpro_params.locale, {style: "currency", currency: tmsm_availpro_params.options.currency, minimumFractionDigits: 0, maximumFractionDigits: 0});
+        // Label is rendered in the HTML by the shortcode (translatable by Weglot), fallback on JS params for cached pages
+        var label = $.trim($(this).html());
+        if(!label){
+          label = _.unescape(tmsm_availpro_params.i18n.yearbestpricelabel);
+        }
+        $(this).html(label.replace('%', formattedPrice));
       }
     });
 

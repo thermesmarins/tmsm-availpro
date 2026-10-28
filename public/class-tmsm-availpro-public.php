@@ -294,7 +294,20 @@ error_log(print_r($bestprice_year, true));
 			}
 		}
 		if (!empty($price)) {
-			$output = '<span class="tmsm-availpro-bestprice-year" data-date="' . $date . '" data-price="' . $price . '" data-roomid="' . (!empty($atts['roomid']) ? esc_attr__($atts['roomid']) : '') . '" data-rateid="' . (!empty($atts['rateid']) ? esc_attr__($atts['rateid']) : '') . '"></span>';
+			// The label is written in the HTML (not only in the JS params) so that translation plugins like Weglot translate it as regular page text. The "%" placeholder is replaced by the formatted price in JS.
+			$label = $this->get_option('yearbestpricelabel');
+			if (empty($label)) {
+				$label = __('From %', 'tmsm-availpro');
+			}
+			$label = wp_kses(html_entity_decode($label), array(
+				'b'      => array(),
+				'strong' => array(),
+				'em'     => array(),
+				'br'     => array(),
+				'span'   => array('class' => array()),
+			));
+
+			$output = '<span class="tmsm-availpro-bestprice-year" data-date="' . $date . '" data-price="' . $price . '" data-roomid="' . (!empty($atts['roomid']) ? esc_attr__($atts['roomid']) : '') . '" data-rateid="' . (!empty($atts['rateid']) ? esc_attr__($atts['rateid']) : '') . '">' . $label . '</span>';
 		}
 		return $output;
 	}
